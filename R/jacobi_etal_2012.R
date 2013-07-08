@@ -1,27 +1,39 @@
-######################################################################
-# Algorithm for defining subclusters of highly-connected sites from
-# the following publication:
-#
-# Jacobi, M. N., André, C., Döös, K., and Jonsson,
-# P. R. 2012. Identification of subpopulations from connectivity
-# matrices. Ecography, 35: 1004–1016.
-#
-# NOTE: In this paper, the connectivity matrix is oriented so that
-# C_ij is dispersal from i to j, whereas in this code, the
-# connectivity matrix is oriented so that C_ij is dispersal from j to
-# i.  This choice of orientation is arbitrary, but one must always be
-# consistent.
-######################################################################
 
-# The slit function takes a vector of sites and returns a list of one
-# or two vectors of sites. It also accepts an input parameter defining
-# how many times to try the spilt (the best result from the tries is
-# returned).
-splitCM <- function(indices,pp,tries,beta,
-                    th=1e-10,alpha=0.1,maxIt=500,best=1e10) {
+#' Split connectivity matrix into subpopulations
+#'
+#' This function tries to optimally split a given subpopulation into
+#' two smaller subpopulations.
+#'
+#' @param indices vector of indices of sites in a subpopulation
+#' @param conn.mat a square connectivity matrix.  This matrix has
+#' typically been normalized and made symmetric prior to using this
+#' function.
+#' @param beta controls degree of splitting of connectivity matrix,
+#' with larger values generating more subpopulations.
+#' @param tries how many times to restart the optimization algorithm. Defaults to 5.
+#' @param threshold controls when to stop each "try".  Defaults to 1e-10.
+#' @param alpha controls rate of convergence to solution
+#' @param maxit Maximum number of iterations to perform per "try".
+#'
+#' @return List with one or two elements, each containing a vector of
+#' indices of sites in a subpopulations
+#'
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
+#' P. R. 2012. Identification of subpopulations from connectivity
+#' matrices. Ecography, 35: 1004–1016.
+#' 
+#' @seealso See also \code{\link{optimal.split.conn.mat}},
+#' \code{\link{rec.split.conn.mat}},
+#' \code{\link{subpops.vector.to.list}}
+#' 
+#' @author
+#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+split.conn.mat <- function(indices,conn.mat,beta,tries=5,
+                    threshold=1e-10,alpha=0.1,maxit=500) {
     # makes a submatrix of the total connectivity matrix only
     # involving the sites in the index list
-    ppp = pp[indices, indices, drop=F]
+    ppp = conn.mat[indices, indices, drop=F]
 
     # al appears to be just 1/beta
     al = 1/beta
@@ -31,14 +43,16 @@ splitCM <- function(indices,pp,tries,beta,
     
     eNoSplit = -t(s) %*% ppp %*% s + al * sum(s)^2;
 
+    best = 1e10
+    
     for (kk in 1:tries) {
         s = matrix( runif(n,min=-1,max=1), ncol = 1 )
         ds = s + 1
         sTot = sum(s)
         sOld = sign(s)
 
-        for (it in 1:maxIt) {
-            if (norm(s-ds,"2") <= th)
+        for (it in 1:maxit) {
+            if (norm(s-ds,"2") <= threshold)
                 break
 
             # the following three lines implements EQ. 8 in the paper
@@ -47,7 +61,7 @@ splitCM <- function(indices,pp,tries,beta,
             s = alpha * s + (1-alpha) * ds
         }
 
-        if (it == maxIt) warning("Reached max iterations")
+        if (it == maxit) warning("Reached max iterations")
 
         s = sign(s)
         e = -t(s) %*% ppp %*% s + al * sum(s)^2;
@@ -69,61 +83,121 @@ splitCM <- function(indices,pp,tries,beta,
     return(list(indices))
 }
 
-# This funtion splits the index list recursively until none of the
-# subpopulations can be split further to improve the minimization
-recSplitCM <- function(ta, pp, tries, beta, ...) {
+#' Recursively subdivides a set of subpoplations
+#' 
+#' This funtion recursively splits each subpopulation of a list of
+#' subpopulations until none of the subpopulations can be split
+#' further to improve the minimization.
+#'
+#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpops.vector.to.list}}.
+#' @param conn.mat A square connectivity matrix.  This matrix has
+#' typically been normalized and made symmetric prior to using this
+#' function.
+#' @param beta Controls degree of splitting of connectivity matrix,
+#' with larger values generating more subpopulations.
+#' @param \dots further arguments to be passed to \code{\link{split.conn.mat}}
+#' 
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
+#' P. R. 2012. Identification of subpopulations from connectivity
+#' matrices. Ecography, 35: 1004–1016.
+#' 
+#' @seealso See also \code{\link{optimal.split.conn.mat}},
+#' \code{\link{split.conn.mat}},
+#' \code{\link{subpops.vector.to.list}}
+#' 
+#' @author
+#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+rec.split.conn.mat <- function(subpops.lst, conn.mat, beta, ...) {
     old = 0
-    ret = ta
-    while (length(ret) > old) {
-        old = length(ret)
-        ret = unlist( sapply( ret, splitCM, pp=pp, tries=tries, beta=beta,
-            ..., simplify=F),
+    while (length(subpops.lst) > old) {
+        old = length(subpops.lst)
+        subpops.lst = unlist( sapply( subpops.lst, split.conn.mat,
+            conn.mat=conn.mat, beta=beta, ..., simplify=F),
             recursive=F )
     }
-    return(ret)
+    return(subpops.lst)
 }
 
-# This function tries to merge random subopoulations, checking if the
-# result is a better soluton to the minimization problem
-mergeCM <- function ( ta,  pp, beta ) {
-    nIt = length(ta)^2
-    ret = ta
+#' Merge subpopulations
+#'
+#' This function tries to merge random subopoulations, checking if the
+#' result is a better soluton to the minimization problem.
+#'
+#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpops.vector.to.list}}.
+#' @param conn.mat A square connectivity matrix.  This matrix has
+#' typically been normalized and made symmetric prior to using this
+#' function.
+#' @param beta Controls degree of splitting of connectivity matrix,
+#' with larger values generating more subpopulations.
+#'
+#' @return List of the same format as subpops.lst, but with
+#' potentially fewer subpopulations.
+#'
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
+#' P. R. 2012. Identification of subpopulations from connectivity
+#' matrices. Ecography, 35: 1004–1016.
+#' 
+#' @seealso See also \code{\link{optimal.split.conn.mat}},
+#' 
+#' @author
+#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+merge.subpops <- function ( subpops.lst,  conn.mat, beta ) {
+    nIt = length(subpops.lst)^2
     al = 1/beta
     
     for (it in 1:nIt) {
-        if (length(ret) < 2) break # Must have at least 2 to merge
+        if (length(subpops.lst) < 2) break # Must have at least 2 to merge
         
-        ii = sort(sample( 1:length(ret), 2 ))
-        li = c( ret[[ ii[1] ]], ret[[ ii[2] ]] )
-        pTest = pp[li,li]
+        ii = sort(sample( 1:length(subpops.lst), 2 ))
+        li = c( subpops.lst[[ ii[1] ]], subpops.lst[[ ii[2] ]] )
+        pTest = conn.mat[li,li]
         
         s = matrix(1,nrow=length(li))
         eTogether = -t(s) %*% pTest %*% s + al * sum(s)^2
-        s[1:length(ret[[ ii[1] ]])] = -1
+        s[1:length(subpops.lst[[ ii[1] ]])] = -1
         eSplit = -t(s) %*% pTest %*% s + al * sum(s)^2
 
         if (eTogether<eSplit) {
-            ret[[ ii[1] ]] = li
-            ret = ret[ -ii[2] ]
+            subpops.lst[[ ii[1] ]] = li
+            subpops.lst = subpops.lst[ -ii[2] ]
         }
     }
 
-    return(ret)
+    return(subpops.lst)
 }
 
-# The quality function is not used to evaluate the result of the
-# solution, i.e. it measures the average total leakage between the
-# subpopulations
-#
-# This quality measure is equal to 1 - mean(RLR) of the reduced
-# connectivity matrix, where RLR=relative local retention, i.e., the
-# fraction of settling individuals that originated at their site of
-# settlement.
-qualCM <- function( ta, p ) {
-    pii = matrix( 0.0, nrow=dim(p)[2], ncol=length(ta) )
+#' Quality measure for subpopulation division
+#'
+#' A measure of the leakage between subpopulations for a given
+#' division of the connectivity matrix into subpopulations.  This
+#' statistic is equal to 1 - mean(RLR) of the reduced connectivity
+#' matrix, where RLR=relative local retention, i.e., the fraction of
+#' settling individuals that originated at their site of settlement.
+#'
+#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpops.vector.to.list}}.
+#' @param conn.mat A square connectivity matrix.
+#'
+#' @return The quality statistic.
+#'
+#' A smaller value of the quality statistic indicates less leakage.
+#'
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
+#' P. R. 2012. Identification of subpopulations from connectivity
+#' matrices. Ecography, 35: 1004–1016.
+#' 
+#' @seealso See also \code{\link{optimal.split.conn.mat}},
+#' \code{\link{subpops.vector.to.list}}
+#' 
+#' @author
+#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+quality.conn.mat <- function( subpops.lst, conn.mat ) {
+    pii = matrix( 0.0, nrow=dim(conn.mat)[2], ncol=length(subpops.lst) )
 
-    for (kk in 1:length(ta)) {
-        pii[ ta[[kk]], kk ] = 1
+    for (kk in 1:length(subpops.lst)) {
+        pii[ subpops.lst[[kk]], kk ] = 1
     }
 
     # Note I use p instead of t(p), as was in Jacobi code.
@@ -131,7 +205,7 @@ qualCM <- function( ta, p ) {
     #pt = t(pii) %*% p %*% pii %*% solve( t(pii) %*% pii )
 
     # Somewhat quicker method
-    pt =  t(pii) %*% p %*% pii #%*% diag( 1 / sapply(ta,length) )
+    pt =  t(pii) %*% conn.mat %*% pii #%*% diag( 1 / sapply(subpops.lst,length) )
     # No need to normalize by number of sites in cluster of larval
     # origin because we are just going to normalize each colum
     
@@ -141,26 +215,105 @@ qualCM <- function( ta, p ) {
     return(1 - mean(diag(pt) / ss))
 }
 
-# Helper function to compute a set of beta values using formula used
-# in Jacobi et al. 2012.
-jacobi.et.al.2012.betas.vector <- function(n,steps=10,cycles=3/4,
+#' Compute vector of beta values
+#' 
+#' Helper function to compute a set of beta values using formula used
+#' in Jacobi et al. (2012).
+#'
+#' @param n numerator of formula from Jacobi et al. (2012).  Normally
+#' will be the number of columns in the connectivity matrix if one
+#' normalizes the columns (otherwise, it would typically be the sum of
+#' all elements of the connectivity matrix).
+#' @param steps number of beta values to return.  Defaults to 10.
+#' @param cycles how many cycles of \code{2*pi} to do.
+#'
+#' @return vector of beta values
+#'
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
+#' P. R. 2012. Identification of subpopulations from connectivity
+#' matrices. Ecography, 35: 1004–1016.
+#' 
+#' @seealso See also \code{\link{optimal.split.conn.mat}}
+#' 
+#' @author
+#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+betas.vector.default <- function(n,steps=10,cycles=3/4,
                                            coeff=0.8,pwr=3.0)
   n/(1+coeff*sin(seq(0,cycles*2*pi,length.out=steps)))^pwr
 
-
-# Acutal Jacobi algorithm
-#
-# Note that I normalize columns, not rows.  This will make "larval
-# loss" uniform for all points of origin, presuming the connectivity
-# matrix, p, is oriented so that settlers = p %*% eggs (i.e., each
-# column represents dispersal from a specific site of origin, each row
-# represents dispersal to a specific site of settlement).
-jacobi.algo <- function(p, normalize.cols=TRUE,
-                        make.symmetric="mean", remove.diagonal=TRUE, 
-                        cycles = 2, tries=5, steps=10,
-                        betas=jacobi.et.al.2012.betas.vector(dim(p)[2],steps),
-                        ... ) {
-    pp <- p
+#' Iteratively, optimally split a connectivity matrix
+#' 
+#' Algorithm for iteratively determining subpopulations of
+#' highly-connected sites.  Uses an iterative method described in
+#' Jacobi et al. (2012)
+#'
+#' @param conn.mat A square connectivity matrix.
+#' @param normalize.cols A boolean indicating if columns of conn.mat
+#' should be normalized by the sum of all elements in the column.
+#' Defaults to TRUE.
+#' @param make.symmetric A string indicating how to force conn.mat to
+#' be symmetric.  "mean" (the default) will replace C_ij by (C_ij +
+#' C_ji)/2.  "max" will replace C_ij by the maximum of C_ij and C_ji.
+#' @param remove.diagonal A boolean indicating if the diagonal
+#' elements of conn.mat should be removed before determining the
+#' subpopulations.  Defaults to TRUE.
+#' @param cycles Number of times to pass over values in betas.
+#' @param betas Vector of beta values to try.  If not given, will
+#' default to \code{\link{betas.vector.default}(dim(conn.mat)[2],steps)}.
+#' @param steps Number of beta values to produce using
+#' betas.vector.default.  Ignored if betas argument is explicitly
+#' given.
+#' @param \dots further arguments to be passed to \code{\link{split.conn.mat}}
+#'
+#' @return A list with the following elements:
+#' \item{betas}{Vector of all beta values tested}
+#'
+#' \item{num.subpops}{Vector of number of subpopulations found for
+#' each value of beta}
+#'
+#' \item{qualities}{Vector of the quality statistic for each
+#' subpopulation division}
+#' 
+#' \item{subpops}{A matrix with dimensions dim(conn.mat)[2] X
+#' length(betas) indicating which subpopulation each site belongs to}
+#' 
+#' \item{best.splits}{A list indicating for each number of
+#' subpopulations, which column of subpops contains the division with
+#' the lowest quality statistic.  E.g.,
+#' \code{best.splits[["4"]]$index} contains the column index of the
+#' optimal division of the connectivity matrix into 4 subpopulations.}
+#' 
+#' @seealso See also \code{\link{split.conn.mat}},
+#' \code{\link{rec.split.conn.mat}}, \code{\link{merge.subpops}},
+#' \code{\link{quality.conn.mat}}
+#' @author
+#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+#' 
+#' @note In Jacobi et al. (2012) paper, the connectivity matrix is
+#' oriented so that \eqn{C_ij} is dispersal from i to j, whereas in this R
+#' package, the connectivity matrix is oriented so that \eqn{C_ij} is
+#' dispersal from j to i.  This choice of orientation is arbitrary,
+#' but one must always be consistent.  From j to i is more common in
+#' population dynamics because it works well with matrix
+#' multiplication (e.g., \code{settlers = conn.mat \%*\% eggs}).
+#'
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
+#'  P. R. 2012. Identification of subpopulations from connectivity
+#'  matrices. Ecography, 35: 1004–1016.
+#' 
+optimal.split.conn.mat <-
+    function(conn.mat, normalize.cols=TRUE,
+             make.symmetric="mean", remove.diagonal=TRUE, 
+             cycles = 2, 
+             betas=betas.vector.default(dim(conn.mat)[2],steps),
+             steps=10,
+             ... ) {
+    if (class(conn.mat) != "matrix")
+        stop("Input conn.mat must be a matrix.")
+    
+    pp <- conn.mat
 
     # Make larval loss uniform over space
     if (normalize.cols)
@@ -181,14 +334,14 @@ jacobi.algo <- function(p, normalize.cols=TRUE,
     if (remove.diagonal)
         diag(pp) <- 0
 
-    clusters = matrix(NA,nrow=dim(p)[2],ncol=cycles*length(betas))
-    num.clusters = rep(NA,cycles*length(betas))
-    qualities = num.clusters
+    subpops = matrix(NA,nrow=dim(conn.mat)[2],ncol=cycles*length(betas))
+    num.subpops = rep(NA,cycles*length(betas))
+    qualities = num.subpops
     for (kk in 1:cycles) {
         print( paste( "Starting cycle",kk ) )
 
         # Initialize with one big cluster
-        ta = list(1:dim(p)[2])
+        ta = list(1:dim(conn.mat)[2])
 
         # Loop over betas
         for (ll in 1:length(betas)) {
@@ -199,37 +352,52 @@ jacobi.algo <- function(p, normalize.cols=TRUE,
             taOld = list()
             while (!setequal(ta,taOld)) {
                 taOld = ta
-                ta = recSplitCM(ta, pp, tries, beta, ...)
-                #if (length(unlist(ta))!=dim(pp)[2]) stop("recSplitCM error")
-                ta = mergeCM(ta,  pp, beta )
-                #if (length(unlist(ta))!=dim(pp)[2]) stop("mergeCM error")
+                ta = rec.split.conn.mat(ta, pp, beta, ...)
+                #if (length(unlist(ta))!=dim(pp)[2]) stop("rec.split.conn.mat error")
+                ta = merge.subpops(ta,  pp, beta )
+                #if (length(unlist(ta))!=dim(pp)[2]) stop("merge.subpops error")
             }
 
             # Store results
             nn = (kk-1)*length(betas)+ll
-            qualities[nn] = qualCM(ta,p)
-            num.clusters[nn] = length(ta)
+            qualities[nn] = quality.conn.mat(ta,conn.mat)
+            num.subpops[nn] = length(ta)
             for (mm in 1:length(ta))
-                clusters[ta[[mm]],nn] = mm
+                subpops[ta[[mm]],nn] = mm
         }
     }
 
-    # For each number of clusters, find the configuration with the
+    # For each number of subpops, find the configuration with the
     # best quality measure
     imin <- function(x) { which( min(x) == x )[1] }
-    best.clusters = by( data.frame(quality=qualities,
+    best.splits = by( data.frame(quality=qualities,
         index=1:length(qualities)),
-        INDICES=num.clusters,
+        INDICES=num.subpops,
         FUN=function(d) d[imin(d$quality),] )
     
-    wareturn(list(betas=rep(betas,cycles),
-                clusters=clusters,qualities=qualities,
-                num.clusters=num.clusters,best.clusters=best.clusters))
+    return(list(betas=rep(betas,cycles),
+                subpops=subpops,qualities=qualities,
+                num.subpops=num.subpops,best.splits=best.splits))
 }
 
-# A helper function to convert a vector of cluster identifications into
-# a list appropriate for qualCM, recSplitCM, etc.
-clusters.vector.to.list <- function(x) {
+#' Convert subpopulation vector to a list of indices
+#'
+#' A helper function to convert a vector of subpopulation
+#' identifications into a list appropriate for
+#' \code{\link{rec.split.conn.mat}}, \code{\link{quality.conn.mat}}, etc.
+#'
+#' @param x vector of subpopulation identifications
+#'
+#' @return A list where each element is a vector of indices for a given
+#' subpopulation.
+#' 
+#' @seealso See also \code{\link{rec.split.conn.mat}}, 
+#' \code{\link{quality.conn.mat}}
+#' 
+#' @author
+#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+subpops.vector.to.list <- function(x) {
     xx = sort(unique(x))
 
     ta = list()
