@@ -12,4 +12,5 @@ Description: ConnMatTools collects several different methods for analyzing and
 Collate:
     'ConnMatTools.R'
     'jacobi_etal_2012.R'
+    'dpr_model.R'
 License: GPL (>= 2)
