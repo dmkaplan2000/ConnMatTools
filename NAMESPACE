@@ -1,4 +1,8 @@
 export(betas.vector.default)
+export(beverton.holt)
+export(dispersal.per.recruit.model)
+export(dpr.plus.homerange.gravity)
+export(hockey.stick)
 export(merge.subpops)
 export(optimal.split.conn.mat)
 export(quality.conn.mat)

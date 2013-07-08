@@ -83,7 +83,7 @@ settler.recruit.slope.correction <- function(slope,conn.mat,natural.LEP=1,
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-beverton.holt <- function(S,slope,Rmax) {
+beverton.holt <- function(S,slope=0.35,Rmax=1) {
   return( (slope * S) / (1 + slope * S / Rmax ) )
 }
 
@@ -108,7 +108,7 @@ beverton.holt <- function(S,slope,Rmax) {
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-hockey.stick <- function(S,slope,Rmax) {
+hockey.stick <- function(S,slope=0.35,Rmax=1) {
   R = slope * S
   R[ R>Rmax] = Rmax
   return( R )
@@ -143,11 +143,13 @@ hockey.stick <- function(S,slope,Rmax) {
 #'   per recruit: An efficient method for assessing sustainability in marine 
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
+#' @seealso See also \code{\link{beverton.holt}},
+#' \code{\link{hockey.stick}}
+#' 
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
 dispersal.per.recruit.model <- 
-  function(LEP,conn.mat,
-           recruits0=matrix(tryCatch(Rmax,finally=1),nrow=dim(conn.mat)[2],ncol=1),
+  function(LEP,conn.mat,recruits0,
            timesteps=10, settler.recruit.func=beverton.holt,...) {
     
     if (class(conn.mat) != "matrix")
@@ -173,4 +175,125 @@ dispersal.per.recruit.model <-
     }
     
     return(list(eggs=eggs,settlers=settlers,recruits=recruits))
+  }
+
+#' Extended population dynamics model with homerange movement
+#' 
+#' This function implements the marine population dynamics model described in 
+#' Gruss et al. (2011).  The model is an extension of the dispersal-per-recruit 
+#' model in Kaplan et al. (2006) to include movement in a homerange and a 
+#' gravity model for fishing effort redistribution.
+#' 
+#' @param larval.mat a square larval connectivity matrix.  \code{dim(larval.mat)
+#'   = rep(length(recruits0),2)}
+#' @param adult.mat a square adult homerange movement matrix. 
+#'   \code{dim(adult.mat) = rep(length(recruits0),2)}. adult.mat must
+#'   be properly normalized so that each column sums to 1.
+#' @param recruits0 a vector of initial recruitment values for each site.
+#' @param f0 a vector of initial real fishing mortalities for each site.
+#' @param timesteps a vector of timesteps at which to record egg production, 
+#'   settlement and recruitment.
+#' @param settler.recruit.func a function to calculate recruitment from the 
+#'   number of settlers at each site.  Defaults to \code{\link{beverton.holt}}.
+#' @param LEP.of.f a function that returns lifetime-egg-productions given a 
+#'   vector of fishing rates.
+#' @param YPR.of.f a function that returns yields-per-recruit given a vector of 
+#'   fishing rates.
+#' @param gamma exponent for the gravity model.  Defaults to 0, i.e., no gravity
+#'   model.
+#' @param gravity.ts.interval number of timesteps between updates of gravity 
+#'   model.  Defaults to 1, i.e., every timestep.
+#' @param \dots additional arguments to settler.recruit.func.
+#'   
+#' @return A list with the following elements:
+#'   
+#'   \item{eggs}{egg production for the timesteps in \code{timesteps}}
+#'   
+#'   \item{settlers}{Similar for settlement}
+#'   
+#'   \item{recruits}{Similar for recruitment}
+#'   
+#'   \item{fishing.mortality}{Real spatial distribution of fishing mortality}
+#'   
+#'   \item{effective.fishing.mortality}{Effective fishing mortality taking into 
+#'   account adult movement}
+#'   
+#'   \item{yield}{Real spatial distribution of yield}
+#'   
+#'   \item{effective.yield}{Effective yield indicating where fish biomass caught
+#'   originates from}
+#'   
+#' @references Grüss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult 
+#'   Movement, Larval Dispersal and Harvester Movement on the Effectiveness of 
+#'   Reserve Networks. PLoS ONE 6:e19960
+#' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
+#'   per recruit: An efficient method for assessing sustainability in marine 
+#'   reserve networks. Ecological Applications, 16: 2248–2263.
+#'   
+#' @seealso See also \code{\link{beverton.holt}}, \code{\link{hockey.stick}}, 
+#'   \link{\code{dispersal.per.recruit.model}}
+#'   
+#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+dpr.plus.homerange.gravity <- 
+  function(larval.mat,adult.mat,recruits0,f0,
+           timesteps=10, settler.recruit.func=beverton.holt,
+           LEP.of.f=function(f) 1-f, YPR.of.f=function(f) f, 
+           gamma=0, gravity.ts.interval=1, ...) {
+    
+    if (class(larval.mat) != "matrix")
+      stop("Input larval.mat must be a matrix.")
+    if (class(adult.mat) != "matrix")
+      stop("Input adult.mat must be a matrix.")
+    
+    r = recruits0
+    f = f0
+    ftot = sum(f)
+    
+    eggs = matrix(NA,nrow=dim(conn.mat)[2],ncol=length(timesteps))
+    settlers = eggs
+    recruits = settlers
+    fishing.mortality=eggs
+    effective.fishing.mortality=fishing.mortality
+    yield=eggs
+    effective.yield=yield
+    
+    for (t in 1:max(timesteps)) {
+      feff = t(t(f) %*% adult.mat)
+      
+      LEP = LEP.of.f(feff)
+      
+      e = r * LEP
+      s = larval.mat %*% e
+      r = settler.recruit.func(s,...)
+      
+      YPR = YPR.of.f(feff)
+      Yeff = YPR * r
+      
+      if (prod(dim(adult.mat))>1)
+        Y = (adult.mat %*% (Yeff/feff)) * f
+      else
+        Y = Yeff
+      
+      I = which( t == timesteps )
+      if (length(I)>0) {
+        eggs[,I] = e
+        settlers[,I] = s
+        recruits[,I] = r        
+        fishing.mortality[,I] = f        
+        effective.fishing.mortality[,I] = feff        
+        yield[,I] =         
+        effective.yield[,I] = feff        
+      }
+      
+      if ((gamma>0) && (t%%gravity.ts.interval == 0)) {
+        YY = Y^(1/gamma)
+        f = ftot * YY / sum(YY)
+      }
+    }
+    
+    return(list(eggs=eggs,settlers=settlers,recruits=recruits,
+                fishing.mortality=fishing.mortality,
+                effective.fishing.mortality=effective.fishing.mortality,
+                yield=yield,effective.yield=effective.yield))
   }
