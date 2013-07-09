@@ -83,7 +83,7 @@ settler.recruit.slope.correction <- function(slope,conn.mat,natural.LEP=1,
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-beverton.holt <- function(S,slope=0.35,Rmax=1) {
+beverton.holt <- function(S,slope=1/0.35,Rmax=1) {
   return( (slope * S) / (1 + slope * S / Rmax ) )
 }
 
@@ -108,7 +108,7 @@ beverton.holt <- function(S,slope=0.35,Rmax=1) {
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-hockey.stick <- function(S,slope=0.35,Rmax=1) {
+hockey.stick <- function(S,slope=1/0.35,Rmax=1) {
   R = slope * S
   R[ R>Rmax] = Rmax
   return( R )
@@ -116,36 +116,36 @@ hockey.stick <- function(S,slope=0.35,Rmax=1) {
 
 #' Population dynamics model based on lifetime-egg-production
 #' 
-#' This function implements the marine population dynamics model described in
-#' Kaplan et al. (2006).  This model is most appropriate for examining
-#' equilibrium dynamics of age-structured populations or temporal dynamics of
+#' This function implements the marine population dynamics model described in 
+#' Kaplan et al. (2006).  This model is most appropriate for examining 
+#' equilibrium dynamics of age-structured populations or temporal dynamics of 
 #' semelparous populations.
 #' 
-#' @param LEP a vector of lifetime-egg-production (LEP; also known as
+#' @param LEP a vector of lifetime-egg-production (LEP; also known as 
 #'   eggs-per-recruit (EPR)) for each site.
-#' @param conn.mat a square connectivity matrix.  \code{dim(conn.mat) =
+#' @param conn.mat a square connectivity matrix.  \code{dim(conn.mat) = 
 #'   rep(length(LEP),2)}
 #' @param recruits0 a vector of initial recruitment values for each site.
-#' @param timesteps a vector of timesteps at which to record egg production,
+#' @param timesteps a vector of timesteps at which to record egg production, 
 #'   settlement and recruitment.
-#' @param settler.recruit.func a function to calculate recruitment from the
+#' @param settler.recruit.func a function to calculate recruitment from the 
 #'   number of settlers at each site.  Defaults to \code{\link{beverton.holt}}.
-#' @param \dots additional arguments to settler.recruit.func.
+#' @param \dots additional arguments to settler.recruit.func.  Typically
+#'   \code{Rmax} and \code{slope}.
 #'   
-#' @return A list with the following elements:
-#' \item{eggs}{egg production for the timesteps in \code{timesteps}}
-#'
-#' \item{settlers}{Similar for settlement}
+#' @return A list with the following elements: \item{eggs}{egg production for
+#'   the timesteps in \code{timesteps}}
 #'   
-#' \item{recruits}{Similar for recruitment}
+#'   \item{settlers}{Similar for settlement}
+#'   
+#'   \item{recruits}{Similar for recruitment}
 #'   
 #' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
 #'   per recruit: An efficient method for assessing sustainability in marine 
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
-#' @seealso See also \code{\link{beverton.holt}},
-#' \code{\link{hockey.stick}}
-#' 
+#' @seealso See also \code{\link{beverton.holt}}, \code{\link{hockey.stick}}
+#'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
 dispersal.per.recruit.model <- 
@@ -250,7 +250,7 @@ dpr.plus.homerange.gravity <-
     f = f0
     ftot = sum(f)
     
-    eggs = matrix(NA,nrow=dim(conn.mat)[2],ncol=length(timesteps))
+    eggs = matrix(NA,nrow=dim(larval.mat)[2],ncol=length(timesteps))
     settlers = eggs
     recruits = settlers
     fishing.mortality=eggs
@@ -326,6 +326,7 @@ dpr.plus.homerange.gravity <-
 #' @seealso See also \code{\link{dispersal.per.recruit.model}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.laplacian.connectivity.matrix.R
 #' @export
 laplacian.connectivity.matrix <- function(num.sites,disp.dist,shift=0,boundaries="nothing") {
   # Function integrates exp(-exponent*abs(x))*exponent/2 from start to end.  start <= end
