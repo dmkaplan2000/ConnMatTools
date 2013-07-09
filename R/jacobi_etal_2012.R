@@ -22,14 +22,14 @@
 #' P. R. 2012. Identification of subpopulations from connectivity
 #' matrices. Ecography, 35: 1004–1016.
 #' 
-#' @seealso See also \code{\link{optimal.split.conn.mat}},
-#' \code{\link{rec.split.conn.mat}},
-#' \code{\link{subpops.vector.to.list}}
+#' @seealso See also \code{\link{optimalSplitConnMat}},
+#' \code{\link{recSplitConnMat}},
+#' \code{\link{subpopsVectorToList}}
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-split.conn.mat <- function(indices,conn.mat,beta,tries=5,
+splitConnMat <- function(indices,conn.mat,beta,tries=5,
                     threshold=1e-10,alpha=0.1,maxit=500) {
     # makes a submatrix of the total connectivity matrix only
     # involving the sites in the index list
@@ -89,30 +89,30 @@ split.conn.mat <- function(indices,conn.mat,beta,tries=5,
 #' subpopulations until none of the subpopulations can be split
 #' further to improve the minimization.
 #'
-#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpops.vector.to.list}}.
+#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpopsVectorToList}}.
 #' @param conn.mat A square connectivity matrix.  This matrix has
 #' typically been normalized and made symmetric prior to using this
 #' function.
 #' @param beta Controls degree of splitting of connectivity matrix,
 #' with larger values generating more subpopulations.
-#' @param \dots further arguments to be passed to \code{\link{split.conn.mat}}
+#' @param \dots further arguments to be passed to \code{\link{splitConnMat}}
 #' 
 #' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
 #' P. R. 2012. Identification of subpopulations from connectivity
 #' matrices. Ecography, 35: 1004–1016.
 #' 
-#' @seealso See also \code{\link{optimal.split.conn.mat}},
-#' \code{\link{split.conn.mat}},
-#' \code{\link{subpops.vector.to.list}}
+#' @seealso See also \code{\link{optimalSplitConnMat}},
+#' \code{\link{splitConnMat}},
+#' \code{\link{subpopsVectorToList}}
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-rec.split.conn.mat <- function(subpops.lst, conn.mat, beta, ...) {
+recSplitConnMat <- function(subpops.lst, conn.mat, beta, ...) {
     old = 0
     while (length(subpops.lst) > old) {
         old = length(subpops.lst)
-        subpops.lst = unlist( sapply( subpops.lst, split.conn.mat,
+        subpops.lst = unlist( sapply( subpops.lst, splitConnMat,
             conn.mat=conn.mat, beta=beta, ..., simplify=F),
             recursive=F )
     }
@@ -124,7 +124,7 @@ rec.split.conn.mat <- function(subpops.lst, conn.mat, beta, ...) {
 #' This function tries to merge random subopoulations, checking if the
 #' result is a better soluton to the minimization problem.
 #'
-#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpops.vector.to.list}}.
+#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpopsVectorToList}}.
 #' @param conn.mat A square connectivity matrix.  This matrix has
 #' typically been normalized and made symmetric prior to using this
 #' function.
@@ -138,12 +138,12 @@ rec.split.conn.mat <- function(subpops.lst, conn.mat, beta, ...) {
 #' P. R. 2012. Identification of subpopulations from connectivity
 #' matrices. Ecography, 35: 1004–1016.
 #' 
-#' @seealso See also \code{\link{optimal.split.conn.mat}},
+#' @seealso See also \code{\link{optimalSplitConnMat}},
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-merge.subpops <- function ( subpops.lst,  conn.mat, beta ) {
+mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
     nIt = length(subpops.lst)^2
     al = 1/beta
     
@@ -169,31 +169,31 @@ merge.subpops <- function ( subpops.lst,  conn.mat, beta ) {
 }
 
 #' Quality measure for subpopulation division
-#'
-#' A measure of the leakage between subpopulations for a given
-#' division of the connectivity matrix into subpopulations.  This
-#' statistic is equal to 1 - mean(RLR) of the reduced connectivity
-#' matrix, where RLR=relative local retention, i.e., the fraction of
-#' settling individuals that originated at their site of settlement.
-#'
-#' @param subpops.lst A list whose elements are vectors of indices for each subpopulation.  See \code{\link{subpops.vector.to.list}}.
+#' 
+#' A measure of the leakage between subpopulations for a given division of the
+#' connectivity matrix into subpopulations.  This statistic is equal to 1 -
+#' mean(RLR) of the reduced connectivity matrix, where RLR=relative local
+#' retention, i.e., the fraction of settling individuals that originated at
+#' their site of settlement.
+#' 
+#' @param subpops.lst A list whose elements are vectors of indices for each
+#'   subpopulation.  See \code{\link{subpopsVectorToList}}.
 #' @param conn.mat A square connectivity matrix.
-#'
+#'   
 #' @return The quality statistic.
-#'
-#' A smaller value of the quality statistic indicates less leakage.
-#'
-#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
-#' P. R. 2012. Identification of subpopulations from connectivity
-#' matrices. Ecography, 35: 1004–1016.
-#' 
-#' @seealso See also \code{\link{optimal.split.conn.mat}},
-#' \code{\link{subpops.vector.to.list}}
-#' 
-#' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#'   
+#'   A smaller value of the quality statistic indicates less leakage.
+#'   
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson, P. R. 2012.
+#'   Identification of subpopulations from connectivity matrices. Ecography, 35:
+#'   1004–1016.
+#'   
+#' @seealso See also \code{\link{optimalSplitConnMat}}, 
+#'   \code{\link{subpopsVectorToList}}
+#'   
+#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-quality.conn.mat <- function( subpops.lst, conn.mat ) {
+qualitySubpops <- function( subpops.lst, conn.mat ) {
     pii = matrix( 0.0, nrow=dim(conn.mat)[2], ncol=length(subpops.lst) )
 
     for (kk in 1:length(subpops.lst)) {
@@ -233,12 +233,12 @@ quality.conn.mat <- function( subpops.lst, conn.mat ) {
 #' P. R. 2012. Identification of subpopulations from connectivity
 #' matrices. Ecography, 35: 1004–1016.
 #' 
-#' @seealso See also \code{\link{optimal.split.conn.mat}}
+#' @seealso See also \code{\link{optimalSplitConnMat}}
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-betas.vector.default <- function(n,steps=10,cycles=3/4,
+betasVectorDefault <- function(n,steps=10,cycles=3/4,
                                            coeff=0.8,pwr=3.0)
   n/(1+coeff*sin(seq(0,cycles*2*pi,length.out=steps)))^pwr
 
@@ -260,11 +260,11 @@ betas.vector.default <- function(n,steps=10,cycles=3/4,
 #' subpopulations.  Defaults to TRUE.
 #' @param cycles Number of times to pass over values in betas.
 #' @param betas Vector of beta values to try.  If not given, will
-#' default to \code{\link{betas.vector.default}(dim(conn.mat)[2],steps)}.
+#' default to \code{\link{betasVectorDefault}(dim(conn.mat)[2],steps)}.
 #' @param steps Number of beta values to produce using
-#' betas.vector.default.  Ignored if betas argument is explicitly
+#' betasVectorDefault.  Ignored if betas argument is explicitly
 #' given.
-#' @param \dots further arguments to be passed to \code{\link{split.conn.mat}}
+#' @param \dots further arguments to be passed to \code{\link{splitConnMat}}
 #'
 #' @return A list with the following elements:
 #' \item{betas}{Vector of all beta values tested}
@@ -284,9 +284,9 @@ betas.vector.default <- function(n,steps=10,cycles=3/4,
 #' \code{best.splits[["4"]]$index} contains the column index of the
 #' optimal division of the connectivity matrix into 4 subpopulations.}
 #' 
-#' @seealso See also \code{\link{split.conn.mat}},
-#' \code{\link{rec.split.conn.mat}}, \code{\link{merge.subpops}},
-#' \code{\link{quality.conn.mat}}
+#' @seealso See also \code{\link{splitConnMat}},
+#' \code{\link{recSplitConnMat}}, \code{\link{mergeSubpops}},
+#' \code{\link{qualitySubpops}}
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
@@ -303,11 +303,11 @@ betas.vector.default <- function(n,steps=10,cycles=3/4,
 #'  P. R. 2012. Identification of subpopulations from connectivity
 #'  matrices. Ecography, 35: 1004–1016.
 #' 
-optimal.split.conn.mat <-
+optimalSplitConnMat <-
     function(conn.mat, normalize.cols=TRUE,
              make.symmetric="mean", remove.diagonal=TRUE, 
              cycles = 2, 
-             betas=betas.vector.default(dim(conn.mat)[2],steps),
+             betas=betasVectorDefault(dim(conn.mat)[2],steps),
              steps=10,
              ... ) {
     if (class(conn.mat) != "matrix")
@@ -352,15 +352,15 @@ optimal.split.conn.mat <-
             taOld = list()
             while (!setequal(ta,taOld)) {
                 taOld = ta
-                ta = rec.split.conn.mat(ta, pp, beta, ...)
-                #if (length(unlist(ta))!=dim(pp)[2]) stop("rec.split.conn.mat error")
-                ta = merge.subpops(ta,  pp, beta )
-                #if (length(unlist(ta))!=dim(pp)[2]) stop("merge.subpops error")
+                ta = recSplitConnMat(ta, pp, beta, ...)
+                #if (length(unlist(ta))!=dim(pp)[2]) stop("recSplitConnMat error")
+                ta = mergeSubpops(ta,  pp, beta )
+                #if (length(unlist(ta))!=dim(pp)[2]) stop("mergeSubpops error")
             }
 
             # Store results
             nn = (kk-1)*length(betas)+ll
-            qualities[nn] = quality.conn.mat(ta,conn.mat)
+            qualities[nn] = qualitySubpops(ta,conn.mat)
             num.subpops[nn] = length(ta)
             for (mm in 1:length(ta))
                 subpops[ta[[mm]],nn] = mm
@@ -384,20 +384,20 @@ optimal.split.conn.mat <-
 #'
 #' A helper function to convert a vector of subpopulation
 #' identifications into a list appropriate for
-#' \code{\link{rec.split.conn.mat}}, \code{\link{quality.conn.mat}}, etc.
+#' \code{\link{recSplitConnMat}}, \code{\link{qualitySubpops}}, etc.
 #'
 #' @param x vector of subpopulation identifications
 #'
 #' @return A list where each element is a vector of indices for a given
 #' subpopulation.
 #' 
-#' @seealso See also \code{\link{rec.split.conn.mat}}, 
-#' \code{\link{quality.conn.mat}}
+#' @seealso See also \code{\link{recSplitConnMat}}, 
+#' \code{\link{qualitySubpops}}
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-subpops.vector.to.list <- function(x) {
+subpopsVectorToList <- function(x) {
     xx = sort(unique(x))
 
     ta = list()

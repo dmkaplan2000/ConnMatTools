@@ -9,7 +9,8 @@ Description: ConnMatTools collects several different methods for analyzing and
     working with connectivity matrices in R.  Though primarily oriented towards
     marine larval dispersal, many of the methods are general and useful for
     terrestrial systems as well.
-Suggests: igraph
+Suggests:
+    igraph
 Collate:
     'ConnMatTools.R'
     'jacobi_etal_2012.R'

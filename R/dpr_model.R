@@ -48,7 +48,7 @@ NULL
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-settler.recruit.slope.correction <- function(conn.mat,slope=1,natural.LEP=1,
+settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
                                              critical.FLEP=0.35,use.arpack=TRUE) {
   if (class(conn.mat) != "matrix")
     stop("Input conn.mat must be a matrix.")
@@ -94,7 +94,7 @@ settler.recruit.slope.correction <- function(conn.mat,slope=1,natural.LEP=1,
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-beverton.holt <- function(S,slope=1/0.35,Rmax=1) {
+BevertonHolt <- function(S,slope=1/0.35,Rmax=1) {
   return( (slope * S) / (1 + slope * S / Rmax ) )
 }
 
@@ -119,7 +119,7 @@ beverton.holt <- function(S,slope=1/0.35,Rmax=1) {
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-hockey.stick <- function(S,slope=1/0.35,Rmax=1) {
+hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
   R = slope * S
   R[ R>Rmax] = Rmax
   return( R )
@@ -140,7 +140,7 @@ hockey.stick <- function(S,slope=1/0.35,Rmax=1) {
 #' @param timesteps a vector of timesteps at which to record egg production, 
 #'   settlement and recruitment.
 #' @param settler.recruit.func a function to calculate recruitment from the 
-#'   number of settlers at each site.  Defaults to \code{\link{beverton.holt}}.
+#'   number of settlers at each site.  Defaults to \code{\link{BevertonHolt}}.
 #' @param \dots additional arguments to settler.recruit.func.  Typically
 #'   \code{Rmax} and \code{slope}.
 #'   
@@ -155,13 +155,13 @@ hockey.stick <- function(S,slope=1/0.35,Rmax=1) {
 #'   per recruit: An efficient method for assessing sustainability in marine 
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
-#' @seealso See also \code{\link{beverton.holt}}, \code{\link{hockey.stick}}
+#' @seealso See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-dispersal.per.recruit.model <- 
+DispersalPerRecruitModel <- 
   function(LEP,conn.mat,recruits0,
-           timesteps=10, settler.recruit.func=beverton.holt,...) {
+           timesteps=10, settler.recruit.func=BevertonHolt,...) {
     
     if (class(conn.mat) != "matrix")
       stop("Input conn.mat must be a matrix.")
@@ -188,7 +188,7 @@ dispersal.per.recruit.model <-
     return(list(eggs=eggs,settlers=settlers,recruits=recruits))
   }
 
-#' Extended population dynamics model with homerange movement
+#' Extended DPR population dynamics model to include homerange movement
 #' 
 #' This function implements the marine population dynamics model described in 
 #' Gruss et al. (2011).  The model is an extension of the dispersal-per-recruit 
@@ -205,7 +205,7 @@ dispersal.per.recruit.model <-
 #' @param timesteps a vector of timesteps at which to record egg production, 
 #'   settlement and recruitment.
 #' @param settler.recruit.func a function to calculate recruitment from the 
-#'   number of settlers at each site.  Defaults to \code{\link{beverton.holt}}.
+#'   number of settlers at each site.  Defaults to \code{\link{BevertonHolt}}.
 #' @param LEP.of.f a function that returns lifetime-egg-productions given a 
 #'   vector of fishing rates.
 #' @param YPR.of.f a function that returns yields-per-recruit given a vector of 
@@ -241,14 +241,14 @@ dispersal.per.recruit.model <-
 #'   per recruit: An efficient method for assessing sustainability in marine 
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
-#' @seealso See also \code{\link{beverton.holt}}, \code{\link{hockey.stick}}, 
-#'   \code{\link{dispersal.per.recruit.model}}
+#' @seealso See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}, 
+#'   \code{\link{DispersalPerRecruitModel}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-dpr.plus.homerange.gravity <- 
+DPRHomerangeGravity <- 
   function(larval.mat,adult.mat,recruits0,f0,
-           timesteps=10, settler.recruit.func=beverton.holt,
+           timesteps=10, settler.recruit.func=BevertonHolt,
            LEP.of.f=function(f) 1-f, YPR.of.f=function(f) f, 
            gamma=0, gravity.ts.interval=1, ...) {
     
@@ -334,12 +334,12 @@ dpr.plus.homerange.gravity <-
 #'   per recruit: An efficient method for assessing sustainability in marine 
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
-#' @seealso See also \code{\link{dispersal.per.recruit.model}}
+#' @seealso See also \code{\link{DispersalPerRecruitModel}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
-#' @example tests/test.laplacian.connectivity.matrix.R
+#' @example tests/test.laplacianConnMat.R
 #' @export
-laplacian.connectivity.matrix <- function(num.sites,disp.dist,shift=0,boundaries="nothing") {
+laplacianConnMat <- function(num.sites,disp.dist,shift=0,boundaries="nothing") {
   # Function integrates exp(-exponent*abs(x))*exponent/2 from start to end.  start <= end
   expint <- function(exponent,start,end) {
     d <- matrix(0,nrow=dim(start)[1],ncol=dim(start)[2])

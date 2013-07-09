@@ -23,6 +23,6 @@
 #' @title Tools for analyzing connectivity matrices
 #' @keywords package
 #' @examples
-#' \dontrun{optimal.split.conn.mat(CM)}
-#' @seealso See \code{\link{optimal.split.conn.mat}}
+#' \dontrun{optimalSplitConnMat(CM)}
+#' @seealso See \code{\link{optimalSplitConnMat}}
 NULL
