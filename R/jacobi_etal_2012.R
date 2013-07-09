@@ -27,7 +27,7 @@
 #' \code{\link{subpopsVectorToList}}
 #' 
 #' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 splitConnMat <- function(indices,conn.mat,beta,tries=5,
@@ -107,7 +107,7 @@ splitConnMat <- function(indices,conn.mat,beta,tries=5,
 #' \code{\link{subpopsVectorToList}}
 #' 
 #' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 recSplitConnMat <- function(subpops.lst, conn.mat, beta, ...) {
@@ -143,7 +143,7 @@ recSplitConnMat <- function(subpops.lst, conn.mat, beta, ...) {
 #' @seealso See also \code{\link{optimalSplitConnMat}},
 #' 
 #' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
@@ -194,7 +194,7 @@ mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
 #' @seealso See also \code{\link{optimalSplitConnMat}}, 
 #'   \code{\link{subpopsVectorToList}}
 #'   
-#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 qualitySubpops <- function( subpops.lst, conn.mat ) {
@@ -242,7 +242,7 @@ qualitySubpops <- function( subpops.lst, conn.mat ) {
 #' @seealso See also \code{\link{optimalSplitConnMat}}
 #' 
 #' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 betasVectorDefault <- function(n,steps=10,cycles=3/4,
@@ -295,7 +295,7 @@ betasVectorDefault <- function(n,steps=10,cycles=3/4,
 #' \code{\link{recSplitConnMat}}, \code{\link{mergeSubpops}},
 #' \code{\link{qualitySubpops}}
 #' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 #' 
@@ -403,7 +403,7 @@ optimalSplitConnMat <-
 #' \code{\link{qualitySubpops}}
 #' 
 #' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
 subpopsVectorToList <- function(x) {
     xx = sort(unique(x))

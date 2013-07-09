@@ -46,7 +46,7 @@ NULL
 #'   stock-recruit curves for use in spatially explicit models. Fisheries 
 #'   Research, 102: 330–334.
 #'   
-#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
@@ -98,7 +98,7 @@ settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
 #' @references Beverton RJH, Holt SJ (1957) On the dynamics of exploited fish 
 #'   populations. H.M.S.O., London. 533 pp.
 #'   
-#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
 BevertonHolt <- function(S,slope=1/0.35,Rmax=1) {
   return( (slope * S) / (1 + slope * S / Rmax ) )
@@ -123,7 +123,7 @@ BevertonHolt <- function(S,slope=1/0.35,Rmax=1) {
 #'   per recruit: An efficient method for assessing sustainability in marine 
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
-#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
@@ -164,7 +164,8 @@ hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
 #'   
 #' @seealso See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}
 #'   
-#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.dpr_model.R
 #' @encoding UTF-8
 #' @export
 DispersalPerRecruitModel <- 
@@ -252,7 +253,7 @@ DispersalPerRecruitModel <-
 #' @seealso See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}, 
 #'   \code{\link{DispersalPerRecruitModel}}
 #'   
-#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 DPRHomerangeGravity <- 
@@ -344,7 +345,7 @@ DPRHomerangeGravity <-
 #'   
 #' @seealso See also \code{\link{DispersalPerRecruitModel}}
 #'   
-#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @example tests/test.laplacianConnMat.R
 #' @encoding UTF-8
 #' @export

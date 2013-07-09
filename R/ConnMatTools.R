@@ -15,9 +15,9 @@
 #' }
 #'
 #' @author
-#' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' 
-#' Maintainer: David Kaplan \email{dmkaplan2000@@gmail.com}
+#' Maintainer: David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @name ConnMatTools
 #' @docType package
 #' @title Tools for analyzing connectivity matrices
