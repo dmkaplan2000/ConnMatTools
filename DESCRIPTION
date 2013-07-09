@@ -1,14 +1,15 @@
 Package: ConnMatTools
 Type: Package
 Title: Tools for analyzing connectivity matrices
-Version: 0.01
-Date: 2013-07-08
+Version: 0.1
+Date: 2013-07-09
 Author: David M. Kaplan <dmkaplan2000@gmail.com>
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>
 Description: ConnMatTools collects several different methods for analyzing and
     working with connectivity matrices in R.  Though primarily oriented towards
     marine larval dispersal, many of the methods are general and useful for
     terrestrial systems as well.
+Suggests: igraph
 Collate:
     'ConnMatTools.R'
     'jacobi_etal_2012.R'

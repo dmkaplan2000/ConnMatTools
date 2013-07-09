@@ -23,18 +23,21 @@ NULL
 #' the connectivity matrix agrees with that of the global non-spatially-explicit
 #' model.  Uses the method in White (2010).
 #' 
-#' @param slope slope at the origin of the settler-recruit relationship.  Can be
-#'   a vector of length = \code{dim(conn.mat)[2]}.
 #' @param conn.mat a square connectivity matrix.
+#' @param slope slope at the origin of the settler-recruit relationship.  Only 
+#'   interesting to fix this argument if it is a vector of length = 
+#'   \code{dim(conn.mat)[2]} (i.e., if the slope varies among sites and one
+#'   wants to globally scale all slopes so that the collapse point matches the
+#'   global collapse point).
 #' @param natural.LEP value of lifetime-egg-production (LEP), also known as 
 #'   eggs-per-recruit, in the absence of fishing.  Can be a vector of length = 
 #'   \code{dim(conn.mat)[2]}.  Defaults to 1.
 #' @param critical.FLEP Fraction of natural.LEP at which collapse occurs. 
 #'   Defaults to 0.35.
 #' @param use.arpack Boolean determining if calculation is to be done with 
-#'   \code{\link{arpack}} function from the \link{igraph} package. This is
-#'   much quicker for large matrices, but requires \link{igraph}. Defaults
-#'   to TRUE, but will use eigen instead if \link{igraph} is not found.
+#'   \code{\link{arpack}} function from the \link{igraph} package. This is much 
+#'   quicker for large matrices, but requires \link{igraph}. Defaults to TRUE, 
+#'   but will use eigen instead if \link{igraph} is not found.
 #'   
 #' @return The slope argument corrected so that collapse happens when LEP is 
 #'   critical.FLEP * natural.LEP.
@@ -45,12 +48,20 @@ NULL
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
-settler.recruit.slope.correction <- function(slope,conn.mat,natural.LEP=1,
+settler.recruit.slope.correction <- function(conn.mat,slope=1,natural.LEP=1,
                                              critical.FLEP=0.35,use.arpack=TRUE) {
   if (class(conn.mat) != "matrix")
     stop("Input conn.mat must be a matrix.")
   
-  C = diag(slope) %*% conn.mat %*% (natural.LEP * critical.FLEP)
+  if (length(natural.LEP)>1)
+    C = conn.mat %*% (natural.LEP * critical.FLEP)
+  else
+    C = conn.mat * (natural.LEP * critical.FLEP)
+  
+  if (length(slope)>1)
+    C = diag(slope) %*% C
+  else
+    C = slope * C
   
   if (use.arpack && require(igraph)) {
     ii = igraph.arpack.default
