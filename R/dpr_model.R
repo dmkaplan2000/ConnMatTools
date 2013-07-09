@@ -16,7 +16,7 @@
 #   populations. H.M.S.O., London. 533 pp.
 NULL
 
-#' Correction slope of settler-recruit relationship
+#' Correction for slope of settler-recruit relationship
 #' 
 #' This function corrects the slope of the settler-recruit curve so that the 
 #' collapse point of the spatially-explicit population model corresponding to 
@@ -32,11 +32,11 @@ NULL
 #' @param critical.FLEP Fraction of natural.LEP at which collapse occurs. 
 #'   Defaults to 0.35.
 #' @param use.arpack Boolean determining if calculation is to be done with 
-#'   arpack function from the igraph package. This is much quicker for large 
-#'   matrices, but requires the igraph package. Defaults to TRUE, but will use 
-#'   eigen instead if igraph is not found.
+#'   \code{\link{arpack}} function from the \link{igraph} package. This is
+#'   much quicker for large matrices, but requires \link{igraph}. Defaults
+#'   to TRUE, but will use eigen instead if \link{igraph} is not found.
 #'   
-#' @return The slope argument corrected so that collapse happens with LEP is
+#' @return The slope argument corrected so that collapse happens when LEP is 
 #'   critical.FLEP * natural.LEP.
 #'   
 #' @references White, J. W. 2010. Adapting the steepness parameter from 
@@ -231,7 +231,7 @@ dispersal.per.recruit.model <-
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
 #' @seealso See also \code{\link{beverton.holt}}, \code{\link{hockey.stick}}, 
-#'   \link{\code{dispersal.per.recruit.model}}
+#'   \code{\link{dispersal.per.recruit.model}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
@@ -297,3 +297,77 @@ dpr.plus.homerange.gravity <-
                 effective.fishing.mortality=effective.fishing.mortality,
                 yield=yield,effective.yield=effective.yield))
   }
+
+#' Uniform Laplacian connectivity matrix
+#' 
+#' This function generates a connectivity matrix that is governed by a Laplacian
+#' distribution: \deqn{D(x,y)=\frac{e^{\frac{-\abs{x-y-\delta}}{\sigma}}}{2 
+#' \sigma}}{D(x,y)=exp(abs(x-y-delta)/sigma)/2/sigma}
+#' 
+#' The \code{boundary} argument can have the following different values: 
+#' "nothing" meaning do nothing special with boundaries; "conservative" meaning force
+#' columns of matrix to sum to 1; and "circular" meaning wrap edges.
+#' 
+#' @param num.sites number of sites.  Sites are assumed to be aligned on a 
+#'   linear coastline.
+#' @param disp.dist dispersal distance in "site" units (i.e., 1 site = 1 unit of
+#'   distance)
+#' @param shift advection distance in "site" units.  Defaults to 0.
+#' @param boundaries string indicating what to do at boundaries.  Defaults to 
+#'   "nothing".  Possible values include: "nothing", "conservative" and
+#'   "circular"
+#'   
+#' @return A square connectivity matrix
+#'   
+#' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
+#'   per recruit: An efficient method for assessing sustainability in marine 
+#'   reserve networks. Ecological Applications, 16: 2248–2263.
+#'   
+#' @seealso See also \code{\link{dispersal.per.recruit.model}}
+#'   
+#' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @export
+laplacian.connectivity.matrix <- function(num.sites,disp.dist,shift=0,boundaries="nothing") {
+  # Function integrates exp(-exponent*abs(x))*exponent/2 from start to end.  start <= end
+  expint <- function(exponent,start,end) {
+    d <- matrix(0,nrow=dim(start)[1],ncol=dim(start)[2])
+    
+    if (is.infinite(exponent)) {
+      if (exponent>0) 
+        exponent = 1e20
+      else
+        exponent = -1e20
+    }
+    
+    posS = start>=0
+    posE = end>= 0
+    
+    pos = posS & posE
+    neg = !posS & !posE
+    mixed = !pos & !neg
+    
+    d[pos] = 0.5 * (exp(-exponent*start[pos]) - exp(-exponent*end[pos]))
+    d[neg] = 0.5 * (exp(exponent*end[neg]) - exp(exponent*start[neg]))
+    d[mixed] = 1-0.5 * (exp(exponent*start[mixed])+exp(-exponent*end[mixed]))
+    
+    return(d)
+  }
+  
+  x = matrix(1:num.sites,nrow=num.sites,ncol=num.sites)
+  x = x - t(x) - shift
+  
+  dm = expint(1/disp.dist,x-0.5,x+0.5)
+
+  if (boundaries=="conservative") {
+    dm = dm %*% diag(apply(dm,2,sum))
+  } else if(boundaries=="circular") {
+    for (k in c(-10:-1,1:10))
+      dm = dm + expint(1/disp.dist,x+k*num.sites-0.5,x+k*num.sites+0.5)
+    
+    # If circular, force conservative
+    dm = dm %*% diag(apply(dm,2,sum))    
+  } else if (boundaries=="nothing") {}
+  else stop("Bad boundaries argument")
+  
+  return(dm)
+}
