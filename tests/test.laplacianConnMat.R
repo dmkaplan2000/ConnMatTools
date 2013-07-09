@@ -1,3 +1,3 @@
 library(ConnMatTools)
-conn.mat <- laplacianConnMat(100,10,15,"circular")
-image(conn.mat)
+cm <- laplacianConnMat(100,10,15,"circular")
+image(cm)

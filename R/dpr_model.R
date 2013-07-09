@@ -50,7 +50,7 @@ NULL
 #' @encoding UTF-8
 #' @export
 settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
-                                             critical.FLEP=0.35,use.arpack=TRUE) {
+                                          critical.FLEP=0.35,use.arpack=TRUE) {
   if (class(conn.mat) != "matrix")
     stop("Input conn.mat must be a matrix.")
   
@@ -67,8 +67,13 @@ settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
   if (use.arpack && require(igraph)) {
     ii = igraph.arpack.default
     ii$n = dim(conn.mat)[2]
-    ff = function(x,extra=NULL) { conn.mat%*%x }
-    v = arpack(ff, extra=NULL, sym=FALSE, options=ii)$values[1]
+    ff = function(x,extra=NULL) { C %*%x }
+    
+    sym = FALSE
+    if (sum(abs(C-t(C)))<1e-10)
+      sym = TRUE
+    
+    v = arpack(ff, extra=NULL, sym=sym, options=ii)$values[1]
   } else {
     v = eigen(C)$values[1]
   }
@@ -142,7 +147,7 @@ hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
 #' @param timesteps a vector of timesteps at which to record egg production, 
 #'   settlement and recruitment.
 #' @param settler.recruit.func a function to calculate recruitment from the 
-#'   number of settlers at each site.  Defaults to \code{\link{BevertonHolt}}.
+#'   number of settlers at each site.  Defaults to \code{\link{hockeyStick}}.
 #' @param \dots additional arguments to settler.recruit.func.  Typically
 #'   \code{Rmax} and \code{slope}.
 #'   
@@ -164,7 +169,7 @@ hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
 #' @export
 DispersalPerRecruitModel <- 
   function(LEP,conn.mat,recruits0,
-           timesteps=10, settler.recruit.func=BevertonHolt,...) {
+           timesteps=10, settler.recruit.func=hockeyStick,...) {
     
     if (class(conn.mat) != "matrix")
       stop("Input conn.mat must be a matrix.")
@@ -208,7 +213,7 @@ DispersalPerRecruitModel <-
 #' @param timesteps a vector of timesteps at which to record egg production, 
 #'   settlement and recruitment.
 #' @param settler.recruit.func a function to calculate recruitment from the 
-#'   number of settlers at each site.  Defaults to \code{\link{BevertonHolt}}.
+#'   number of settlers at each site.  Defaults to \code{\link{hockeyStick}}.
 #' @param LEP.of.f a function that returns lifetime-egg-productions given a 
 #'   vector of fishing rates.
 #' @param YPR.of.f a function that returns yields-per-recruit given a vector of 
@@ -252,7 +257,7 @@ DispersalPerRecruitModel <-
 #' @export
 DPRHomerangeGravity <- 
   function(larval.mat,adult.mat,recruits0,f0,
-           timesteps=10, settler.recruit.func=BevertonHolt,
+           timesteps=10, settler.recruit.func=hockeyStick,
            LEP.of.f=function(f) 1-f, YPR.of.f=function(f) f, 
            gamma=0, gravity.ts.interval=1, ...) {
     
