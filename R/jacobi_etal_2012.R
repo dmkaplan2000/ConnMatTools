@@ -28,6 +28,7 @@
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 splitConnMat <- function(indices,conn.mat,beta,tries=5,
                     threshold=1e-10,alpha=0.1,maxit=500) {
@@ -107,6 +108,7 @@ splitConnMat <- function(indices,conn.mat,beta,tries=5,
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 recSplitConnMat <- function(subpops.lst, conn.mat, beta, ...) {
     old = 0
@@ -142,6 +144,7 @@ recSplitConnMat <- function(subpops.lst, conn.mat, beta, ...) {
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
     nIt = length(subpops.lst)^2
@@ -192,6 +195,7 @@ mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
 #'   \code{\link{subpopsVectorToList}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 qualitySubpops <- function( subpops.lst, conn.mat ) {
     pii = matrix( 0.0, nrow=dim(conn.mat)[2], ncol=length(subpops.lst) )
@@ -226,6 +230,8 @@ qualitySubpops <- function( subpops.lst, conn.mat ) {
 #' all elements of the connectivity matrix).
 #' @param steps number of beta values to return.  Defaults to 10.
 #' @param cycles how many cycles of \code{2*pi} to do.
+#' @param coeff coefficient in front of sine function
+#' @param pwr exponent in denominator
 #'
 #' @return vector of beta values
 #'
@@ -237,6 +243,7 @@ qualitySubpops <- function( subpops.lst, conn.mat ) {
 #' 
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 betasVectorDefault <- function(n,steps=10,cycles=3/4,
                                            coeff=0.8,pwr=3.0)
@@ -289,6 +296,7 @@ betasVectorDefault <- function(n,steps=10,cycles=3/4,
 #' \code{\link{qualitySubpops}}
 #' @author
 #' David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 #' 
 #' @note In Jacobi et al. (2012) paper, the connectivity matrix is

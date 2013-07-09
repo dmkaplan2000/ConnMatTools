@@ -1,4 +1,4 @@
-# Implements code in the following references:
+# Implements methods from the following references:
 # 
 # @references Grüss, A., Kaplan, D. M., and Lett, C. 2012. Estimating local 
 #   settler–recruit relationship parameters for complex spatially explicit 
@@ -35,9 +35,9 @@ NULL
 #' @param critical.FLEP Fraction of natural.LEP at which collapse occurs. 
 #'   Defaults to 0.35.
 #' @param use.arpack Boolean determining if calculation is to be done with 
-#'   \code{\link{arpack}} function from the \link{igraph} package. This is much 
-#'   quicker for large matrices, but requires \link{igraph}. Defaults to TRUE, 
-#'   but will use eigen instead if \link{igraph} is not found.
+#'   \code{\link[igraph]{arpack}} function from the \link[igraph]{igraph} package. This is much 
+#'   quicker for large matrices, but requires \link[igraph]{igraph}. Defaults to TRUE, 
+#'   but will use eigen instead if \link[igraph]{igraph} is not found.
 #'   
 #' @return The slope argument corrected so that collapse happens when LEP is 
 #'   critical.FLEP * natural.LEP.
@@ -47,6 +47,7 @@ NULL
 #'   Research, 102: 330–334.
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
                                              critical.FLEP=0.35,use.arpack=TRUE) {
@@ -118,6 +119,7 @@ BevertonHolt <- function(S,slope=1/0.35,Rmax=1) {
 #'   reserve networks. Ecological Applications, 16: 2248–2263.
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
   R = slope * S
@@ -158,6 +160,7 @@ hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
 #' @seealso See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 DispersalPerRecruitModel <- 
   function(LEP,conn.mat,recruits0,
@@ -245,6 +248,7 @@ DispersalPerRecruitModel <-
 #'   \code{\link{DispersalPerRecruitModel}}
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 DPRHomerangeGravity <- 
   function(larval.mat,adult.mat,recruits0,f0,
@@ -312,8 +316,7 @@ DPRHomerangeGravity <-
 #' Uniform Laplacian connectivity matrix
 #' 
 #' This function generates a connectivity matrix that is governed by a Laplacian
-#' distribution: \deqn{D(x,y)=\frac{e^{\frac{-\abs{x-y-\delta}}{\sigma}}}{2 
-#' \sigma}}{D(x,y)=exp(abs(x-y-delta)/sigma)/2/sigma}
+#' distribution: \code{D[i,j]=exp(abs(x[i]-y[i]-shift)/disp.dist)/2/disp.dist}
 #' 
 #' The \code{boundary} argument can have the following different values: 
 #' "nothing" meaning do nothing special with boundaries; "conservative" meaning force
@@ -338,6 +341,7 @@ DPRHomerangeGravity <-
 #'   
 #' @author David Kaplan \email{dmkaplan2000@@gmail.com}
 #' @example tests/test.laplacianConnMat.R
+#' @encoding UTF-8
 #' @export
 laplacianConnMat <- function(num.sites,disp.dist,shift=0,boundaries="nothing") {
   # Function integrates exp(-exponent*abs(x))*exponent/2 from start to end.  start <= end
