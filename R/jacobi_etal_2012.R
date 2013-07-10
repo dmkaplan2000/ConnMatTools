@@ -20,7 +20,7 @@
 #'
 #' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
 #' P. R. 2012. Identification of subpopulations from connectivity
-#' matrices. Ecography, 35: 1004–1016.
+#' matrices. Ecography, 35: 1004-1016.
 #' 
 #' @seealso See also \code{\link{optimalSplitConnMat}},
 #' \code{\link{recSplitConnMat}},
@@ -100,7 +100,7 @@ splitConnMat <- function(indices,conn.mat,beta,tries=5,
 #' 
 #' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
 #' P. R. 2012. Identification of subpopulations from connectivity
-#' matrices. Ecography, 35: 1004–1016.
+#' matrices. Ecography, 35: 1004-1016.
 #' 
 #' @seealso See also \code{\link{optimalSplitConnMat}},
 #' \code{\link{splitConnMat}},
@@ -138,7 +138,7 @@ recSplitConnMat <- function(subpops.lst, conn.mat, beta, ...) {
 #'
 #' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
 #' P. R. 2012. Identification of subpopulations from connectivity
-#' matrices. Ecography, 35: 1004–1016.
+#' matrices. Ecography, 35: 1004-1016.
 #' 
 #' @seealso See also \code{\link{optimalSplitConnMat}},
 #' 
@@ -189,7 +189,7 @@ mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
 #'   
 #' @references Jacobi, M. N., André, C., Döös, K., and Jonsson, P. R. 2012.
 #'   Identification of subpopulations from connectivity matrices. Ecography, 35:
-#'   1004–1016.
+#'   1004-1016.
 #'   
 #' @seealso See also \code{\link{optimalSplitConnMat}}, 
 #'   \code{\link{subpopsVectorToList}}
@@ -237,7 +237,7 @@ qualitySubpops <- function( subpops.lst, conn.mat ) {
 #'
 #' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
 #' P. R. 2012. Identification of subpopulations from connectivity
-#' matrices. Ecography, 35: 1004–1016.
+#' matrices. Ecography, 35: 1004-1016.
 #' 
 #' @seealso See also \code{\link{optimalSplitConnMat}}
 #' 
@@ -309,7 +309,7 @@ betasVectorDefault <- function(n,steps=10,cycles=3/4,
 #'
 #' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
 #'  P. R. 2012. Identification of subpopulations from connectivity
-#'  matrices. Ecography, 35: 1004–1016.
+#'  matrices. Ecography, 35: 1004-1016.
 #' 
 optimalSplitConnMat <-
     function(conn.mat, normalize.cols=TRUE,

@@ -1,14 +1,14 @@
 # Implements methods from the following references:
 # 
 # @references Grüss, A., Kaplan, D. M., and Lett, C. 2012. Estimating local 
-#   settler–recruit relationship parameters for complex spatially explicit 
-#   models. Fisheries Research, 127–128: 34–39.
+#   settler-recruit relationship parameters for complex spatially explicit 
+#   models. Fisheries Research, 127-128: 34-39.
 # @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal 
 #   per recruit: An efficient method for assessing sustainability in marine 
-#   reserve networks. Ecological Applications, 16: 2248–2263.
+#   reserve networks. Ecological Applications, 16: 2248-2263.
 # @references White, J. W. 2010. Adapting the steepness parameter from 
 #   stock-recruit curves for use in spatially explicit models. Fisheries 
-#   Research, 102: 330–334.
+#   Research, 102: 330-334.
 # @references Grüss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult
 #   Movement, Larval Dispersal and Harvester Movement on the Effectiveness of
 #   Reserve Networks. PLoS ONE 6:e19960
@@ -44,10 +44,9 @@ NULL
 #'   
 #' @references White, J. W. 2010. Adapting the steepness parameter from 
 #'   stock-recruit curves for use in spatially explicit models. Fisheries 
-#'   Research, 102: 330–334.
+#'   Research, 102: 330-334.
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @encoding UTF-8
 #' @export
 settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
                                           critical.FLEP=0.35,use.arpack=TRUE) {
@@ -121,10 +120,9 @@ BevertonHolt <- function(S,slope=1/0.35,Rmax=1) {
 #'   
 #' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
 #'   per recruit: An efficient method for assessing sustainability in marine 
-#'   reserve networks. Ecological Applications, 16: 2248–2263.
+#'   reserve networks. Ecological Applications, 16: 2248-2263.
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @encoding UTF-8
 #' @export
 hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
   R = slope * S
@@ -160,13 +158,12 @@ hockeyStick <- function(S,slope=1/0.35,Rmax=1) {
 #'   
 #' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
 #'   per recruit: An efficient method for assessing sustainability in marine 
-#'   reserve networks. Ecological Applications, 16: 2248–2263.
+#'   reserve networks. Ecological Applications, 16: 2248-2263.
 #'   
 #' @seealso See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @example tests/test.dpr_model.R
-#' @encoding UTF-8
 #' @export
 DispersalPerRecruitModel <- 
   function(LEP,conn.mat,recruits0,
@@ -248,7 +245,7 @@ DispersalPerRecruitModel <-
 #'   Reserve Networks. PLoS ONE 6:e19960
 #' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
 #'   per recruit: An efficient method for assessing sustainability in marine 
-#'   reserve networks. Ecological Applications, 16: 2248–2263.
+#'   reserve networks. Ecological Applications, 16: 2248-2263.
 #'   
 #' @seealso See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}, 
 #'   \code{\link{DispersalPerRecruitModel}}
@@ -341,13 +338,12 @@ DPRHomerangeGravity <-
 #'   
 #' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
 #'   per recruit: An efficient method for assessing sustainability in marine 
-#'   reserve networks. Ecological Applications, 16: 2248–2263.
+#'   reserve networks. Ecological Applications, 16: 2248-2263.
 #'   
 #' @seealso See also \code{\link{DispersalPerRecruitModel}}
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @example tests/test.laplacianConnMat.R
-#' @encoding UTF-8
 #' @export
 laplacianConnMat <- function(num.sites,disp.dist,shift=0,boundaries="nothing") {
   # Function integrates exp(-exponent*abs(x))*exponent/2 from start to end.  start <= end
