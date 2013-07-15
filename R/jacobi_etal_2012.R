@@ -250,28 +250,27 @@ qualitySubpops <- function( subpops.lst, conn.mat )
 
 #' Compute vector of beta values
 #' 
-#' Helper function to compute a set of beta values using formula used
-#' in Jacobi et al. (2012).
-#'
-#' @param n numerator of formula from Jacobi et al. (2012).  Normally
-#' will be the number of columns in the connectivity matrix if one
-#' normalizes the columns (otherwise, it would typically be the sum of
-#' all elements of the connectivity matrix).
+#' Helper function to compute a set of beta values using formula used in Jacobi
+#' et al. (2012).
+#' 
+#' @param n numerator of formula from Jacobi et al. (2012).  Normally will be
+#'   the number of columns in the connectivity matrix if one normalizes the
+#'   columns (otherwise, it would typically be \code{N^2 / sum(conn.mat)}, where
+#'   \code{N} is the number of columns of \code{conn.mat}.
 #' @param steps number of beta values to return.  Defaults to 10.
 #' @param cycles how many cycles of \code{2*pi} to do.
 #' @param coeff coefficient in front of sine function
 #' @param pwr exponent in denominator
-#'
+#'   
 #' @return vector of beta values
-#'
-#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson,
-#' P. R. 2012. Identification of subpopulations from connectivity
-#' matrices. Ecography, 35: 1004-1016.
-#' 
+#'   
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson, P. R. 2012.
+#'   Identification of subpopulations from connectivity matrices. Ecography, 35:
+#'   1004-1016.
+#'   
 #' @seealso See also \code{\link{optimalSplitConnMat}}
-#' 
-#' @author
-#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#'   
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 betasVectorDefault <- function(n,steps=10,cycles=3/4,
@@ -345,7 +344,9 @@ optimalSplitConnMat <-
     function(conn.mat, normalize.cols=TRUE,
              make.symmetric="mean", remove.diagonal=TRUE, 
              cycles = 2, 
-             betas=betasVectorDefault(dim(conn.mat)[2],steps),
+             betas=betasVectorDefault(
+               ifelse(normalize.cols,dim(conn.mat)[2],
+                      prod(dim(conn.mat))/sum(conn.mat)),steps),
              steps=10,
              ... ) {
     if (class(conn.mat) != "matrix")
