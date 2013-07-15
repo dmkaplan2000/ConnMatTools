@@ -53,7 +53,7 @@ splitConnMat <- function(indices,conn.mat,beta,tries=5,
         sOld = sign(s)
 
         for (it in 1:maxit) {
-            if (norm(s-ds,"2") <= threshold)
+            if (sqrt(sum((s-ds)^2)) <= threshold)
                 break
 
             # the following three lines implements EQ. 8 in the paper
@@ -196,6 +196,7 @@ mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
+#' @example tests/test.optimalSplitConnMat.R
 #' @export
 reducedConnMat <- function( subpops.lst, conn.mat ) {
   if (!is.list(subpops.lst))
@@ -272,6 +273,7 @@ qualitySubpops <- function( subpops.lst, conn.mat )
 #' @author
 #' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
+#' @example tests/test.optimalSplitConnMat.R
 #' @export
 betasVectorDefault <- function(n,steps=10,cycles=3/4,
                                            coeff=0.8,pwr=3.0)
@@ -325,6 +327,7 @@ betasVectorDefault <- function(n,steps=10,cycles=3/4,
 #' @author
 #' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
+#' @example tests/test.optimalSplitConnMat.R
 #' @export
 #' 
 #' @note In Jacobi et al. (2012) paper, the connectivity matrix is
@@ -435,6 +438,7 @@ optimalSplitConnMat <-
 #' @seealso See also \code{\link{recSplitConnMat}}, \code{\link{qualitySubpops}}
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.optimalSplitConnMat.R
 #' @export
 subpopsVectorToList <- function(x) {
     xx = sort(unique(x))
