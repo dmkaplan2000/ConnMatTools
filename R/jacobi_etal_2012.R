@@ -273,7 +273,6 @@ qualitySubpops <- function( subpops.lst, conn.mat )
 #' @author
 #' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
-#' @example tests/test.optimalSplitConnMat.R
 #' @export
 betasVectorDefault <- function(n,steps=10,cycles=3/4,
                                            coeff=0.8,pwr=3.0)
@@ -438,7 +437,6 @@ optimalSplitConnMat <-
 #' @seealso See also \code{\link{recSplitConnMat}}, \code{\link{qualitySubpops}}
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @example tests/test.optimalSplitConnMat.R
 #' @export
 subpopsVectorToList <- function(x) {
     xx = sort(unique(x))

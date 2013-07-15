@@ -1,7 +1,7 @@
 Package: ConnMatTools
 Type: Package
 Title: Tools for analyzing connectivity matrices
-Version: 0.1
+Version: 0.1.1
 Date: 2013-07-09
 Author: David M. Kaplan <dmkaplan2000@gmail.com>
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>

@@ -5,7 +5,7 @@
 #' @param conn.mat A square connectivity matrix.
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @example tests/test.optimalSplitConnMat.R
+#' @example tests/test.retentionStats.R
 #' @export
 localRetention <- function(conn.mat)
   diag(conn.mat)
@@ -19,7 +19,7 @@ localRetention <- function(conn.mat)
 #' @param conn.mat A square connectivity matrix.
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @example tests/test.optimalSplitConnMat.R
+#' @example tests/test.retentionStats.R
 #' @export
 relativeLocalRetention <- function(conn.mat) {
   ss = apply(conn.mat,2,sum)
@@ -36,7 +36,7 @@ relativeLocalRetention <- function(conn.mat) {
 #' @param conn.mat A square connectivity matrix.
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @example tests/test.optimalSplitConnMat.R
+#' @example tests/test.retentionStats.R
 #' @export
 selfRecruitment <- function(conn.mat) {
   ss = apply(conn.mat,1,sum)

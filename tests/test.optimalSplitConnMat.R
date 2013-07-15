@@ -1,3 +1,4 @@
+library(ConnMatTools)
 data(chile.loco)
 
 num <- prod(dim(chile.loco)) / sum(chile.loco)
