@@ -13,6 +13,7 @@ Suggests:
     igraph
 Collate:
     'ConnMatTools.R'
+    'retentionStats.R'
     'jacobi_etal_2012.R'
     'dpr_model.R'
     'datasets.R'

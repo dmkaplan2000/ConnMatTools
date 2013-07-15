@@ -171,53 +171,81 @@ mergeSubpops <- function ( subpops.lst,  conn.mat, beta ) {
     return(subpops.lst)
 }
 
+#' Reduced connectivity matrix according to a set of subpopulations
+#' 
+#' Reduces a connectivity matrix based on a set of subpopulations.  If there are
+#' N subpopulations, then the reduced matrix will have dimensions NxN.  The 
+#' reduced matrix will be ordered according to the order of subpopulations in 
+#' \code{subpops.lst}.
+#' 
+#' @param subpops.lst A list whose elements are vectors of indices for each 
+#'   subpopulation.  If a vector of integers is given, then 
+#'   \code{\link{subpopsVectorToList}} is applied to convert it to a list of 
+#'   subpopulations.
+#' @param conn.mat A square connectivity matrix.
+#'   
+#' @return A reduced connectivity matrix.  The sum of all elements of this
+#'   reduced connectivity matrix will be equal to the sum of all elements of the
+#'   original connectivity matrix.
+#'   
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson, P. R. 2012. 
+#'   Identification of subpopulations from connectivity matrices. Ecography, 35:
+#'   1004-1016.
+#'   
+#' @seealso See also \code{\link{qualitySubpops}}
+#'   
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
+#' @export
+reducedConnMat <- function( subpops.lst, conn.mat ) {
+  if (!is.list(subpops.lst))
+    subpops.lst = subpopsVectorToList(subpops.lst)
+  
+  pii = matrix( 0.0, nrow=dim(conn.mat)[2], ncol=length(subpops.lst) )
+  
+  for (kk in 1:length(subpops.lst)) {
+    pii[ subpops.lst[[kk]], kk ] = 1
+  }
+  
+  # Note I use p instead of t(p), as was in Jacobi code.
+  # This is because my matrices are oriented columns to rows
+  #pt = t(pii) %*% p %*% pii %*% solve( t(pii) %*% pii )
+  
+  # Somewhat quicker method
+  pt =  t(pii) %*% conn.mat %*% pii #%*% diag( 1 / sapply(subpops.lst,length) )
+  # No need to normalize by number of sites in cluster of larval
+  # origin because we are just going to normalize each colum
+ 
+  return(pt)
+}
+
 #' Quality measure for subpopulation division
 #' 
-#' A measure of the leakage between subpopulations for a given division of the
-#' connectivity matrix into subpopulations.  This statistic is equal to 1 -
-#' mean(RLR) of the reduced connectivity matrix, where RLR=relative local
-#' retention, i.e., the fraction of settling individuals that originated at
-#' their site of settlement.
+#' A measure of the leakage between subpopulations for a given division of the 
+#' connectivity matrix into subpopulations.  This statistic is equal to 1 - 
+#' mean(RLR) of the reduced connectivity matrix, where RLR=relative local 
+#' retention (\code{\link{relativeLocalRetention}}), i.e., the fraction of 
+#' settling individuals that originated at their site of settlement.
 #' 
-#' @param subpops.lst A list whose elements are vectors of indices for each
-#'   subpopulation.  See \code{\link{subpopsVectorToList}}.
-#' @param conn.mat A square connectivity matrix.
+#' @inheritParams reducedConnMat
 #'   
 #' @return The quality statistic.
 #'   
 #'   A smaller value of the quality statistic indicates less leakage.
 #'   
-#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson, P. R. 2012.
+#' @references Jacobi, M. N., André, C., Döös, K., and Jonsson, P. R. 2012. 
 #'   Identification of subpopulations from connectivity matrices. Ecography, 35:
 #'   1004-1016.
 #'   
 #' @seealso See also \code{\link{optimalSplitConnMat}}, 
-#'   \code{\link{subpopsVectorToList}}
+#'   \code{\link{subpopsVectorToList}}, \code{\link{relativeLocalRetention}}
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
-qualitySubpops <- function( subpops.lst, conn.mat ) {
-    pii = matrix( 0.0, nrow=dim(conn.mat)[2], ncol=length(subpops.lst) )
-
-    for (kk in 1:length(subpops.lst)) {
-        pii[ subpops.lst[[kk]], kk ] = 1
-    }
-
-    # Note I use p instead of t(p), as was in Jacobi code.
-    # This is because my matrices are oriented columns to rows
-    #pt = t(pii) %*% p %*% pii %*% solve( t(pii) %*% pii )
-
-    # Somewhat quicker method
-    pt =  t(pii) %*% conn.mat %*% pii #%*% diag( 1 / sapply(subpops.lst,length) )
-    # No need to normalize by number of sites in cluster of larval
-    # origin because we are just going to normalize each colum
-    
-    ss = apply( pt, 2, sum )
-    ss[ ss == 0 ] = 1
-    
-    return(1 - mean(diag(pt) / ss))
-}
+#' @include retentionStats.R
+qualitySubpops <- function( subpops.lst, conn.mat )  
+    (1 - mean(relativeLocalRetention(reducedConnMat(subpops.lst,conn.mat))))
 
 #' Compute vector of beta values
 #' 
@@ -389,21 +417,24 @@ optimalSplitConnMat <-
 }
 
 #' Convert subpopulation vector to a list of indices
-#'
-#' A helper function to convert a vector of subpopulation
-#' identifications into a list appropriate for
-#' \code{\link{recSplitConnMat}}, \code{\link{qualitySubpops}}, etc.
-#'
+#' 
+#' A helper function to convert a vector of subpopulation identifications into a
+#' list appropriate for \code{\link{recSplitConnMat}},
+#' \code{\link{qualitySubpops}}, etc.
+#' 
+#' Note that subpopulations list will be ordered according to the numerical
+#' order of the subpopulation indices in the original matrix, which will not
+#' necessarily be that of the spatial order of sites in the original
+#' connectivity matrix.
+#' 
 #' @param x vector of subpopulation identifications
-#'
-#' @return A list where each element is a vector of indices for a given
-#' subpopulation.
-#' 
-#' @seealso See also \code{\link{recSplitConnMat}}, 
-#' \code{\link{qualitySubpops}}
-#' 
-#' @author
-#' David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#'   
+#' @return A list where each element is a vector of indices for a given 
+#'   subpopulation.
+#'   
+#' @seealso See also \code{\link{recSplitConnMat}}, \code{\link{qualitySubpops}}
+#'   
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
 subpopsVectorToList <- function(x) {
     xx = sort(unique(x))
