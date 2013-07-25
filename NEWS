@@ -1,3 +1,15 @@
+ConnMatTools 0.1.2
+------------------
+
+* Added function written by Marco Andrello for applying eigenvalue perturbation 
+  method in Jacobi & Jonsson (2011) to reserve selection based on connectivity.
+
+ConnMatTools 0.1.1
+------------------
+
+* Added several tests, a test dataset and functions for calculating basic statistics 
+  on connectivity matrices.
+
 ConnMatTools 0.1
 ----------------
 
