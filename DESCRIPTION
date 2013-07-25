@@ -3,7 +3,6 @@ Type: Package
 Title: Tools for working with connectivity matrices
 Version: 0.1.2
 Date: 2013-07-09
-Author: David M. Kaplan <dmkaplan2000@gmail.com>
 Author: Marco Andrello <marco.andrello@gmail.com>
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>
 Description: ConnMatTools collects several different methods for analyzing and
@@ -16,6 +15,8 @@ Collate:
     'ConnMatTools.R'
     'retentionStats.R'
     'jacobi_etal_2012.R'
+    'eigs.R'
     'dpr_model.R'
     'datasets.R'
+    'Jacobi_EPT_reserve_selection.R'
 License: GPL (>= 2)
