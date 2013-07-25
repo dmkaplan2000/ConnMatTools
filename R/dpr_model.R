@@ -46,8 +46,11 @@ NULL
 #'   stock-recruit curves for use in spatially explicit models. Fisheries 
 #'   Research, 102: 330-334.
 #'   
+#' @seealso See also \code{\link{eigs}}, \code{\link[igraph]{arpack}}
+#' 
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @export
+#' @include eigs.R
 settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
                                           critical.FLEP=0.35,use.arpack=TRUE) {
   if (class(conn.mat) != "matrix")
@@ -63,19 +66,9 @@ settlerRecruitSlopeCorrection <- function(conn.mat,slope=1,natural.LEP=1,
   else
     C = slope * C
   
-  if (use.arpack && require(igraph)) {
-    ii = igraph.arpack.default
-    ii$n = dim(conn.mat)[2]
-    ff = function(x,extra=NULL) { C %*%x }
-    
-    sym = FALSE
-    if (sum(abs(C-t(C)))<1e-10)
-      sym = TRUE
-    
-    v = arpack(ff, extra=NULL, sym=sym, options=ii)$values[1]
-  } else {
-    v = eigen(C)$values[1]
-  }
+  v = eigs(M=C,nev=1,which="LM",
+           use.arpack=use.arpack)$values
+
   return(slope/Mod(v))
 }
 

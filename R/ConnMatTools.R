@@ -16,7 +16,7 @@
 #'
 #' @author
 #' David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' Marco Andrello \email{marco.andrello@gmail.com}
+#' Marco Andrello \email{marco.andrello@@gmail.com}
 #' 
 #' Maintainer: David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @name ConnMatTools
