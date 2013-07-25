@@ -1,4 +1,4 @@
-#' Tools for analyzing connectivity matrices
+#' Tools for working with connectivity matrices
 #' 
 #' ConnMatTools collects several different methods for analyzing and
 #' working with connectivity matrices in R.  Though primarily oriented
@@ -8,7 +8,7 @@
 #' \tabular{ll}{
 #' Package: \tab ConnMatTools\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.1.1\cr
+#' Version: \tab 0.1.2\cr
 #' Date: \tab 2013-07-09\cr
 #' License: \tab GPL (>= 2)\cr
 #' LazyLoad: \tab no\cr
@@ -16,11 +16,12 @@
 #'
 #' @author
 #' David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' Marco Andrello \email{marco.andrello@gmail.com}
 #' 
 #' Maintainer: David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @name ConnMatTools
 #' @docType package
-#' @title Tools for analyzing connectivity matrices
+#' @title Tools for working with connectivity matrices
 #' @keywords package
 #' @examples
 #' \dontrun{optimalSplitConnMat(CM)}
