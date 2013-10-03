@@ -42,7 +42,7 @@ relativeLocalRetention <- function(conn.mat) {
 #' @example tests/test.retentionStats.R
 #' @export
 selfRecruitment <- function(conn.mat,eggs=NULL) {
-  if !(is.null(eggs))
+  if (!is.null(eggs))
     conn.mat = conn.mat %*% diag(eggs)
   
   ss = apply(conn.mat,1,sum)
