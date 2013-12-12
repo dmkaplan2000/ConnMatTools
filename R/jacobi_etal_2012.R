@@ -292,7 +292,7 @@ betasVectorDefault <- function(n,steps=10,cycles=3/4,
 #' C_ji)/2.  "max" will replace C_ij by the maximum of C_ij and C_ji.
 #' @param remove.diagonal A boolean indicating if the diagonal
 #' elements of conn.mat should be removed before determining the
-#' subpopulations.  Defaults to TRUE.
+#' subpopulations.  Defaults to FALSE.
 #' @param cycles Number of times to pass over values in betas.
 #' @param betas Vector of beta values to try.  If not given, will
 #' default to \code{\link{betasVectorDefault}(dim(conn.mat)[2],steps)}.
@@ -342,7 +342,7 @@ betasVectorDefault <- function(n,steps=10,cycles=3/4,
 #' 
 optimalSplitConnMat <-
     function(conn.mat, normalize.cols=TRUE,
-             make.symmetric="mean", remove.diagonal=TRUE, 
+             make.symmetric="mean", remove.diagonal=FALSE, 
              cycles = 2, 
              betas=betasVectorDefault(
                ifelse(normalize.cols,dim(conn.mat)[2],
