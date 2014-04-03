@@ -1,4 +1,3 @@
-
 #' Split connectivity matrix into subpopulations
 #'
 #' This function tries to optimally split a given subpopulation into

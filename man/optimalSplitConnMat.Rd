@@ -79,7 +79,7 @@ library(ConnMatTools)
 data(chile.loco)
 
 num <- prod(dim(chile.loco)) / sum(chile.loco)
-betas <- betasVectorDefault(n=num,steps=20)
+betas <- betasVectorDefault(n=num,steps=4)
 chile.loco.split <- optimalSplitConnMat(chile.loco,normalize.cols=FALSE,
                                         betas=betas)
 
