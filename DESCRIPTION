@@ -1,7 +1,7 @@
 Package: ConnMatTools
 Type: Package
 Title: Tools for working with connectivity matrices
-Version: 0.1.3
+Version: 0.1.4
 Date: 2013-07-09
 Author: Marco Andrello <marco.andrello@gmail.com>
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>
@@ -13,10 +13,10 @@ Suggests:
     igraph
 Collate:
     'ConnMatTools.R'
+    'eigs.R'
+    'Jacobi_EPT_reserve_selection.R'
+    'datasets.R'
+    'dpr_model.R'
     'retentionStats.R'
     'jacobi_etal_2012.R'
-    'eigs.R'
-    'dpr_model.R'
-    'datasets.R'
-    'Jacobi_EPT_reserve_selection.R'
 License: GPL (>= 2)
