@@ -13,7 +13,7 @@ useful for terrestrial systems as well.
 
 ## Installation of latest version via github
 
-The latest development version of Rxt can be installed directly from
+The latest development version of the package can be installed directly from
 [github](https://github.com/) using the
 [devtools](http://cran.r-project.org/web/packages/devtools/index.html)
 R package. First that package needs to be installed:
