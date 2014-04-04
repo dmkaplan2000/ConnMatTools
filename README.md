@@ -28,7 +28,7 @@ Once this is done, one can install the development version with:
 Replace "master" with another branch, tag or commit to obtain a
 different version of the package.
 
-# References
+## References
 
 Methods from the following publications are implemented in the package:
 
