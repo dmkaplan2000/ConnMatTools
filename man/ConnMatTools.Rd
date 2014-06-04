@@ -29,13 +29,13 @@ Marco Andrello \email{marco.andrello@gmail.com}
 Jacobi, M. N., and Jonsson, P. R. 2011. Optimal networks of
 nature reserves can be found through eigenvalue
 perturbation theory of the connectivity matrix. Ecological
-Applications, 21: 1861–1870.
+Applications, 21: 1861-1870.
 
-Jacobi, M. N., André, C., Döös, K., and Jonsson, P. R.
+Jacobi, M. N., Andre, C., Doos, K., and Jonsson, P. R.
 2012. Identification of subpopulations from connectivity
 matrices. Ecography, 35: 1004-1016.
 
-Grüss, A., Kaplan, D. M., and Lett, C. 2012. Estimating
+Gruss, A., Kaplan, D. M., and Lett, C. 2012. Estimating
 local settler-recruit relationship parameters for complex
 spatially explicit models. Fisheries Research, 127-128:
 34-39.
@@ -49,7 +49,7 @@ White, J. W. 2010. Adapting the steepness parameter from
 stock-recruit curves for use in spatially explicit models.
 Fisheries Research, 102: 330-334.
 
-Grüss A, Kaplan DM, Hart DR (2011) Relative Impacts of
+Gruss A, Kaplan DM, Hart DR (2011) Relative Impacts of
 Adult Movement, Larval Dispersal and Harvester Movement on
 the Effectiveness of Reserve Networks. PLoS ONE 6:e19960
 
