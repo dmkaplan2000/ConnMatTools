@@ -5,7 +5,8 @@
 \alias{dmixfunc.norm}
 \alias{pmixfunc.norm}
 \alias{qmixfunc.norm}
-\title{Returns a function that is PDF for fraction of marked individuals}
+\title{Functions for examining the probability distribution for the fraction of
+marked individuals}
 \usage{
 dmixfunc.norm(obs, d.unmarked, d.marked, ...)
 
@@ -27,19 +28,22 @@ properly.}
 }
 \value{
 A function that takes one argument (the fraction of marked
-  individuals for \code{dmixfunc.norm} and \code{pmixfunc.norm}; the quantile for
-  \code{qmixfunc.norm}) and returns the probability density, cumulative
+  individuals for \code{dmixfunc.norm} and \code{pmixfunc.norm}; the quantile
+  for \code{qmixfunc.norm}) and returns the probability density, cumulative
   probability distribution or score value, respectively.
 }
 \description{
 These functions return functions that calculates the probability density
-function (\code{dmixfunc.norm}), the probability distribution function (aka the
-cumulative distribution function; \code{pmixfunc.norm}) and the quantile function
-(\code{qmixfunc.norm}) given a set of observed score values and distributions for
-unmarked and marked individuals.
+function (\code{dmixfunc.norm}), the probability distribution function (aka
+the cumulative distribution function; \code{pmixfunc.norm}) and the quantile
+function (\code{qmixfunc.norm}) given a set of observed score values and
+distributions for unmarked and marked individuals.
 }
 \section{Functions}{
 \itemize{
+\item \code{dmixfunc.norm}: Returns a function that is PDF for fraction of
+marked individuals
+
 \item \code{pmixfunc.norm}: Returns a function that is cumulative probability
 distribution for fraction of marked individuals
 

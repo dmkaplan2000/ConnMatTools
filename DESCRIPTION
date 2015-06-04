@@ -17,6 +17,7 @@ Collate:
     'eigs.R'
     'Jacobi_EPT_reserve_selection.R'
     'datasets.R'
+    'detecting_marked_individuals.R'
     'dpr_model.R'
     'retentionStats.R'
     'jacobi_etal_2012.R'

@@ -137,23 +137,26 @@ optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
 .dmixfunc.N <- function(obs)
   max(100,min(5000,2*length(obs)))
 
-#' Returns a function that is PDF for fraction of marked individuals
+#' Functions for examining the probability distribution for the fraction of
+#' marked individuals
 #' 
 #' These functions return functions that calculates the probability density 
-#' function (\code{dmixfunc.norm}), the probability distribution function (aka the 
-#' cumulative distribution function; \code{pmixfunc.norm}) and the quantile function 
-#' (\code{qmixfunc.norm}) given a set of observed score values and distributions for 
-#' unmarked and marked individuals.
+#' function (\code{dmixfunc.norm}), the probability distribution function (aka 
+#' the cumulative distribution function; \code{pmixfunc.norm}) and the quantile 
+#' function (\code{qmixfunc.norm}) given a set of observed score values and 
+#' distributions for unmarked and marked individuals.
 #' 
 #' @param obs Vector of observed score values for potentially marked individuals
 #' @inheritParams dmixfunc
 #' @param \dots Additional arguments for the \code{\link{approxfun}} function.
 #'   
 #' @return A function that takes one argument (the fraction of marked 
-#'   individuals for \code{dmixfunc.norm} and \code{pmixfunc.norm}; the quantile for 
-#'   \code{qmixfunc.norm}) and returns the probability density, cumulative
+#'   individuals for \code{dmixfunc.norm} and \code{pmixfunc.norm}; the quantile
+#'   for \code{qmixfunc.norm}) and returns the probability density, cumulative 
 #'   probability distribution or score value, respectively.
 #'   
+#' @describeIn dmixfunc.norm Returns a function that is PDF for fraction of 
+#'   marked individuals
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
