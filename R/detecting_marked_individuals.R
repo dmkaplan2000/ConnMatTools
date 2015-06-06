@@ -52,9 +52,35 @@ stepfun.hist <- function(h,...,normalize=TRUE) {
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
-dmixfunc <- function(d.unmarked,d.marked) {
+d.mix.dists.func <- function(d.unmarked,d.marked) {
   return(function(p.marked,obs) (1-p.marked)*d.unmarked(obs)+
-           p.marked*d.unmarked(obs))
+           p.marked*d.marked(obs))
+}
+
+#' Returns probability a set of observations correspond to marked individuals
+#' 
+#' This function returns the probability each of a set of observations 
+#' corresponds to a marked individual given the distribution of scores for 
+#' unmarked and marked individuals and the fraction of individuals that are 
+#' marked.
+#' 
+#' @param p.marked The overall fraction of marked individuals in the entire 
+#'   population
+#' @param obs A vector of score values for a random sample of (marked and 
+#'   unmarked) individuals from the population
+#' @inheritParams d.mix.dists.func
+#'   
+#' @return A vector of the same size as \code{obs} containing the probability
+#'   that each individual is marked
+#'   
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
+#'   connectivity estimation
+#'   
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
+#' @export
+prob.marked <- function(p.marked,obs,d.unmarked,d.marked) {
+  p.marked*d.marked(obs) / ((1-p.marked)*d.unmarked(obs)+p.marked*d.marked(obs))
 }
 
 #' Logarithm of probability for a set of observed score values given a PDF
@@ -93,7 +119,7 @@ log.prob <- function(p,obs,dfunc) {
 #' unmarked individuals.
 #' 
 #' @param obs Vector of observed score values for potentially marked individuals
-#' @inheritParams dmixfunc
+#' @inheritParams d.mix.dists.func
 #' @param par Initial fraction of marked individuals for \code{\link{optim}} 
 #'   function. Defaults to 0.5.
 #' @param method Method variable for \code{\link{optim}} function. Defaults to
@@ -117,15 +143,15 @@ optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
                                                 par=0.5,method="Brent",lower=0,upper=1,
                                                 ...) {
   f = function(p.marked)
-    -log.prob(p.marked,obs,dmixfunc(d.unmarked,d.marked))
+    -log.prob(p.marked,obs,d.mix.dists.func(d.unmarked,d.marked))
   
   o=optim(par=par,fn=f,method=method,lower=lower,upper=upper,...)
   
   return(o)
 }
 
-.dmixfunc.internal <- function(obs,d.unmarked,d.marked) {
-  f = dmixfunc(d.unmarked,d.marked)
+.d.marked.fraction.internal <- function(obs,d.unmarked,d.marked) {
+  f = d.mix.dists.func(d.unmarked,d.marked)
   ff = function(p.marked,obs)
     log.prob(p.marked,obs,f)
   
@@ -134,16 +160,16 @@ optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
   return(function(p) exp(ff(p,obs)+f0))
 }
 
-.dmixfunc.N <- function(obs)
+.d.marked.fraction.N <- function(obs)
   max(100,min(5000,2*length(obs)))
 
 #' Functions for examining the probability distribution for the fraction of 
 #' marked individuals
 #' 
 #' These functions return functions that calculates the probability density 
-#' function (\code{dmixfunc.norm}), the probability distribution function (aka 
-#' the cumulative distribution function; \code{pmixfunc.norm}) and the quantile 
-#' function (\code{qmixfunc.norm}) given a set of observed score values and 
+#' function (\code{d.marked.fraction}), the probability distribution function (aka 
+#' the cumulative distribution function; \code{p.marked.fraction}) and the quantile 
+#' function (\code{q.marked.fraction}) given a set of observed score values and 
 #' distributions for unmarked and marked individuals.
 #' 
 #' The normalization of the probability distribution is carried out using a 
@@ -152,55 +178,55 @@ optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
 #' that number is comprised between \code{100} and \code{5000}.
 #' 
 #' @param obs Vector of observed score values for potentially marked individuals
-#' @inheritParams dmixfunc
+#' @inheritParams d.mix.dists.func
 #' @param N number of steps in fixed-step, trapezoidal integration scheme used 
 #'   to normalize probability distributions.  Defaults to \code{2*length(obs)}
 #'   so long as that number is comprised between \code{100} and \code{5000}.
 #' @param \dots Additional arguments for the \code{\link{approxfun}} function.
 #'   
 #' @return A function that takes one argument (the fraction of marked 
-#'   individuals for \code{dmixfunc.norm} and \code{pmixfunc.norm}; the quantile
-#'   for \code{qmixfunc.norm}) and returns the probability density, cumulative 
+#'   individuals for \code{d.marked.fraction} and \code{p.marked.fraction}; the quantile
+#'   for \code{q.marked.fraction}) and returns the probability density, cumulative 
 #'   probability distribution or score value, respectively.
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval
 #'   connectivity estimation
 #'   
-#' @describeIn dmixfunc.norm Returns a function that is PDF for fraction of 
+#' @describeIn d.marked.fraction Returns a function that is PDF for fraction of 
 #'   marked individuals
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
-dmixfunc.norm <- function(obs,d.unmarked,d.marked,N=.dmixfunc.N(obs),...) {
+d.marked.fraction <- function(obs,d.unmarked,d.marked,N=.d.marked.fraction.N(obs),...) {
   p.marked=seq(0,1,length.out=N+1)
   
-  f = sapply(p.marked,.dmixfunc.internal(obs,d.unmarked,d.marked))
+  f = sapply(p.marked,.d.marked.fraction.internal(obs,d.unmarked,d.marked))
   fs = sum(f[1:N]+diff(f)/2)*(p.marked[2]-p.marked[1])
   f2 = f / fs
   
   return(approxfun(p.marked,f2,...))
 }
 
-#' @describeIn dmixfunc.norm Returns a function that is cumulative probability
+#' @describeIn d.marked.fraction Returns a function that is cumulative probability
 #'   distribution for fraction of marked individuals
 #' @export
-pmixfunc.norm <- function(obs,d.unmarked,d.marked,N=.dmixfunc.N(obs),...) {
+p.marked.fraction <- function(obs,d.unmarked,d.marked,N=.d.marked.fraction.N(obs),...) {
   p.marked=seq(0,1,length.out=N+1)
   
-  f = sapply(p.marked,.dmixfunc.internal(obs,d.unmarked,d.marked))
+  f = sapply(p.marked,.d.marked.fraction.internal(obs,d.unmarked,d.marked))
   fs = c(0,cumsum(f[1:N]+diff(f)/2)*(p.marked[2]-p.marked[1]))
   f2 = fs / fs[length(fs)]
   browser()
   return(approxfun(p.marked,f2,...))
 }
 
-#' @describeIn dmixfunc.norm Returns a function that is quantile function for
+#' @describeIn d.marked.fraction Returns a function that is quantile function for
 #'   fraction of marked individuals
 #' @export
-qmixfunc.norm <- function(obs,d.unmarked,d.marked,N=.dmixfunc.N(obs),...) {
+q.marked.fraction <- function(obs,d.unmarked,d.marked,N=.d.marked.fraction.N(obs),...) {
   p.marked=seq(0,1,length.out=N+1)
   
-  f = sapply(p.marked,.dmixfunc.internal(obs,d.unmarked,d.marked))
+  f = sapply(p.marked,.d.marked.fraction.internal(obs,d.unmarked,d.marked))
   fs = c(0,cumsum(f[1:N]+diff(f)/2)*(p.marked[2]-p.marked[1]))
   f2 = fs / fs[length(fs)]
   
