@@ -8,11 +8,11 @@
 \title{Functions for examining the probability distribution for the fraction of
 marked individuals}
 \usage{
-dmixfunc.norm(obs, d.unmarked, d.marked, ...)
+dmixfunc.norm(obs, d.unmarked, d.marked, N = .dmixfunc.N(obs), ...)
 
-pmixfunc.norm(obs, d.unmarked, d.marked, ...)
+pmixfunc.norm(obs, d.unmarked, d.marked, N = .dmixfunc.N(obs), ...)
 
-qmixfunc.norm(obs, d.unmarked, d.marked, ...)
+qmixfunc.norm(obs, d.unmarked, d.marked, N = .dmixfunc.N(obs), ...)
 }
 \arguments{
 \item{obs}{Vector of observed score values for potentially marked individuals}
@@ -23,6 +23,10 @@ properly.}
 
 \item{d.marked}{A function representing the PDF of marked individuals.  Must
   be normalized so that it integrates to 1 for the function to work properly.}
+
+\item{N}{number of steps in fixed-step, trapezoidal integration scheme used
+to normalize probability distributions.  Defaults to \code{2*length(obs)}
+so long as that number is comprised between \code{100} and \code{5000}.}
 
 \item{\dots}{Additional arguments for the \code{\link{approxfun}} function.}
 }
@@ -39,6 +43,12 @@ the cumulative distribution function; \code{pmixfunc.norm}) and the quantile
 function (\code{qmixfunc.norm}) given a set of observed score values and
 distributions for unmarked and marked individuals.
 }
+\details{
+The normalization of the probability distribution is carried out using a
+simple, fixed-step trapezoidal integration scheme.  The number of steps
+between marked fractions 0 and 1 defaults to \code{2*length(obs)} so long as
+that number is comprised between \code{100} and \code{5000}.
+}
 \section{Functions}{
 \itemize{
 \item \code{dmixfunc.norm}: Returns a function that is PDF for fraction of
@@ -52,5 +62,9 @@ fraction of marked individuals
 }}
 \author{
 David M. Kaplan \email{dmkaplan2000@gmail.com}
+}
+\references{
+Kaplan et al. (submitted) Uncertainty in marine larval
+  connectivity estimation
 }
 

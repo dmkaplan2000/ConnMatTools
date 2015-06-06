@@ -29,8 +29,4 @@ integrates to 1.
 \author{
 David M. Kaplan \email{dmkaplan2000@gmail.com}
 }
-\references{
-Kaplan et al. (submitted) Uncertainty in marine larval
-  connectivity estimation
-}
 

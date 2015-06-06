@@ -17,9 +17,6 @@
 #' @return A function of class \code{stepfun}.  The height of the steps will be
 #'   divided by the distance between breaks and possibly the
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval
-#'   connectivity estimation
-#'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
@@ -110,6 +107,9 @@ log.prob <- function(p,obs,dfunc) {
 #' @return A list with results of optimization. Optimal fraction of marked
 #'   individuals is in \code{par} field. See \code{\link{optim}} for details.
 #'   
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval
+#'   connectivity estimation
+#'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
@@ -137,7 +137,7 @@ optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
 .dmixfunc.N <- function(obs)
   max(100,min(5000,2*length(obs)))
 
-#' Functions for examining the probability distribution for the fraction of
+#' Functions for examining the probability distribution for the fraction of 
 #' marked individuals
 #' 
 #' These functions return functions that calculates the probability density 
@@ -146,8 +146,16 @@ optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
 #' function (\code{qmixfunc.norm}) given a set of observed score values and 
 #' distributions for unmarked and marked individuals.
 #' 
+#' The normalization of the probability distribution is carried out using a 
+#' simple, fixed-step trapezoidal integration scheme.  The number of steps 
+#' between marked fractions 0 and 1 defaults to \code{2*length(obs)} so long as 
+#' that number is comprised between \code{100} and \code{5000}.
+#' 
 #' @param obs Vector of observed score values for potentially marked individuals
 #' @inheritParams dmixfunc
+#' @param N number of steps in fixed-step, trapezoidal integration scheme used 
+#'   to normalize probability distributions.  Defaults to \code{2*length(obs)}
+#'   so long as that number is comprised between \code{100} and \code{5000}.
 #' @param \dots Additional arguments for the \code{\link{approxfun}} function.
 #'   
 #' @return A function that takes one argument (the fraction of marked 
@@ -155,14 +163,15 @@ optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
 #'   for \code{qmixfunc.norm}) and returns the probability density, cumulative 
 #'   probability distribution or score value, respectively.
 #'   
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval
+#'   connectivity estimation
+#'   
 #' @describeIn dmixfunc.norm Returns a function that is PDF for fraction of 
 #'   marked individuals
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
-dmixfunc.norm <- function(obs,d.unmarked,d.marked,...) {
-  N = .dmixfunc.N(obs)
-  
+dmixfunc.norm <- function(obs,d.unmarked,d.marked,N=.dmixfunc.N(obs),...) {
   p.marked=seq(0,1,length.out=N+1)
   
   f = sapply(p.marked,.dmixfunc.internal(obs,d.unmarked,d.marked))
@@ -175,9 +184,7 @@ dmixfunc.norm <- function(obs,d.unmarked,d.marked,...) {
 #' @describeIn dmixfunc.norm Returns a function that is cumulative probability
 #'   distribution for fraction of marked individuals
 #' @export
-pmixfunc.norm <- function(obs,d.unmarked,d.marked,...) {
-  N = .dmixfunc.N(obs)
-  
+pmixfunc.norm <- function(obs,d.unmarked,d.marked,N=.dmixfunc.N(obs),...) {
   p.marked=seq(0,1,length.out=N+1)
   
   f = sapply(p.marked,.dmixfunc.internal(obs,d.unmarked,d.marked))
@@ -190,9 +197,7 @@ pmixfunc.norm <- function(obs,d.unmarked,d.marked,...) {
 #' @describeIn dmixfunc.norm Returns a function that is quantile function for
 #'   fraction of marked individuals
 #' @export
-qmixfunc.norm <- function(obs,d.unmarked,d.marked,...) {
-  N = .dmixfunc.N(obs)
-  
+qmixfunc.norm <- function(obs,d.unmarked,d.marked,N=.dmixfunc.N(obs),...) {
   p.marked=seq(0,1,length.out=N+1)
   
   f = sapply(p.marked,.dmixfunc.internal(obs,d.unmarked,d.marked))
