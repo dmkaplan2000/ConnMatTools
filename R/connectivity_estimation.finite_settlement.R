@@ -29,6 +29,7 @@
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
+#' @example tests/test.connectivity_estimation.R
 #' @export
 d.rel.conn.finite.settlement <- function(phi,p,n.obs,n.settlers,n.bootstraps=1000) {
   ss = phi * n.settlers

@@ -144,6 +144,7 @@ is.wholenumber <-
 #'   relative connectivity between a paire of sites
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
+#' @example tests/test.connectivity_estimation.R
 #' @export
 d.relative.connectivity <- function(phi,p,k,n)
   p*(p*phi)^k*(1-p*phi)^(n-k)/.sr.int(p,k,n)
@@ -160,7 +161,7 @@ p.relative.connectivity <- function(phi,p,k,n)
 #' @export
 q.relative.connectivity.func <- function(p,k,n,N=1000){
   phi = seq(0,1,length.out=N)
-  q = psr(phi,p,k,n)
+  q = p.relative.connectivity(phi,p,k,n)
   return(approxfun(q,phi))
 }
 

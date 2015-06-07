@@ -48,6 +48,9 @@ Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
   per recruit: An efficient method for assessing sustainability in marine
   reserve networks. Ecological Applications, 16: 2248-2263.
 
+Kaplan et al. (submitted) Uncertainty in marine larval
+  connectivity estimation
+
 White, J. W. 2010. Adapting the steepness parameter from
   stock-recruit curves for use in spatially explicit models. Fisheries
   Research, 102: 330-334.
