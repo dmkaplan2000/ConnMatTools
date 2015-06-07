@@ -142,6 +142,8 @@ is.wholenumber <-
 #'   
 #' @describeIn d.relative.connectivity Returns the probability density for 
 #'   relative connectivity between a paire of sites
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
 #' @export
 d.relative.connectivity <- function(phi,p,k,n)
   p*(p*phi)^k*(1-p*phi)^(n-k)/.sr.int(p,k,n)
