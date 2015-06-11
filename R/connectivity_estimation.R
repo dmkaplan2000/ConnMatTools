@@ -120,9 +120,9 @@ is.wholenumber <-
 #' between a source and destination site given a known fraction of marked 
 #' individuals (i.e., eggs) in the source population.
 #' 
-#' Estimations of the probability distribution are analytic, except that
-#' quantile estimation is performed using \code{\link{approxfun}} to perform
-#' reverse estimation based on the cumulative probability distribution function
+#' Estimations of the probability distribution are analytic, except that 
+#' quantile estimation is performed using \code{\link{approxfun}} to perform 
+#' reverse estimation based on the cumulative probability distribution function 
 #' estimated at a finite number of points.
 #' 
 #' @param phi Vector of fractions of individuals (i.e., eggs) from the source 
@@ -135,7 +135,8 @@ is.wholenumber <-
 #'   function for reverse approximation of quantile distribution. Defaults to 
 #'   \code{1000}.
 #'   
-#' @return Vector of probabilities or quantiles.
+#' @return Vector of probabilities or quantiles, or a function in the case of
+#'   \code{\link{q.relative.connectivity.func}}
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
