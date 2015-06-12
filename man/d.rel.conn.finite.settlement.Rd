@@ -39,6 +39,8 @@ samples and calculating for each the number of would-be marked settlers for
 all values of \code{phi}, the relative connectivity value.
 }
 \examples{
+library(ConnMatTools)
+
 k <- 10 # Number of marked settlers among sample
 n.obs <- 87 # Number of settlers in sample
 n.settlers <- 100 # Total size of settler pool
@@ -94,5 +96,8 @@ David M. Kaplan \email{dmkaplan2000@gmail.com}
 \references{
 Kaplan et al. (submitted) Uncertainty in marine larval
   connectivity estimation
+}
+\seealso{
+See also \code{\link{d.relative.connectivity}}, \code{\link{d.rel.conn.multiple}}
 }
 

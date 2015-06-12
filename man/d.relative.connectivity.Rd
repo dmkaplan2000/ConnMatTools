@@ -34,7 +34,8 @@ population settling at the destination population}
 \item{q}{Vector of quantiles}
 }
 \value{
-Vector of probabilities or quantiles.
+Vector of probabilities or quantiles, or a function in the case of
+  \code{\link{q.relative.connectivity.func}}
 }
 \description{
 These functions calculate the probability density function
@@ -67,6 +68,8 @@ a pair of sites
 distribution function for relative connectivity between a pair of sites
 }}
 \examples{
+library(ConnMatTools)
+
 k <- 10 # Number of marked settlers among sample
 n.obs <- 87 # Number of settlers in sample
 n.settlers <- 100 # Total size of settler pool

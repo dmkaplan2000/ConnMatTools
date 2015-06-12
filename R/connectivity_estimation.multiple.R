@@ -62,12 +62,13 @@
 #'   distribution function for relative connectivity between a pair of sites for
 #'   multiple possible \code{p}, \code{k} and \code{n} values.
 #' @include connectivity_estimation.R
+#' @example tests/test.connectivity_estimation.multiple.R
 #' @export
 d.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1) {
   pars = .rel.conn.multiple.pars.df(ps,ks,ns,weights)
 
   d=rep(0,length(phi))
-  for (M in 1:length(phi)) {
+  for (M in 1:dim(pars)[1]) {
     d = d + 
       d.relative.connectivity(phi,pars$ps[M],pars$ks[M],pars$ns[M]) *
       pars$ws[M]
@@ -85,7 +86,7 @@ p.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1) {
   pars = .rel.conn.multiple.pars.df(ps,ks,ns,weights)
   
   d=rep(0,length(phi))
-  for (M in 1:length(phi)) {
+  for (M in 1:dim(pars)[1]) {
     d = d + 
       p.relative.connectivity(phi,pars$ps[M],pars$ks[M],pars$ns[M]) *
       pars$ws[M]
@@ -111,4 +112,4 @@ q.rel.conn.multiple.func <- function(ps,ks,ns,weights=1,N=1000){
 #' @include connectivity_estimation.R
 #' @export
 q.rel.conn.multiple <-function(q,ps,ks,ns,weights=1,N=1000)
-  (q.rel.conn.func(ps,ks,ns,weights,N=N))(q)
+  (q.rel.conn.multiple.func(ps,ks,ns,weights,N=N))(q)
