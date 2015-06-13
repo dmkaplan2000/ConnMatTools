@@ -52,6 +52,7 @@ stepfun.hist <- function(h,...,normalize=TRUE) {
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
+#' @export
 d.mix.dists.func <- function(d.unmarked,d.marked) {
   return(function(p.marked,obs) (1-p.marked)*d.unmarked(obs)+
            p.marked*d.marked(obs))
@@ -86,26 +87,26 @@ prob.marked <- function(obs,d.unmarked,d.marked,phi,p=1) {
   p.marked*d.marked(obs) / ((1-p.marked)*d.unmarked(obs)+p.marked*d.marked(obs))
 }
 
-#' Logarithm of probability for a set of observed score values given a PDF
-#' 
-#' This function returns log-probability for a set of observed score values 
-#' given a PDF for the distribution of scores.
-#' 
-#' @param p Parameter in the PDF distribution.  This should be a single scalar
-#'   value, presumably the fraction of marked individuals in the population, but
-#'   the function is generic.
-#' @param obs A vector of score values
-#' @param dfunc A function representing the PDF of scores.  Should be normalized
-#'   so that it integrates to 1 for the function to return a true 
-#'   log-probability.
-#'   
-#' @return The log-probability.
-#'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
-#'   
-#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @encoding UTF-8
+# Logarithm of probability for a set of observed score values given a PDF
+# 
+# This function returns log-probability for a set of observed score values 
+# given a PDF for the distribution of scores.
+# 
+# @param p Parameter in the PDF distribution.  This should be a single scalar
+#   value, presumably the fraction of marked individuals in the population, but
+#   the function is generic.
+# @param obs A vector of score values
+# @param dfunc A function representing the PDF of scores.  Should be normalized
+#   so that it integrates to 1 for the function to return a true 
+#   log-probability.
+#   
+# @return The log-probability.
+#   
+# @references Kaplan et al. (submitted) Uncertainty in marine larval 
+#   connectivity estimation
+#   
+# @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+# @encoding UTF-8
 log.prob <- function(p,obs,dfunc) {
   v=dfunc(p,obs)
   

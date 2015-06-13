@@ -53,31 +53,31 @@ is.wholenumber <-
            p^(k) * (1-p)^(n-k+1) / (n-k+1))
 }
 
-#' Evaluates integral used to for PDF calculation for estimating relative 
-#' transport between a pair of sites
-#' 
-#' This function analytically evaluates the integral from \code{0} to \code{p} 
-#' of \code{x^k*(1-x)^(n-k)}.  This integral is used to normalize the PDF 
-#' functions for estimating relative (to the all recruits to the recruitment 
-#' site) larval transport between a pair of sites.
-#' 
-#' This is a universal version of the integral function that does error checking
-#' and picks one of two specific functions that actually do the calculations by 
-#' iteration from \code{k} to \code{n} or to \code{0}.  The choice between the 
-#' two versions is based on \code{k>n/2} or not.  Also looks for simple cases so
-#' they can be evaluated efficiently.
-#' 
-#' @param p Vector of upper limits for integral
-#' @param k Number of marked settlers found in sample
-#' @param n Total number of settlers collected
-#'   
-#' @return A vector of size \code{length(p)} with the values of the integrals.
-#'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval
-#'   connectivity estimation
-#'   
-#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @encoding UTF-8
+# Evaluates integral used to for PDF calculation for estimating relative 
+# transport between a pair of sites
+# 
+# This function analytically evaluates the integral from \code{0} to \code{p} 
+# of \code{x^k*(1-x)^(n-k)}.  This integral is used to normalize the PDF 
+# functions for estimating relative (to the all recruits to the recruitment 
+# site) larval transport between a pair of sites.
+# 
+# This is a universal version of the integral function that does error checking
+# and picks one of two specific functions that actually do the calculations by 
+# iteration from \code{k} to \code{n} or to \code{0}.  The choice between the 
+# two versions is based on \code{k>n/2} or not.  Also looks for simple cases so
+# they can be evaluated efficiently.
+# 
+# @param p Vector of upper limits for integral
+# @param k Number of marked settlers found in sample
+# @param n Total number of settlers collected
+#   
+# @return A vector of size \code{length(p)} with the values of the integrals.
+#   
+# @references Kaplan et al. (submitted) Uncertainty in marine larval
+#   connectivity estimation
+#   
+# @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+# @encoding UTF-8
 .sr.int <- function(p,k,n) {
   # Check for whole number inputs.  Comment out to increase efficiency a bit.
   if (!is.wholenumber(k) || !is.wholenumber(n))
