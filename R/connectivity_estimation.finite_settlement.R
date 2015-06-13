@@ -20,14 +20,15 @@
 #'   element of which are counts indicating the number of times among the 
 #'   \code{n.bootstraps} samples that \code{k} marked settlers are found among 
 #'   the \code{n.obs} settlers collected from the total settlement pool of 
-#'   \code{n.settlers} individuals. Results for \code{k} marked settlers are in
+#'   \code{n.settlers} individuals. Results for \code{k} marked settlers are in 
 #'   row \code{k+1} of the matrix, the first row being used for \code{k=0}.  The
 #'   row names of the matrix reflect the value of \code{k}.
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
-#' @seealso See also \code{\link{d.relative.connectivity}}, \code{\link{d.rel.conn.multiple}}
+#' @seealso See also \code{\link{d.relative.connectivity}},
+#'   \code{\link{d.rel.conn.multiple}}
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8

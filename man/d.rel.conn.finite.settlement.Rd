@@ -98,6 +98,7 @@ Kaplan et al. (submitted) Uncertainty in marine larval
   connectivity estimation
 }
 \seealso{
-See also \code{\link{d.relative.connectivity}}, \code{\link{d.rel.conn.multiple}}
+See also \code{\link{d.relative.connectivity}},
+  \code{\link{d.rel.conn.multiple}}
 }
 

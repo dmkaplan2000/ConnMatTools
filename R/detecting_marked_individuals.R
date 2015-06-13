@@ -64,13 +64,15 @@ d.mix.dists.func <- function(d.unmarked,d.marked) {
 #' unmarked and marked individuals and the fraction of individuals that are 
 #' marked.
 #' 
-#' @param p.marked The overall fraction of marked individuals in the entire 
-#'   population
 #' @param obs A vector of score values for a random sample of (marked and 
 #'   unmarked) individuals from the population
 #' @inheritParams d.mix.dists.func
+#' @param phi The fraction of settlers at the destination population that 
+#'   originated at the source population
+#' @param p Fraction of individuals (i.e., eggs) marked in the source
+#'   population. Defaults to 1.
 #'   
-#' @return A vector of the same size as \code{obs} containing the probability
+#' @return A vector of the same size as \code{obs} containing the probability 
 #'   that each individual is marked
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
@@ -79,7 +81,8 @@ d.mix.dists.func <- function(d.unmarked,d.marked) {
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
-prob.marked <- function(p.marked,obs,d.unmarked,d.marked) {
+prob.marked <- function(obs,d.unmarked,d.marked,phi,p=1) {
+  p.marked = phi * p
   p.marked*d.marked(obs) / ((1-p.marked)*d.unmarked(obs)+p.marked*d.marked(obs))
 }
 
@@ -112,17 +115,21 @@ log.prob <- function(p,obs,dfunc) {
   sum(log(v))  
 }
 
-#' Calculate the optimal fraction of marked individuals
+#' Calculate the optimal value for relative connectivity given two distributions 
+#' for scores for marked and unmarked individuals
 #' 
-#' This function calculates the fraction of marked individuals that best fits a 
-#' set of observed score values and a pair of distributions for marked and 
-#' unmarked individuals.
+#' This function calculates the value for relative connectivity that best fits a
+#' set of observed score values, a pair of distributions for marked and unmarked
+#' individuals and an estimate of the fraction of eggs marked in the source
+#' population, \code{p}.
 #' 
 #' @param obs Vector of observed score values for potentially marked individuals
 #' @inheritParams d.mix.dists.func
-#' @param par Initial fraction of marked individuals for \code{\link{optim}} 
-#'   function. Defaults to 0.5.
-#' @param method Method variable for \code{\link{optim}} function. Defaults to
+#' @param p Fraction of individuals (i.e., eggs) marked in the source population
+#' @param phi0 Initial value for \eqn{\phi}, the fraction of settlers at the 
+#'   destination population that originated at the source population, for 
+#'   \code{\link{optim}} function. Defaults to 0.5.
+#' @param method Method variable for \code{\link{optim}} function. Defaults to 
 #'   \code{"Brent"}.
 #' @param lower Lower limit for search for fraction of marked individuals. 
 #'   Defaults to 0.
@@ -130,106 +137,121 @@ log.prob <- function(p,obs,dfunc) {
 #'   Defaults to 1.
 #' @param \dots Additional arguments for the \code{\link{optim}} function.
 #'   
-#' @return A list with results of optimization. Optimal fraction of marked
-#'   individuals is in \code{par} field. See \code{\link{optim}} for details.
+#' @return A list with results of optimization. Optimal fraction of marked 
+#'   individuals is in \code{par} field. Negative log-likelihood is in the 
+#'   \code{value} field. See \code{\link{optim}} for more details.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
+#' @seealso See also \code{\link{d.relative.connectivity}}
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
-optimal.fraction.from.distributions <- function(obs,d.unmarked,d.marked,
-                                                par=0.5,method="Brent",lower=0,upper=1,
-                                                ...) {
-  f = function(p.marked)
-    -log.prob(p.marked,obs,d.mix.dists.func(d.unmarked,d.marked))
+optim.rel.conn.dists <- function(obs,d.unmarked,d.marked,p=1,
+                                 phi0=0.5,method="Brent",lower=0,upper=1,
+                                 ...) {
+  f = function(phi)
+    -log.prob(p*phi,obs,d.mix.dists.func(d.unmarked,d.marked))
   
-  o=optim(par=par,fn=f,method=method,lower=lower,upper=upper,...)
+  o=optim(par=phi0,fn=f,method=method,lower=lower,upper=upper,...)
+  o$phi = o$par
+  o$neg.log.prob = o$value
   
   return(o)
 }
 
-.d.marked.fraction.internal <- function(obs,d.unmarked,d.marked) {
+.d.rel.conn.dists.internal <- function(obs,d.unmarked,d.marked,p=1) {
   f = d.mix.dists.func(d.unmarked,d.marked)
-  ff = function(p.marked,obs)
-    log.prob(p.marked,obs,f)
+  ff = function(obs,phi,p)
+    log.prob(phi*p,obs,f)
   
-  f0 = optimal.fraction.from.distributions(obs,d.unmarked,d.marked)$value
+  f0 = optim.rel.conn.dists(obs,d.unmarked,d.marked,p=p)$value
   
-  return(function(p) exp(ff(p,obs)+f0))
+  return(function(phi) exp(ff(obs,phi,p)+f0))
 }
 
-.d.marked.fraction.N <- function(obs)
+.d.rel.conn.dists.N <- function(obs)
   max(100,min(5000,2*length(obs)))
 
-#' Functions for examining the probability distribution for the fraction of 
-#' marked individuals
+#' Functions for estimating the probability distribution for relative 
+#' connectivity given a pair of distributions for scores for marked and unmarked
+#' individuals
 #' 
-#' These functions return functions that calculates the probability density 
-#' function (\code{d.marked.fraction}), the probability distribution function (aka 
-#' the cumulative distribution function; \code{p.marked.fraction}) and the quantile 
-#' function (\code{q.marked.fraction}) given a set of observed score values and 
-#' distributions for unmarked and marked individuals.
+#' These functions return functions that calculate the probability density 
+#' function (\code{d.rel.conn.dists.func}), the probability distribution 
+#' function (aka the cumulative distribution function; 
+#' \code{p.rel.conn.dists.func}) and the quantile function 
+#' (\code{q.rel.conn.dists.func}) for relative connectivity given a set of 
+#' observed score values, distributions for unmarked and marked individuals, and
+#' an estimate of the fraction of all eggs marked at the source site, \code{p}.
 #' 
 #' The normalization of the probability distribution is carried out using a 
 #' simple, fixed-step trapezoidal integration scheme.  The number of steps 
-#' between marked fractions 0 and 1 defaults to \code{2*length(obs)} so long as 
-#' that number is comprised between \code{100} and \code{5000}.
+#' between relative connectivity values of 0 and 1 defaults to 
+#' \code{2*length(obs)} so long as that number is comprised between \code{100} 
+#' and \code{5000}.
 #' 
 #' @param obs Vector of observed score values for potentially marked individuals
 #' @inheritParams d.mix.dists.func
+#' @param p Fraction of individuals (i.e., eggs) marked in the source 
+#'   population. Defaults to 1.
 #' @param N number of steps in fixed-step, trapezoidal integration scheme used 
-#'   to normalize probability distributions.  Defaults to \code{2*length(obs)}
+#'   to normalize probability distributions.  Defaults to \code{2*length(obs)} 
 #'   so long as that number is comprised between \code{100} and \code{5000}.
 #' @param \dots Additional arguments for the \code{\link{approxfun}} function.
 #'   
-#' @return A function that takes one argument (the fraction of marked 
-#'   individuals for \code{d.marked.fraction} and \code{p.marked.fraction}; the quantile
-#'   for \code{q.marked.fraction}) and returns the probability density, cumulative 
-#'   probability distribution or score value, respectively.
+#' @return A function that takes one argument (the relative connectivity for 
+#'   \code{d.rel.conn.dists.func} and \code{p.rel.conn.dists.func}; the quantile
+#'   for \code{q.rel.conn.dists.func}) and returns the probability density, 
+#'   cumulative probability distribution or score value, respectively. The 
+#'   returned function accepts both vector and scalar input values.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
-#' @describeIn d.marked.fraction Returns a function that is PDF for fraction of 
-#'   marked individuals
+#' @describeIn d.rel.conn.dists.func Returns a function that is PDF for relative
+#'   connectivity
+#' @seealso See also \code{\link{d.relative.connectivity}}
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
-d.marked.fraction <- function(obs,d.unmarked,d.marked,N=.d.marked.fraction.N(obs),...) {
-  p.marked=seq(0,1,length.out=N+1)
+d.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
+                                  N=.d.rel.conn.dists.N(obs),...) {
+  phi=seq(0,1,length.out=N+1)
   
-  f = sapply(p.marked,.d.marked.fraction.internal(obs,d.unmarked,d.marked))
-  fs = sum(f[1:N]+diff(f)/2)*(p.marked[2]-p.marked[1])
+  f = sapply(phi,.d.rel.conn.dists.internal(obs,d.unmarked,d.marked,p=p))
+  fs = sum(f[1:N]+diff(f)/2)*(phi[2]-phi[1])
   f2 = f / fs
   
-  return(approxfun(p.marked,f2,...))
+  return(approxfun(phi,f2,...))
 }
 
-#' @describeIn d.marked.fraction Returns a function that is cumulative probability
-#'   distribution for fraction of marked individuals
+#' @describeIn d.rel.conn.dists.func Returns a function that is cumulative
+#'   probability distribution for relative connectivity
 #' @export
-p.marked.fraction <- function(obs,d.unmarked,d.marked,N=.d.marked.fraction.N(obs),...) {
-  p.marked=seq(0,1,length.out=N+1)
+p.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
+                                  N=.d.rel.conn.dists.N(obs),...) {
+  phi=seq(0,1,length.out=N+1)
   
-  f = sapply(p.marked,.d.marked.fraction.internal(obs,d.unmarked,d.marked))
-  fs = c(0,cumsum(f[1:N]+diff(f)/2)*(p.marked[2]-p.marked[1]))
+  f = sapply(phi,.d.rel.conn.dists.internal(obs,d.unmarked,d.marked,p=p))
+  fs = c(0,cumsum(f[1:N]+diff(f)/2)*(phi[2]-phi[1]))
   f2 = fs / fs[length(fs)]
-  browser()
-  return(approxfun(p.marked,f2,...))
+
+  return(approxfun(phi,f2,...))
 }
 
-#' @describeIn d.marked.fraction Returns a function that is quantile function for
-#'   fraction of marked individuals
+#' @describeIn d.rel.conn.dists.func Returns a function that is quantile
+#'   function for relative connectivity
 #' @export
-q.marked.fraction <- function(obs,d.unmarked,d.marked,N=.d.marked.fraction.N(obs),...) {
-  p.marked=seq(0,1,length.out=N+1)
+q.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
+                                  N=.d.rel.conn.dists.N(obs),...) {
+  phi=seq(0,1,length.out=N+1)
   
-  f = sapply(p.marked,.d.marked.fraction.internal(obs,d.unmarked,d.marked))
-  fs = c(0,cumsum(f[1:N]+diff(f)/2)*(p.marked[2]-p.marked[1]))
+  f = sapply(phi,.d.rel.conn.dists.internal(obs,d.unmarked,d.marked,p=p))
+  fs = c(0,cumsum(f[1:N]+diff(f)/2)*(phi[2]-phi[1]))
   f2 = fs / fs[length(fs)]
   
-  return(approxfun(f2,p.marked,...))
+  return(approxfun(f2,phi,...))
 }
 

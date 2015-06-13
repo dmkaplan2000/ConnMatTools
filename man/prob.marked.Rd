@@ -5,12 +5,9 @@
 \alias{prob.marked}
 \title{Returns probability a set of observations correspond to marked individuals}
 \usage{
-prob.marked(p.marked, obs, d.unmarked, d.marked)
+prob.marked(obs, d.unmarked, d.marked, phi, p = 1)
 }
 \arguments{
-\item{p.marked}{The overall fraction of marked individuals in the entire
-population}
-
 \item{obs}{A vector of score values for a random sample of (marked and
 unmarked) individuals from the population}
 
@@ -20,6 +17,12 @@ properly.}
 
 \item{d.marked}{A function representing the PDF of marked individuals.  Must
   be normalized so that it integrates to 1 for the function to work properly.}
+
+\item{phi}{The fraction of settlers at the destination population that
+originated at the source population}
+
+\item{p}{Fraction of individuals (i.e., eggs) marked in the source
+  population. Defaults to 1.}
 }
 \value{
 A vector of the same size as \code{obs} containing the probability
