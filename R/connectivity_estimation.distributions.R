@@ -18,6 +18,7 @@
 #'   divided by the distance between breaks and possibly the
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.connectivity_estimation.distributions.R
 #' @encoding UTF-8
 #' @export
 stepfun.hist <- function(h,...,normalize=TRUE) {
@@ -139,14 +140,15 @@ log.prob <- function(p,obs,dfunc) {
 #' @param \dots Additional arguments for the \code{\link{optim}} function.
 #'   
 #' @return A list with results of optimization. Optimal fraction of marked 
-#'   individuals is in \code{par} field. Negative log-likelihood is in the 
-#'   \code{value} field. See \code{\link{optim}} for more details.
+#'   individuals is in \code{phi} field. Negative log-likelihood is in the 
+#'   \code{neg.log.prob} field. See \code{\link{optim}} for more details.
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
 #' @seealso See also \code{\link{d.relative.connectivity}}
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.connectivity_estimation.distributions.R
 #' @encoding UTF-8
 #' @export
 optim.rel.conn.dists <- function(obs,d.unmarked,d.marked,p=1,
@@ -167,7 +169,7 @@ optim.rel.conn.dists <- function(obs,d.unmarked,d.marked,p=1,
   ff = function(obs,phi,p)
     log.prob(phi*p,obs,f)
   
-  f0 = optim.rel.conn.dists(obs,d.unmarked,d.marked,p=p)$value
+  f0 = optim.rel.conn.dists(obs,d.unmarked,d.marked,p=p)$neg.log.prob
   
   return(function(phi) exp(ff(obs,phi,p)+f0))
 }
@@ -215,6 +217,7 @@ optim.rel.conn.dists <- function(obs,d.unmarked,d.marked,p=1,
 #'   connectivity
 #' @seealso See also \code{\link{d.relative.connectivity}}
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.connectivity_estimation.distributions.R
 #' @encoding UTF-8
 #' @export
 d.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
