@@ -3,13 +3,10 @@
 # single type of marked individuals among a set of collected individuals (larvae) 
 # from a source population with known fraction of marked individuals (eggs).
 # 
-# In the code below, I first define recursion functions to estimate
-# the integrals in the probability distribution.  There is one such
-# for recursion to k=n, and another to k=0.  I then define a function
-# that chooses which one to use based on whether or not k>n/2.
+# In the code below, I first estimate probability distributions assuming a
+# uniform prior for connectivitt.  
 #
-# The rest of the functions use this integral to calculate different
-# aspects of the probability distribution.
+# Then I do the more complicated case of a general prior.
 ################################################################
 
 # Utility function to determine if input is an integer
@@ -171,3 +168,77 @@ q.relative.connectivity.func <- function(p,k,n,N=1000){
 #' @export
 q.relative.connectivity <-function(q,p,k,n,N=1000)
   (q.relative.connectivity.func(p,k,n,N=N))(q)
+
+################################################
+# Functions for actually calculating PDF
+################################################
+
+#' Estimate the probability distribution of relative connectivity values given a
+#' uniform prior distribution
+#' 
+#' These functions calculate the probability density function 
+#' (\code{d.rel.conn.unif.prior}), the probability distribution function (aka 
+#' the cumulative distribution function; \code{p.rel.conn.unif.prior}) and the 
+#' quantile function (\code{q.rel.conn.unif.prior}) for the relative (to all 
+#' settlers at the destination site) connectivity value for larval transport 
+#' between a source and destination site given a known fraction of marked 
+#' individuals (i.e., eggs) in the source population.
+#' 
+#' Estimations of the probability distribution are analytic, except that 
+#' quantile estimation is performed using \code{\link{approxfun}} to perform 
+#' reverse estimation based on the cumulative probability distribution function 
+#' estimated at a finite number of points.
+#' 
+#' @param phi Vector of fractions of individuals (i.e., eggs) from the source 
+#'   population settling at the destination population
+#' @param q Vector of quantiles
+#' @param p Fraction of individuals (i.e., eggs) marked in the source population
+#' @param k Number of marked settlers found in sample
+#' @param n Total number of settlers collected
+#' @param log If \code{TRUE}, returns natural logarithm of
+#'   probabilities, except for \code{\link{q.rel.conn.unif.prior}}, which
+#'   expects log of probabilities as inputs
+#' 
+#'   
+#' @return Vector of probabilities or quantiles, or a function in the case of 
+#'   \code{\link{q.rel.conn.unif.prior.func}}
+#'   
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
+#'   connectivity estimation
+#'   
+#' @describeIn d.rel.conn.unif.prior Returns the probability density for 
+#'   relative connectivity between a paire of sites
+#' @family connectivity estimation
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
+#' @example tests/test.connectivity_estimation.R
+#' @export
+d.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
+  if (log) {
+    log(p) + dbeta(phi*p,k+1,n-k+1,log=log,...) - pbeta(p,k+1,n-k+1,log=log,...)
+  } else {
+    p*dbeta(phi*p,k+1,n-k+1,log=log,...)/pbeta(p,k+1,n-k+1,log=log,...) 
+  } 
+}
+
+#' @describeIn d.rel.conn.unif.prior Returns the cumulative probability
+#'   distribution for relative connectivity between a paire of sites
+#' @export
+p.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
+  if (log) {
+    pbeta(phi*p,k+1,n-k+1,log=log,...) - pbeta(p,k+1,n-k+1,log=log,...)
+  } else {
+    pbeta(phi*p,k+1,n-k+1,log=log,...) / pbeta(p,k+1,n-k+1,log=log,...)
+  } 
+}
+
+#' @describeIn d.rel.conn.unif.prior Estimates quantiles for the probability
+#'   distribution function for relative connectivity between a pair of sites
+#' @export
+q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
+  if (log) {
+    qbeta(q + pbeta(p,k+1,n-k+1,log=log,...),k+1,n-k+1,log=log,...)/p    
+  } else {
+    qbeta(q*pbeta(p,k+1,n-k+1,log=log,...),k+1,n-k+1,log=log,...)/p
+  }
+}
