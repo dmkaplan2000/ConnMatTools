@@ -8,20 +8,24 @@
 \title{Functions for estimating the probability distribution of relative
 connectivity values as a weighted sum over possible input parameters}
 \usage{
-d.rel.conn.multiple(phi, ps, ks, ns, weights = 1)
+d.rel.conn.multiple(phi, ps, ks, ns, weights = 1,
+  d.rel.conn = d.rel.conn.beta.prior, ...)
 
-p.rel.conn.multiple(phi, ps, ks, ns, weights = 1)
+p.rel.conn.multiple(phi, ps, ks, ns, weights = 1,
+  p.rel.conn = p.rel.conn.beta.prior)
 
-q.rel.conn.multiple.func(ps, ks, ns, weights = 1, N = 1000)
+q.rel.conn.multiple.func(ps, ks, ns, weights = 1,
+  p.rel.conn = p.rel.conn.beta.prior, N = 1000, ...)
 
-q.rel.conn.multiple(q, ps, ks, ns, weights = 1, N = 1000)
+q.rel.conn.multiple(q, ps, ks, ns, weights = 1,
+  p.rel.conn = p.rel.conn.beta.prior, N = 1000, ...)
 }
 \arguments{
 \item{phi}{Vector of fractions of individuals (i.e., eggs) from the source
 population settling at the destination population}
 
-\item{ps}{Vector of fractions of individuals (i.e., eggs) marked in the source
-population}
+\item{ps}{Vector of fractions of individuals (i.e., eggs) marked in the
+source population}
 
 \item{ks}{Vector of numbers of marked settlers found in sample}
 
@@ -29,11 +33,21 @@ population}
 
 \item{weights}{Vector of weights for each set of p, k and n values}
 
+\item{d.rel.conn}{Function to use to calculate probability density for
+individual combinations of \code{ps}, \code{ks} and \code{ns}. Defaults to
+\code{\link{d.rel.conn.beta.prior}}}
+
+\item{p.rel.conn}{Function to use to calculate cumulative probability
+distribution for individual combinations of \code{ps}, \code{ks} and
+\code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}}
+
 \item{N}{Number of points at which to estimate cumulative probability
-  function for reverse approximation of quantile distribution. Defaults to
-  \code{1000}.}
+function for reverse approximation of quantile distribution. Defaults to
+\code{1000}.}
 
 \item{q}{Vector of quantiles}
+
+\item{\dots}{Additional arguments to \code{d.rel.conn} or \code{p.rel.conn}}
 }
 \value{
 Vector of probabilities or quantiles, or a function in the case of
@@ -105,9 +119,9 @@ plot(phi,d.rel.conn.multiple(phi,p,k,n,w),
      type="l")
 
 # Add standard distributions for max and min p values
-lines(phi,d.relative.connectivity(phi,min(p),k,n),
+lines(phi,d.rel.conn.beta.prior(phi,min(p),k,n),
       col="red",lty="dashed")
-lines(phi,d.relative.connectivity(phi,max(p),k,n),
+lines(phi,d.rel.conn.beta.prior(phi,max(p),k,n),
       col="red",lty="dashed")
 
 # Add some quantiles
@@ -123,7 +137,13 @@ Kaplan et al. (submitted) Uncertainty in marine larval
   connectivity estimation
 }
 \seealso{
-See also \code{\link{d.relative.connectivity}},
-  \code{\link{d.rel.conn.finite.settlement}}
+Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
+  \code{\link{p.rel.conn.beta.prior}},
+  \code{\link{q.rel.conn.beta.prior}},
+  \code{\link{q.rel.conn.beta.prior.func}};
+  \code{\link{d.rel.conn.unif.prior}},
+  \code{\link{p.rel.conn.unif.prior}},
+  \code{\link{q.rel.conn.unif.prior}};
+  \code{\link{dual.mark.transmission}}
 }
 

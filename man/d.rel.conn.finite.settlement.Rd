@@ -48,13 +48,14 @@ n.settlers <- 100 # Total size of settler pool
 p <- 0.4 # Fraction of eggs that was marked
 phi <- seq(0,1,length.out=101) # Values for relative connectivity
 
-drc <- d.relative.connectivity(phi,p,k,n.obs)
-prc <- p.relative.connectivity(phi,p,k,n.obs)
-qrc <- q.relative.connectivity(c(0.025,0.975),p,k,n.obs) # 95\% confidence interval
+# Probability distribution assuming infinite settler pool and uniform prior
+drc <- d.rel.conn.unif.prior(phi,p,k,n.obs)
+prc <- p.rel.conn.unif.prior(phi,p,k,n.obs)
+qrc <- q.rel.conn.unif.prior(c(0.025,0.975),p,k,n.obs) # 95\% confidence interval
 
 n.bootstraps <- 1000 # Increase to improve accuracy of brute force estimations
 
-# Test with brute force finite settlement function
+# Test with brute force finite settlement function and (nearly) infinite settler pool
 dbf <- d.rel.conn.finite.settlement(phi,p,n.obs,100*n.obs,
                                     n.bootstraps=n.bootstraps)
 dbf <- dbf[as.character(k),]
@@ -67,7 +68,7 @@ pbf <- pbf / max(pbf)
 # Approximate quantiles
 qbf <- approx(pbf,phi,c(0.025,0.975))$y
 
-# Finite recruitment
+# Finite settler pool
 dfr <- d.rel.conn.finite.settlement(phi,p,n.obs,n.settlers,
                                     n.bootstraps=n.bootstraps)
 dfr <- dfr[as.character(k),]

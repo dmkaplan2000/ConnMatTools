@@ -1,5 +1,5 @@
 ################################################################
-# This code estimates analytic probability distribution for a 
+# This code estimates probability distribution for a 
 # single type of marked individuals among a set of collected individuals (larvae) 
 # from a source population with known fraction of marked individuals (eggs).
 # 
@@ -9,172 +9,12 @@
 # Then I do the more complicated case of a general prior.
 ################################################################
 
-# Utility function to determine if input is an integer
-is.wholenumber <-
-  function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
-
-###########################################
-# From k=n
-###########################################
-
-# Integral needed for calculating quantiles
-.sr.int.n <- function(p,k,n) {
-  #   # Check for whole number inputs.  Comment out to increase efficiency a bit.
-  #   if (!is.wholenumber(k) | !is.wholenumber(n))
-  #     stop("k and n must be integers")
-  
-  # Define base of series
-  if (k>n) return(0)
-  
-  # For other values, calculate by induction
-  return(p^(k+1) * (1-p)^(n-k) / (k+1) + 
-           (n-k)/(k+1) * .sr.int.n(p,k+1,n))
-}
-
-###########################################
-# From k=0
-###########################################
-
-# Integral needed for calculating quantiles
-# Recursion from k=0
-.sr.int.0 <- function(p,k,n) {
-  #   # Check for whole number inputs.  Comment out to increase efficiency a bit.
-  #   if (!is.wholenumber(k) | !is.wholenumber(n))
-  #     stop("k and n must be integers")
-  
-  # Define base of series
-  if (k<1) return((1-(1-p)^(n+1))/(n+1))
-  
-  # For other values, calculate by induction
-  return(k/(n-k+1) * .sr.int.0(p,k-1,n) -
-           p^(k) * (1-p)^(n-k+1) / (n-k+1))
-}
-
-# Evaluates integral used to for PDF calculation for estimating relative 
-# transport between a pair of sites
-# 
-# This function analytically evaluates the integral from \code{0} to \code{p} 
-# of \code{x^k*(1-x)^(n-k)}.  This integral is used to normalize the PDF 
-# functions for estimating relative (to the all recruits to the recruitment 
-# site) larval transport between a pair of sites.
-# 
-# This is a universal version of the integral function that does error checking
-# and picks one of two specific functions that actually do the calculations by 
-# iteration from \code{k} to \code{n} or to \code{0}.  The choice between the 
-# two versions is based on \code{k>n/2} or not.  Also looks for simple cases so
-# they can be evaluated efficiently.
-# 
-# @param p Vector of upper limits for integral
-# @param k Number of marked settlers found in sample
-# @param n Total number of settlers collected
-#   
-# @return A vector of size \code{length(p)} with the values of the integrals.
-#   
-# @references Kaplan et al. (submitted) Uncertainty in marine larval
-#   connectivity estimation
-#   
-# @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-# @encoding UTF-8
-.sr.int <- function(p,k,n) {
-  # Check for whole number inputs.  Comment out to increase efficiency a bit.
-  if (!is.wholenumber(k) || !is.wholenumber(n))
-    stop("k and n must be integers")
-  
-  if (k<0 || k>n)
-    stop("k must satisfy 0<=k<=n")
-  
-  # Do simple cases
-  I = p == 0
-  J = p == 1
-  K = !I & !J
-  x = NA*p
-  x[I] = 0
-  x[J] = 1/choose(n,k)/(n+1)
-  
-  if (any(K)) {
-    if (k>n/2)
-      x[K] = .sr.int.n(p[K],k,n)
-    else
-      x[K] = .sr.int.0(p[K],k,n)    
-  }
-  
-  return(x)
-}
-
-
 ################################################
-# Functions for actually calculating PDF
+# Functions for calculating PDF for uniform prior
 ################################################
 
-#' Functions for estimating the probability distribution of relative 
-#' connectivity values
-#' 
-#' These functions calculate the probability density function 
-#' (\code{d.relative.connectivity}), the probability distribution function (aka 
-#' the cumulative distribution function; \code{p.relative.connectivity}) and the
-#' quantile function (\code{q.relative.connectivity}) for the relative (to all 
-#' settlers at the destination site) connectivity value for larval transport 
-#' between a source and destination site given a known fraction of marked 
-#' individuals (i.e., eggs) in the source population.
-#' 
-#' Estimations of the probability distribution are analytic, except that 
-#' quantile estimation is performed using \code{\link{approxfun}} to perform 
-#' reverse estimation based on the cumulative probability distribution function 
-#' estimated at a finite number of points.
-#' 
-#' @param phi Vector of fractions of individuals (i.e., eggs) from the source 
-#'   population settling at the destination population
-#' @param q Vector of quantiles
-#' @param p Fraction of individuals (i.e., eggs) marked in the source population
-#' @param k Number of marked settlers found in sample
-#' @param n Total number of settlers collected
-#' @param N Number of points at which to estimate cumulative probability 
-#'   function for reverse approximation of quantile distribution. Defaults to 
-#'   \code{1000}.
-#'   
-#' @return Vector of probabilities or quantiles, or a function in the case of
-#'   \code{\link{q.relative.connectivity.func}}
-#'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
-#'   
-#' @describeIn d.relative.connectivity Returns the probability density for 
-#'   relative connectivity between a paire of sites
-#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @encoding UTF-8
-#' @example tests/test.connectivity_estimation.R
-#' @export
-d.relative.connectivity <- function(phi,p,k,n)
-  p*(p*phi)^k*(1-p*phi)^(n-k)/.sr.int(p,k,n)
-
-#' @describeIn d.relative.connectivity Returns the cumulative probability
-#'   distribution for relative connectivity between a paire of sites
-#' @export
-p.relative.connectivity <- function(phi,p,k,n)
-  .sr.int(p*phi,k,n)/.sr.int(p,k,n)
-
-#' @describeIn d.relative.connectivity Returns a function to estimate quantiles
-#'   for the probability distribution function for relative connectivity between
-#'   a pair of sites
-#' @export
-q.relative.connectivity.func <- function(p,k,n,N=1000){
-  phi = seq(0,1,length.out=N)
-  q = p.relative.connectivity(phi,p,k,n)
-  return(approxfun(q,phi))
-}
-
-#' @describeIn d.relative.connectivity Estimates quantiles for the probability
-#'   distribution function for relative connectivity between a pair of sites
-#' @export
-q.relative.connectivity <-function(q,p,k,n,N=1000)
-  (q.relative.connectivity.func(p,k,n,N=N))(q)
-
-################################################
-# Functions for actually calculating PDF
-################################################
-
-#' Estimate the probability distribution of relative connectivity values given a
-#' uniform prior distribution
+#' Estimate the probability distribution of relative connectivity values 
+#' assuming a uniform prior distribution
 #' 
 #' These functions calculate the probability density function 
 #' (\code{d.rel.conn.unif.prior}), the probability distribution function (aka 
@@ -182,12 +22,12 @@ q.relative.connectivity <-function(q,p,k,n,N=1000)
 #' quantile function (\code{q.rel.conn.unif.prior}) for the relative (to all 
 #' settlers at the destination site) connectivity value for larval transport 
 #' between a source and destination site given a known fraction of marked 
-#' individuals (i.e., eggs) in the source population.
+#' individuals (i.e., eggs) in the source population.  A uniform prior is used
+#' for the relative connectivity value.
 #' 
-#' Estimations of the probability distribution are analytic, except that 
-#' quantile estimation is performed using \code{\link{approxfun}} to perform 
-#' reverse estimation based on the cumulative probability distribution function 
-#' estimated at a finite number of points.
+#' Estimations of the probability distribution are derived from the Beta 
+#' distribution (see \code{\link{dbeta}}) and should be exact to great 
+#' precision.
 #' 
 #' @param phi Vector of fractions of individuals (i.e., eggs) from the source 
 #'   population settling at the destination population
@@ -195,19 +35,19 @@ q.relative.connectivity <-function(q,p,k,n,N=1000)
 #' @param p Fraction of individuals (i.e., eggs) marked in the source population
 #' @param k Number of marked settlers found in sample
 #' @param n Total number of settlers collected
-#' @param log If \code{TRUE}, returns natural logarithm of
-#'   probabilities, except for \code{\link{q.rel.conn.unif.prior}}, which
-#'   expects log of probabilities as inputs
-#' 
+#' @param log If \code{TRUE}, returns natural logarithm of probabilities, except
+#'   for \code{\link{q.rel.conn.unif.prior}}, which expects log of probabilities
+#'   as inputs
+#' @param \dots Extra arguments to Beta distribution functions.  See 
+#'   \code{\link{dbeta}} for details.  For expert use only.
 #'   
-#' @return Vector of probabilities or quantiles, or a function in the case of 
-#'   \code{\link{q.rel.conn.unif.prior.func}}
+#' @return Vector of probabilities or quantiles.
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
 #' @describeIn d.rel.conn.unif.prior Returns the probability density for 
-#'   relative connectivity between a paire of sites
+#'   relative connectivity between a pair of sites
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
@@ -242,3 +82,119 @@ q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
     qbeta(q*pbeta(p,k+1,n-k+1,log=log,...),k+1,n-k+1,log=log,...)/p
   }
 }
+
+
+################################################
+# Functions for calculating PDF for Beta prior
+################################################
+
+#' Estimate the probability distribution of relative connectivity values 
+#' assuming a Beta-distributed prior
+#' 
+#' These functions calculate the probability density function 
+#' (\code{d.rel.conn.beta.prior}), the probability distribution function (aka 
+#' the cumulative distribution function; \code{p.rel.conn.beta.prior}) and the 
+#' quantile function (\code{q.rel.conn.beta.prior}) for the relative (to all 
+#' settlers at the destination site) connectivity value for larval transport 
+#' between a source and destination site given a known fraction of marked 
+#' individuals (i.e., eggs) in the source population.  A non-uniform prior is 
+#' used for the relative connectivity value.
+#' 
+#' The prior distribution for relative connectivity \code{phi} defaults to a 
+#' Beta distribution with both shape parameters equal to 0.5.  This is the 
+#' Reference or Jeffreys prior for a binomial distribution parameter.  Both 
+#' shape parameters equal to 1 corresponds to a uniform prior.
+#' 
+#' Estimations of the probability distribution are based on numerical 
+#' integration using the \code{\link{integrate}} function, and therefore are 
+#' accurate to the level of that function.  Some modification of the default 
+#' arguments to that function may be necessary to acheive good results for 
+#' certain parameter values.
+#' 
+#' @param phi Vector of fractions of individuals (i.e., eggs) from the source 
+#'   population settling at the destination population
+#' @param q Vector of quantiles
+#' @param p Fraction of individuals (i.e., eggs) marked in the source population
+#' @param k Number of marked settlers found in sample
+#' @param n Total number of settlers collected
+#' @param prior.shape1 First shape parameter for Beta distributed prior. 
+#'   Defaults to 0.5.
+#' @param prior.shape2 Second shape parameter for Beta distributed prior. 
+#'   Defaults to being the same as \code{prior.shape1}.
+#' @param prior.func Function for prior distribution.  Should take one 
+#'   parameter, \code{phi}, and return a probability.  Defaults to 
+#'   \code{function(phi) dbeta(phi,prior.shape1,prior.shape2)}
+#' @param N Number of points at which to estimate cumulative probability 
+#'   function for reverse approximation of quantile distribution. Defaults to 
+#'   \code{1000}.
+#' @param \dots Extra arguments for the \code{\link{integrate}} function used 
+#'   for normalization of probability distributions.
+#'   
+#' @return Vector of probabilities or quantiles, or a function in the case of
+#'   \code{\link{q.rel.conn.beta.prior.func}}.
+#'   
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
+#'   connectivity estimation
+#'   
+#' @describeIn d.rel.conn.beta.prior Returns the probability density for 
+#'   relative connectivity between a pair of sites
+#' @family connectivity estimation
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @encoding UTF-8
+#' @example tests/test.connectivity_estimation.R
+#' @export
+d.rel.conn.beta.prior <- function(phi,p,k,n,
+                                  prior.shape1=0.5,
+                                  prior.shape2=prior.shape1,
+                                  prior.func=function(phi) dbeta(phi,prior.shape1,prior.shape2),
+                                  ...) {
+  f = function(phi) dbeta(phi*p,k+1,n-k+1) * prior.func(phi)
+  ff = integrate(f,0,1,...)$value
+  
+  f(phi) / ff
+}
+
+#' @describeIn d.rel.conn.beta.prior Returns the cumulative probability
+#'   distribution for relative connectivity between a paire of sites
+#' @export
+p.rel.conn.beta.prior <- function(phi,p,k,n,
+                                  prior.shape1=0.5,
+                                  prior.shape2=prior.shape1,
+                                  prior.func=function(phi) dbeta(phi,prior.shape1,prior.shape2),
+                                  ...) {
+  f = function(phi) dbeta(phi*p,k+1,n-k+1) * prior.func(phi)
+  ff = integrate(f,0,1,...)$value
+  fff = function(phi) {
+    if (phi==0) return(0)
+    
+    integrate(f,0,phi,...)$value
+  }
+  
+  sapply(phi,fff) / ff
+}
+
+#' @describeIn d.rel.conn.beta.prior Returns a function to estimate quantiles for
+#'   the probability distribution function for relative connectivity between a
+#'   pair of sites.
+#' @export
+q.rel.conn.beta.prior.func <-function(p,k,n,
+                                      prior.shape1=0.5,
+                                      prior.shape2=prior.shape1,
+                                      prior.func=function(phi) dbeta(phi,prior.shape1,prior.shape2),
+                                      N=1000,
+                                      ...) {
+  phi = seq(0,1,length.out=N)
+  q = p.rel.conn.beta.prior(phi,p,k,n,prior.func=prior.func,...)
+  return(approxfun(q,phi))
+}
+
+#' @describeIn d.rel.conn.beta.prior Estimates quantiles for the probability
+#'   distribution function for relative connectivity between a pair of sites
+#' @export
+q.rel.conn.beta.prior <-function(q,p,k,n,
+                                 prior.shape1=0.5,
+                                 prior.shape2=prior.shape1,
+                                 prior.func=function(phi) dbeta(phi,prior.shape1,prior.shape2),
+                                 N=1000,
+                                 ...)
+  (q.rel.conn.beta.prior.func(p,k,n,prior.func=prior.func,N=N,...))(q)

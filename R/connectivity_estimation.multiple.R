@@ -27,9 +27,9 @@
 #' produce ensemble averages over different input parameter values with 
 #' different probabilities of being correct.
 #' 
-#' If \code{ps}, \code{ks}, \code{ns} and \code{weights} can be scalars or
-#' vectors of the same length (or lengths divisible into that of the largest
-#' input parameter).  \code{weights} are normalized to sum to 1 before being
+#' If \code{ps}, \code{ks}, \code{ns} and \code{weights} can be scalars or 
+#' vectors of the same length (or lengths divisible into that of the largest 
+#' input parameter).  \code{weights} are normalized to sum to 1 before being 
 #' used to sum probabilities from each individual set of input parameters.
 #' 
 #' Estimations of the probability distributions are analytic, with the exception
@@ -39,24 +39,29 @@
 #' @param phi Vector of fractions of individuals (i.e., eggs) from the source 
 #'   population settling at the destination population
 #' @param q Vector of quantiles
-#' @param ps Vector of fractions of individuals (i.e., eggs) marked in the source 
-#'   population
+#' @param ps Vector of fractions of individuals (i.e., eggs) marked in the 
+#'   source population
 #' @param ks Vector of numbers of marked settlers found in sample
 #' @param ns Vector of total numbers of settlers collected
 #' @param weights Vector of weights for each set of p, k and n values
+#' @param d.rel.conn Function to use to calculate probability density for 
+#'   individual combinations of \code{ps}, \code{ks} and \code{ns}. Defaults to 
+#'   \code{\link{d.rel.conn.beta.prior}}
+#' @param p.rel.conn Function to use to calculate cumulative probability
+#'   distribution for individual combinations of \code{ps}, \code{ks} and
+#'   \code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}
 #' @param N Number of points at which to estimate cumulative probability 
 #'   function for reverse approximation of quantile distribution. Defaults to 
 #'   \code{1000}.
-#'   
+#' @param \dots Additional arguments to \code{d.rel.conn} or \code{p.rel.conn}
+#'
 #' @return Vector of probabilities or quantiles, or a function in the case of 
 #'   \code{\link{q.rel.conn.multiple.func}}
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
-#' @seealso See also \code{\link{d.relative.connectivity}}, 
-#'   \code{\link{d.rel.conn.finite.settlement}}
-#'   
+#' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @describeIn d.rel.conn.multiple Estimates quantiles for the probability 
 #'   distribution function for relative connectivity between a pair of sites for
@@ -64,13 +69,13 @@
 #' @include connectivity_estimation.R
 #' @example tests/test.connectivity_estimation.multiple.R
 #' @export
-d.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1) {
+d.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,d.rel.conn=d.rel.conn.beta.prior,...) {
   pars = .rel.conn.multiple.pars.df(ps,ks,ns,weights)
 
   d=rep(0,length(phi))
   for (M in 1:dim(pars)[1]) {
     d = d + 
-      d.relative.connectivity(phi,pars$ps[M],pars$ks[M],pars$ns[M]) *
+      d.rel.conn(phi,pars$ps[M],pars$ks[M],pars$ns[M],...) *
       pars$ws[M]
   }
   
@@ -82,13 +87,14 @@ d.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1) {
 #'   multiple possible \code{p}, \code{k} and \code{n} values.
 #' @include connectivity_estimation.R
 #' @export
-p.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1) {
+p.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,
+                                 p.rel.conn=p.rel.conn.beta.prior) {
   pars = .rel.conn.multiple.pars.df(ps,ks,ns,weights)
   
   d=rep(0,length(phi))
   for (M in 1:dim(pars)[1]) {
     d = d + 
-      p.relative.connectivity(phi,pars$ps[M],pars$ks[M],pars$ns[M]) *
+      p.rel.conn(phi,pars$ps[M],pars$ks[M],pars$ns[M]) *
       pars$ws[M]
   }
   
@@ -100,7 +106,9 @@ p.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1) {
 #'   pair of sites for multiple possible \code{p}, \code{k} and \code{n} values.
 #' @include connectivity_estimation.R
 #' @export
-q.rel.conn.multiple.func <- function(ps,ks,ns,weights=1,N=1000){
+q.rel.conn.multiple.func <- function(ps,ks,ns,weights=1,
+                                     p.rel.conn=p.rel.conn.beta.prior,
+                                     N=1000,...){
   phi = seq(0,1,length.out=N)
   q = p.rel.conn.multiple(phi,ps,ks,ns,weights)
   return(approxfun(q,phi))
@@ -111,5 +119,7 @@ q.rel.conn.multiple.func <- function(ps,ks,ns,weights=1,N=1000){
 #'   multiple possible \code{p}, \code{k} and \code{n} values.
 #' @include connectivity_estimation.R
 #' @export
-q.rel.conn.multiple <-function(q,ps,ks,ns,weights=1,N=1000)
-  (q.rel.conn.multiple.func(ps,ks,ns,weights,N=N))(q)
+q.rel.conn.multiple <-function(q,ps,ks,ns,weights=1,
+                               p.rel.conn=p.rel.conn.beta.prior,
+                               N=1000,...)
+  (q.rel.conn.multiple.func(ps,ks,ns,weights,p.rel.conn=p.rel.conn,N=N))(q)

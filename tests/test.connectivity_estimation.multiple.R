@@ -22,9 +22,9 @@ plot(phi,d.rel.conn.multiple(phi,p,k,n,w),
      type="l")
 
 # Add standard distributions for max and min p values
-lines(phi,d.relative.connectivity(phi,min(p),k,n),
+lines(phi,d.rel.conn.beta.prior(phi,min(p),k,n),
       col="red",lty="dashed")
-lines(phi,d.relative.connectivity(phi,max(p),k,n),
+lines(phi,d.rel.conn.beta.prior(phi,max(p),k,n),
       col="red",lty="dashed")
 
 # Add some quantiles
