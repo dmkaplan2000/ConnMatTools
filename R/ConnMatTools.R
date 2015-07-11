@@ -1,4 +1,4 @@
-#' Tools for working with connectivity matrices
+#' Tools for Working with Connectivity Matrices
 #' 
 #' ConnMatTools collects several different methods for analyzing and
 #' working with connectivity matrices in R.  Though primarily oriented

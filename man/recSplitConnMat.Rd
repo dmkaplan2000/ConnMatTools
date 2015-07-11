@@ -28,7 +28,7 @@ further to improve the minimization.
 David M. Kaplan \email{dmkaplan2000@gmail.com}
 }
 \references{
-Jacobi, M. N., André, C., Döös, K., and Jonsson,
+Jacobi, M. N., Andre, C., Doos, K., and Jonsson,
 P. R. 2012. Identification of subpopulations from connectivity
 matrices. Ecography, 35: 1004-1016.
 }

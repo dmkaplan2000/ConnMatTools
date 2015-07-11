@@ -1,6 +1,6 @@
 Package: ConnMatTools
 Type: Package
-Title: Tools for working with connectivity matrices
+Title: Tools for Working with Connectivity Matrices
 Version: 0.2.0
 Date: 2015-06-12
 Author: Marco Andrello <marco.andrello@gmail.com>

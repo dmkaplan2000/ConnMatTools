@@ -28,7 +28,7 @@ David M. Kaplan \email{dmkaplan2000@gmail.com}
 \references{
 Gerber S, Chabrier P, Kremer A (2003) FAMOZ: a software for
   parentage analysis using dominant, codominant and uniparentally inherited
-  markers. Molecular Ecology Notes 3:479–481.
+  markers. Molecular Ecology Notes 3:479-481.
   \href{http://dx.doi.org/10.1046/j.1471-8286.2003.00439.x}{doi:10.1046/j.1471-8286.2003.00439.x}
 
 Kaplan et al. (submitted) Uncertainty in marine larval

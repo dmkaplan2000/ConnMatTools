@@ -6,7 +6,7 @@
 \alias{ConnMatTools-package}
 \title{Tools for working with connectivity matrices}
 \description{
-Tools for working with connectivity matrices
+Tools for Working with Connectivity Matrices
 }
 \details{
 ConnMatTools collects several different methods for analyzing and

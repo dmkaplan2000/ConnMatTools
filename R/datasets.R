@@ -8,7 +8,7 @@
 #' @references Garavelli L, Kaplan DM, Colas F, Stotz W, Yannicelli B, Lett C
 #'   (2014) Identifying appropriate spatial scales for marine conservation and
 #'   management using a larval dispersal model: The case of Concholepas
-#'   concholepas (loco) in Chile. Progress in Oceanography 124:42–53.
+#'   concholepas (loco) in Chile. Progress in Oceanography 124:42-53.
 #'   \href{http://dx.doi.org/10.1016/j.pocean.2014.03.011}{doi:10.1016/j.pocean.2014.03.011}
 #' @name chile.loco
 #' @docType data
@@ -37,7 +37,7 @@ NULL
 #'   juvenile fish}}
 #' @references Gerber S, Chabrier P, Kremer A (2003) FAMOZ: a software for 
 #'   parentage analysis using dominant, codominant and uniparentally inherited 
-#'   markers. Molecular Ecology Notes 3:479–481. 
+#'   markers. Molecular Ecology Notes 3:479-481. 
 #'   \href{http://dx.doi.org/10.1046/j.1471-8286.2003.00439.x}{doi:10.1046/j.1471-8286.2003.00439.x}
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation

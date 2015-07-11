@@ -106,12 +106,16 @@ d.unmarked <- stepfun.hist(h.out)
 # Fraction of adults genotyped at source site
 p.adults <- 0.25
 
+# prior.shape1=1 # Uniform prior
+prior.shape1=0.5 # Jeffreys prior
+
 # Fraction of eggs from one or more genotyped parents
 p <- dual.mark.transmission(p.adults)$p
 
 # PDF for relative connectivity
 D <- d.rel.conn.dists.func(damselfish.lods$real.children,
-                           d.unmarked,d.marked,p)
+                           d.unmarked,d.marked,p,
+                           prior.shape1=prior.shape1)
 
 # Estimate most probable value for relative connectivity
 phi.mx <- optim.rel.conn.dists(damselfish.lods$real.children,
@@ -119,10 +123,11 @@ phi.mx <- optim.rel.conn.dists(damselfish.lods$real.children,
 
 # Estimate 95\% confidence interval for relative connectivity
 Q <- q.rel.conn.dists.func(damselfish.lods$real.children,
-                           d.unmarked,d.marked,p)
+                           d.unmarked,d.marked,p,
+                           prior.shape1=prior.shape1)
 
 # Plot it up
-phi <- seq(0,1,0.01)
+phi <- seq(0,1,0.001)
 plot(phi,D(phi),type="l",
      xlim=c(0,0.1),
      main="PDF for relative connectivity",

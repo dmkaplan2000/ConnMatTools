@@ -24,8 +24,8 @@
 #' settlers at the destination site) connectivity value for larval transport 
 #' between a source and destination site. This version allows one to input 
 #' multiple possible fractions of individuals (i.e., eggs) marked at the source 
-#' site and multiple possible numbers of settlers collected and marked 
-#' individuals observed in the sample.  This gives one the possibility to 
+#' site, multiple possible numbers of settlers collected and multiple possible 
+#' marked individuals observed in the sample.  This gives one the possibility to
 #' produce ensemble averages over different input parameter values with 
 #' different probabilities of being correct.
 #' 
@@ -33,10 +33,6 @@
 #' vectors of the same length (or lengths divisible into that of the largest 
 #' input parameter).  \code{weights} are normalized to sum to 1 before being 
 #' used to sum probabilities from each individual set of input parameters.
-#' 
-#' Estimations of the probability distributions are analytic, with the exception
-#' of quantile estimation.  See \code{\link{q.relative.connectivity}} for more 
-#' details.
 #' 
 #' @param phi Vector of fractions of individuals (i.e., eggs) from the source 
 #'   population settling at the destination population
@@ -48,16 +44,17 @@
 #' @param weights Vector of weights for each set of p, k and n values
 #' @param d.rel.conn Function to use to calculate probability density for 
 #'   individual combinations of \code{ps}, \code{ks} and \code{ns}. Defaults to 
-#'   \code{\link{d.rel.conn.beta.prior}}.  Could also be
+#'   \code{\link{d.rel.conn.beta.prior}}.  Could also be 
 #'   \code{\link{d.rel.conn.unif.prior}}.
 #' @param p.rel.conn Function to use to calculate cumulative probability 
 #'   distribution for individual combinations of \code{ps}, \code{ks} and 
-#'   \code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}. Could also be
+#'   \code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}. Could also be 
 #'   \code{\link{p.rel.conn.unif.prior}}.
 #' @param N Number of points at which to estimate cumulative probability 
 #'   function for reverse approximation of quantile distribution. Defaults to 
 #'   \code{1000}.
-#' @param \dots Additional arguments to \code{d.rel.conn} or \code{p.rel.conn}
+#' @param \dots Additional arguments for the function \code{d.rel.conn} or
+#'   \code{p.rel.conn}
 #'   
 #' @return Vector of probabilities or quantiles, or a function in the case of 
 #'   \code{\link{q.rel.conn.multiple.func}}
@@ -116,8 +113,9 @@ p.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,
 q.rel.conn.multiple.func <- function(ps,ks,ns,weights=1,
                                      p.rel.conn=p.rel.conn.beta.prior,
                                      N=1000,...){
-  phi = seq(0,1,length.out=N)
-  q = p.rel.conn.multiple(phi,ps,ks,ns,weights,...)
+  phi = seq(0,1,length.out=N+1)
+  q = p.rel.conn.multiple(phi,ps,ks,ns,weights,
+                          p.rel.conn=p.rel.conn,...)
   return(rel.conn.approxfun(q,phi))
 }
 
@@ -129,4 +127,4 @@ q.rel.conn.multiple.func <- function(ps,ks,ns,weights=1,
 q.rel.conn.multiple <-function(q,ps,ks,ns,weights=1,
                                p.rel.conn=p.rel.conn.beta.prior,
                                N=1000,...)
-  (q.rel.conn.multiple.func(ps,ks,ns,weights,p.rel.conn=p.rel.conn,N=N))(q)
+  (q.rel.conn.multiple.func(ps,ks,ns,weights,p.rel.conn=p.rel.conn,N=N,...))(q)

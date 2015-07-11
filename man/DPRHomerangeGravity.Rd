@@ -70,7 +70,7 @@ gravity model for fishing effort redistribution.
 David M. Kaplan \email{dmkaplan2000@gmail.com}
 }
 \references{
-Grüss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult
+Gruss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult
   Movement, Larval Dispersal and Harvester Movement on the Effectiveness of
   Reserve Networks. PLoS ONE 6:e19960
 

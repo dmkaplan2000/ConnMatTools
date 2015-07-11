@@ -18,7 +18,7 @@ David M. Kaplan \email{dmkaplan2000@gmail.com}
 Garavelli L, Kaplan DM, Colas F, Stotz W, Yannicelli B, Lett C
   (2014) Identifying appropriate spatial scales for marine conservation and
   management using a larval dispersal model: The case of Concholepas
-  concholepas (loco) in Chile. Progress in Oceanography 124:42–53.
+  concholepas (loco) in Chile. Progress in Oceanography 124:42-53.
   \href{http://dx.doi.org/10.1016/j.pocean.2014.03.011}{doi:10.1016/j.pocean.2014.03.011}
 }
 \keyword{data}

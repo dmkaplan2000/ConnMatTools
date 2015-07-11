@@ -1,6 +1,6 @@
 # Implements methods from the following references:
 # 
-# @references Grüss, A., Kaplan, D. M., and Lett, C. 2012. Estimating local 
+# @references Gruss, A., Kaplan, D. M., and Lett, C. 2012. Estimating local 
 #   settler-recruit relationship parameters for complex spatially explicit 
 #   models. Fisheries Research, 127-128: 34-39.
 # @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal 
@@ -9,7 +9,7 @@
 # @references White, J. W. 2010. Adapting the steepness parameter from 
 #   stock-recruit curves for use in spatially explicit models. Fisheries 
 #   Research, 102: 330-334.
-# @references Grüss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult
+# @references Gruss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult
 #   Movement, Larval Dispersal and Harvester Movement on the Effectiveness of
 #   Reserve Networks. PLoS ONE 6:e19960
 # @references Beverton RJH, Holt SJ (1957) On the dynamics of exploited fish
@@ -233,7 +233,7 @@ DispersalPerRecruitModel <-
 #'   \item{effective.yield}{Effective yield indicating where fish biomass caught
 #'   originates from}
 #'   
-#' @references Grüss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult 
+#' @references Gruss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult 
 #'   Movement, Larval Dispersal and Harvester Movement on the Effectiveness of 
 #'   Reserve Networks. PLoS ONE 6:e19960
 #' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal

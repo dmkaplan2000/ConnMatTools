@@ -55,9 +55,9 @@
 #' @export
 d.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
   if (log) {
-    log(p) + dbeta(phi*p,k+1,n-k+1,log=log,...) - pbeta(p,k+1,n-k+1,log=log,...)
+    log(p) + dbeta(phi*p,k+1,n-k+1,log=log,...) - pbeta(p,k+1,n-k+1,log.p=log,...)
   } else {
-    p*dbeta(phi*p,k+1,n-k+1,log=log,...)/pbeta(p,k+1,n-k+1,log=log,...) 
+    p*dbeta(phi*p,k+1,n-k+1,log=log,...)/pbeta(p,k+1,n-k+1,log.p=log,...) 
   } 
 }
 
@@ -66,9 +66,9 @@ d.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
 #' @export
 p.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
   if (log) {
-    pbeta(phi*p,k+1,n-k+1,log=log,...) - pbeta(p,k+1,n-k+1,log=log,...)
+    pbeta(phi*p,k+1,n-k+1,log.p=log,...) - pbeta(p,k+1,n-k+1,log.p=log,...)
   } else {
-    pbeta(phi*p,k+1,n-k+1,log=log,...) / pbeta(p,k+1,n-k+1,log=log,...)
+    pbeta(phi*p,k+1,n-k+1,log.p=log,...) / pbeta(p,k+1,n-k+1,log.p=log,...)
   } 
 }
 
@@ -77,9 +77,9 @@ p.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
 #' @export
 q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
   if (log) {
-    qbeta(q + pbeta(p,k+1,n-k+1,log=log,...),k+1,n-k+1,log=log,...)/p    
+    qbeta(q + pbeta(p,k+1,n-k+1,log.p=log,...),k+1,n-k+1,log.p=log,...)/p    
   } else {
-    qbeta(q*pbeta(p,k+1,n-k+1,log=log,...),k+1,n-k+1,log=log,...)/p
+    qbeta(q*pbeta(p,k+1,n-k+1,log.p=log,...),k+1,n-k+1,log.p=log,...)/p
   }
 }
 
