@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{optim.rel.conn.dists}
 \alias{optim.rel.conn.dists}
-\title{Calculate the optimal value for relative connectivity given two distributions
+\title{Maximum-likelihood estimate for relative connectivity given two distributions
 for scores for marked and unmarked individuals}
 \usage{
 optim.rel.conn.dists(obs, d.unmarked, d.marked, p = 1, phi0 = 0.5,
@@ -39,7 +39,8 @@ Defaults to 1.}
 \value{
 A list with results of optimization. Optimal fraction of marked
   individuals is in \code{phi} field. Negative log-likelihood is in the
-  \code{neg.log.prob} field. See \code{\link{optim}} for more details.
+  \code{neg.log.prob} field. See \code{\link{optim}} for other elements of
+  list.
 }
 \description{
 This function calculates the value for relative connectivity that best fits a
@@ -97,6 +98,21 @@ Kaplan et al. (submitted) Uncertainty in marine larval
   connectivity estimation
 }
 \seealso{
-See also \code{\link{d.relative.connectivity}}
+Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
+  \code{\link{p.rel.conn.beta.prior}},
+  \code{\link{q.rel.conn.beta.prior}},
+  \code{\link{q.rel.conn.beta.prior.func}};
+  \code{\link{d.rel.conn.dists.func}},
+  \code{\link{p.rel.conn.dists.func}},
+  \code{\link{q.rel.conn.dists.func}};
+  \code{\link{d.rel.conn.finite.settlement}};
+  \code{\link{d.rel.conn.multiple}},
+  \code{\link{p.rel.conn.multiple}},
+  \code{\link{q.rel.conn.multiple}},
+  \code{\link{q.rel.conn.multiple.func}};
+  \code{\link{d.rel.conn.unif.prior}},
+  \code{\link{p.rel.conn.unif.prior}},
+  \code{\link{q.rel.conn.unif.prior}};
+  \code{\link{dual.mark.transmission}}
 }
 

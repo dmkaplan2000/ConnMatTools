@@ -19,7 +19,7 @@ function.}
 }
 \value{
 A function of class \code{stepfun}.  The height of the steps will be
-  divided by the distance between breaks and possibly the
+  divided by the distance between breaks and possibly the total count.
 }
 \description{
 This function creates a step function from the bars in a \code{histogram}
@@ -70,5 +70,9 @@ abline(v=Q(c(0.025,0.975)),col="red",lty="dashed")
 }
 \author{
 David M. Kaplan \email{dmkaplan2000@gmail.com}
+}
+\seealso{
+See also \code{\link{d.rel.conn.dists.func}},
+  \code{\link{optim.rel.conn.dists}}.
 }
 

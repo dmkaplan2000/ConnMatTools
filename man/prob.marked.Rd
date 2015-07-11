@@ -41,4 +41,8 @@ David M. Kaplan \email{dmkaplan2000@gmail.com}
 Kaplan et al. (submitted) Uncertainty in marine larval
   connectivity estimation
 }
+\seealso{
+See also \code{\link{d.rel.conn.dists.func}},
+  \code{\link{optim.rel.conn.dists}}.
+}
 

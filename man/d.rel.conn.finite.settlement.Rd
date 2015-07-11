@@ -103,6 +103,9 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{p.rel.conn.beta.prior}},
   \code{\link{q.rel.conn.beta.prior}},
   \code{\link{q.rel.conn.beta.prior.func}};
+  \code{\link{d.rel.conn.dists.func}},
+  \code{\link{p.rel.conn.dists.func}},
+  \code{\link{q.rel.conn.dists.func}};
   \code{\link{d.rel.conn.multiple}},
   \code{\link{p.rel.conn.multiple}},
   \code{\link{q.rel.conn.multiple}},
@@ -110,6 +113,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{d.rel.conn.unif.prior}},
   \code{\link{p.rel.conn.unif.prior}},
   \code{\link{q.rel.conn.unif.prior}};
-  \code{\link{dual.mark.transmission}}
+  \code{\link{dual.mark.transmission}};
+  \code{\link{optim.rel.conn.dists}}
 }
 

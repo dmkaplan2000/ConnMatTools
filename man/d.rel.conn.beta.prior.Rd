@@ -43,7 +43,9 @@ Defaults to being the same as \code{prior.shape1}.}
 
 \item{prior.func}{Function for prior distribution.  Should take one
 parameter, \code{phi}, and return a probability.  Defaults to
-\code{function(phi) dbeta(phi,prior.shape1,prior.shape2)}}
+\code{function(phi) dbeta(phi,prior.shape1,prior.shape2)}.  If this is
+specified, then inputs \code{prior.shape1} and \code{prior.shape2} are
+ignored.}
 
 \item{N}{Number of points at which to estimate cumulative probability
 function for reverse approximation of quantile distribution. Defaults to
@@ -149,7 +151,10 @@ Kaplan et al. (submitted) Uncertainty in marine larval
   connectivity estimation
 }
 \seealso{
-Other connectivity.estimation: \code{\link{d.rel.conn.finite.settlement}};
+Other connectivity.estimation: \code{\link{d.rel.conn.dists.func}},
+  \code{\link{p.rel.conn.dists.func}},
+  \code{\link{q.rel.conn.dists.func}};
+  \code{\link{d.rel.conn.finite.settlement}};
   \code{\link{d.rel.conn.multiple}},
   \code{\link{p.rel.conn.multiple}},
   \code{\link{q.rel.conn.multiple}},
@@ -157,6 +162,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.finite.settlement}};
   \code{\link{d.rel.conn.unif.prior}},
   \code{\link{p.rel.conn.unif.prior}},
   \code{\link{q.rel.conn.unif.prior}};
-  \code{\link{dual.mark.transmission}}
+  \code{\link{dual.mark.transmission}};
+  \code{\link{optim.rel.conn.dists}}
 }
 

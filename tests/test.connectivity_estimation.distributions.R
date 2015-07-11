@@ -38,3 +38,6 @@ plot(phi,D(phi),type="l",
 
 abline(v=phi.mx,col="green",lty="dashed")
 abline(v=Q(c(0.025,0.975)),col="red",lty="dashed")
+
+!!!!!!!!!!!NEEDS FIXING FOR NEW PRIORS STUFF!!!!!!!!!!!!!!!
+  

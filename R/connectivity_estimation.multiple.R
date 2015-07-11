@@ -3,6 +3,8 @@
 # probability functions to take into account multiple possible p,k and n values
 ############################################################################
 
+# Function that takes in arguments that may be scalar or vector and puts them
+# all together in a logical way.  Also normalizes weights.
 .rel.conn.multiple.pars.df <- function(ps,ks,ns,ws) {
   pars = data.frame(ps=ps,ks=ks,ns=ns,ws=ws)
   
@@ -46,15 +48,17 @@
 #' @param weights Vector of weights for each set of p, k and n values
 #' @param d.rel.conn Function to use to calculate probability density for 
 #'   individual combinations of \code{ps}, \code{ks} and \code{ns}. Defaults to 
-#'   \code{\link{d.rel.conn.beta.prior}}
-#' @param p.rel.conn Function to use to calculate cumulative probability
-#'   distribution for individual combinations of \code{ps}, \code{ks} and
-#'   \code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}
+#'   \code{\link{d.rel.conn.beta.prior}}.  Could also be
+#'   \code{\link{d.rel.conn.unif.prior}}.
+#' @param p.rel.conn Function to use to calculate cumulative probability 
+#'   distribution for individual combinations of \code{ps}, \code{ks} and 
+#'   \code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}. Could also be
+#'   \code{\link{p.rel.conn.unif.prior}}.
 #' @param N Number of points at which to estimate cumulative probability 
 #'   function for reverse approximation of quantile distribution. Defaults to 
 #'   \code{1000}.
 #' @param \dots Additional arguments to \code{d.rel.conn} or \code{p.rel.conn}
-#'
+#'   
 #' @return Vector of probabilities or quantiles, or a function in the case of 
 #'   \code{\link{q.rel.conn.multiple.func}}
 #'   
@@ -69,7 +73,8 @@
 #' @include connectivity_estimation.R
 #' @example tests/test.connectivity_estimation.multiple.R
 #' @export
-d.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,d.rel.conn=d.rel.conn.beta.prior,...) {
+d.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,
+                                 d.rel.conn=d.rel.conn.beta.prior,...) {
   pars = .rel.conn.multiple.pars.df(ps,ks,ns,weights)
 
   d=rep(0,length(phi))
@@ -88,13 +93,14 @@ d.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,d.rel.conn=d.rel.conn.be
 #' @include connectivity_estimation.R
 #' @export
 p.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,
-                                 p.rel.conn=p.rel.conn.beta.prior) {
+                                 p.rel.conn=p.rel.conn.beta.prior,
+                                 ...) {
   pars = .rel.conn.multiple.pars.df(ps,ks,ns,weights)
   
   d=rep(0,length(phi))
   for (M in 1:dim(pars)[1]) {
     d = d + 
-      p.rel.conn(phi,pars$ps[M],pars$ks[M],pars$ns[M]) *
+      p.rel.conn(phi,pars$ps[M],pars$ks[M],pars$ns[M],...) *
       pars$ws[M]
   }
   
@@ -105,13 +111,14 @@ p.rel.conn.multiple <- function (phi,ps,ks,ns,weights=1,
 #'   the probability distribution function for relative connectivity between a
 #'   pair of sites for multiple possible \code{p}, \code{k} and \code{n} values.
 #' @include connectivity_estimation.R
+#' @include utils.R
 #' @export
 q.rel.conn.multiple.func <- function(ps,ks,ns,weights=1,
                                      p.rel.conn=p.rel.conn.beta.prior,
                                      N=1000,...){
   phi = seq(0,1,length.out=N)
-  q = p.rel.conn.multiple(phi,ps,ks,ns,weights)
-  return(approxfun(q,phi))
+  q = p.rel.conn.multiple(phi,ps,ks,ns,weights,...)
+  return(rel.conn.approxfun(q,phi))
 }
 
 #' @describeIn d.rel.conn.multiple Estimates quantiles for the probability 

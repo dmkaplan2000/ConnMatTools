@@ -16,6 +16,7 @@ Collate:
     'ConnMatTools.R'
     'eigs.R'
     'Jacobi_EPT_reserve_selection.R'
+    'utils.R'
     'connectivity_estimation.R'
     'connectivity_estimation.distributions.R'
     'connectivity_estimation.finite_settlement.R'

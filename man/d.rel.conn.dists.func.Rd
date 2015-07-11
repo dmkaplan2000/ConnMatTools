@@ -9,14 +9,20 @@
 connectivity given a pair of distributions for scores for marked and unmarked
 individuals}
 \usage{
-d.rel.conn.dists.func(obs, d.unmarked, d.marked, p = 1,
-  N = .d.rel.conn.dists.N(obs), ...)
+d.rel.conn.dists.func(obs, d.unmarked, d.marked, p = 1, N = max(100,
+  min(5000, 2 * length(obs))), prior.shape1 = 0.5,
+  prior.shape2 = prior.shape1, prior.func = function(phi) dbeta(phi,
+  prior.shape1, prior.shape2), ...)
 
-p.rel.conn.dists.func(obs, d.unmarked, d.marked, p = 1,
-  N = .d.rel.conn.dists.N(obs), ...)
+p.rel.conn.dists.func(obs, d.unmarked, d.marked, p = 1, N = max(100,
+  min(5000, 2 * length(obs))), prior.shape1 = 0.5,
+  prior.shape2 = prior.shape1, prior.func = function(phi) dbeta(phi,
+  prior.shape1, prior.shape2), ...)
 
-q.rel.conn.dists.func(obs, d.unmarked, d.marked, p = 1,
-  N = .d.rel.conn.dists.N(obs), ...)
+q.rel.conn.dists.func(obs, d.unmarked, d.marked, p = 1, N = max(100,
+  min(5000, 2 * length(obs))), prior.shape1 = 0.5,
+  prior.shape2 = prior.shape1, prior.func = function(phi) dbeta(phi,
+  prior.shape1, prior.shape2), ...)
 }
 \arguments{
 \item{obs}{Vector of observed score values for potentially marked individuals}
@@ -31,18 +37,31 @@ properly.}
 \item{p}{Fraction of individuals (i.e., eggs) marked in the source
 population. Defaults to 1.}
 
-\item{N}{number of steps in fixed-step, trapezoidal integration scheme used
-to normalize probability distributions.  Defaults to \code{2*length(obs)}
-so long as that number is comprised between \code{100} and \code{5000}.}
+\item{N}{number of steps between 0 and 1 at which to approximate likelihood
+function as input to \code{\link{approxfun}}. Defaults to
+\code{2*length(obs)} so long as that number is comprised between \code{100}
+and \code{5000}.}
 
-\item{\dots}{Additional arguments for the \code{\link{approxfun}} function.}
+\item{prior.shape1}{First shape parameter for Beta distributed prior.
+Defaults to 0.5.}
+
+\item{prior.shape2}{Second shape parameter for Beta distributed prior.
+Defaults to being the same as \code{prior.shape1}.}
+
+\item{prior.func}{Function for prior distribution.  Should take one
+parameter, \code{phi}, and return a probability.  Defaults to
+\code{function(phi) dbeta(phi,prior.shape1,prior.shape2)}.  If this is
+specified, then inputs \code{prior.shape1} and \code{prior.shape2} are
+ignored.}
+
+\item{\dots}{Additional arguments for the \code{\link{integrate}} function.}
 }
 \value{
 A function that takes one argument (the relative connectivity for
   \code{d.rel.conn.dists.func} and \code{p.rel.conn.dists.func}; the quantile
   for \code{q.rel.conn.dists.func}) and returns the probability density,
-  cumulative probability distribution or score value, respectively. The
-  returned function accepts both vector and scalar input values.
+  cumulative probability or score value, respectively. The returned function
+  accepts both vector and scalar input values.
 }
 \description{
 These functions return functions that calculate the probability density
@@ -55,8 +74,8 @@ an estimate of the fraction of all eggs marked at the source site, \code{p}.
 }
 \details{
 The normalization of the probability distribution is carried out using a
-simple, fixed-step trapezoidal integration scheme.  The number of steps
-between relative connectivity values of 0 and 1 defaults to
+simple, fixed-step trapezoidal integration scheme.  By default, the number of
+steps between relative connectivity values of 0 and 1 defaults to
 \code{2*length(obs)} so long as that number is comprised between \code{100}
 and \code{5000}.
 }
@@ -121,6 +140,19 @@ Kaplan et al. (submitted) Uncertainty in marine larval
   connectivity estimation
 }
 \seealso{
-See also \code{\link{d.relative.connectivity}}
+Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
+  \code{\link{p.rel.conn.beta.prior}},
+  \code{\link{q.rel.conn.beta.prior}},
+  \code{\link{q.rel.conn.beta.prior.func}};
+  \code{\link{d.rel.conn.finite.settlement}};
+  \code{\link{d.rel.conn.multiple}},
+  \code{\link{p.rel.conn.multiple}},
+  \code{\link{q.rel.conn.multiple}},
+  \code{\link{q.rel.conn.multiple.func}};
+  \code{\link{d.rel.conn.unif.prior}},
+  \code{\link{p.rel.conn.unif.prior}},
+  \code{\link{q.rel.conn.unif.prior}};
+  \code{\link{dual.mark.transmission}};
+  \code{\link{optim.rel.conn.dists}}
 }
 

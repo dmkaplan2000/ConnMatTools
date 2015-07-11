@@ -12,7 +12,7 @@ d.rel.conn.multiple(phi, ps, ks, ns, weights = 1,
   d.rel.conn = d.rel.conn.beta.prior, ...)
 
 p.rel.conn.multiple(phi, ps, ks, ns, weights = 1,
-  p.rel.conn = p.rel.conn.beta.prior)
+  p.rel.conn = p.rel.conn.beta.prior, ...)
 
 q.rel.conn.multiple.func(ps, ks, ns, weights = 1,
   p.rel.conn = p.rel.conn.beta.prior, N = 1000, ...)
@@ -35,11 +35,13 @@ source population}
 
 \item{d.rel.conn}{Function to use to calculate probability density for
 individual combinations of \code{ps}, \code{ks} and \code{ns}. Defaults to
-\code{\link{d.rel.conn.beta.prior}}}
+\code{\link{d.rel.conn.beta.prior}}.  Could also be
+\code{\link{d.rel.conn.unif.prior}}.}
 
 \item{p.rel.conn}{Function to use to calculate cumulative probability
 distribution for individual combinations of \code{ps}, \code{ks} and
-\code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}}
+\code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}. Could also be
+\code{\link{p.rel.conn.unif.prior}}.}
 
 \item{N}{Number of points at which to estimate cumulative probability
 function for reverse approximation of quantile distribution. Defaults to
@@ -141,10 +143,14 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{p.rel.conn.beta.prior}},
   \code{\link{q.rel.conn.beta.prior}},
   \code{\link{q.rel.conn.beta.prior.func}};
+  \code{\link{d.rel.conn.dists.func}},
+  \code{\link{p.rel.conn.dists.func}},
+  \code{\link{q.rel.conn.dists.func}};
   \code{\link{d.rel.conn.finite.settlement}};
   \code{\link{d.rel.conn.unif.prior}},
   \code{\link{p.rel.conn.unif.prior}},
   \code{\link{q.rel.conn.unif.prior}};
-  \code{\link{dual.mark.transmission}}
+  \code{\link{dual.mark.transmission}};
+  \code{\link{optim.rel.conn.dists}}
 }
 

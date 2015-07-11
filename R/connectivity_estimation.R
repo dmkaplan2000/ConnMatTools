@@ -123,14 +123,16 @@ q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
 #'   Defaults to being the same as \code{prior.shape1}.
 #' @param prior.func Function for prior distribution.  Should take one 
 #'   parameter, \code{phi}, and return a probability.  Defaults to 
-#'   \code{function(phi) dbeta(phi,prior.shape1,prior.shape2)}
+#'   \code{function(phi) dbeta(phi,prior.shape1,prior.shape2)}.  If this is
+#'   specified, then inputs \code{prior.shape1} and \code{prior.shape2} are
+#'   ignored.
 #' @param N Number of points at which to estimate cumulative probability 
 #'   function for reverse approximation of quantile distribution. Defaults to 
 #'   \code{1000}.
 #' @param \dots Extra arguments for the \code{\link{integrate}} function used 
 #'   for normalization of probability distributions.
 #'   
-#' @return Vector of probabilities or quantiles, or a function in the case of
+#' @return Vector of probabilities or quantiles, or a function in the case of 
 #'   \code{\link{q.rel.conn.beta.prior.func}}.
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
@@ -176,6 +178,7 @@ p.rel.conn.beta.prior <- function(phi,p,k,n,
 #' @describeIn d.rel.conn.beta.prior Returns a function to estimate quantiles for
 #'   the probability distribution function for relative connectivity between a
 #'   pair of sites.
+#' @include utils.R
 #' @export
 q.rel.conn.beta.prior.func <-function(p,k,n,
                                       prior.shape1=0.5,
@@ -185,7 +188,7 @@ q.rel.conn.beta.prior.func <-function(p,k,n,
                                       ...) {
   phi = seq(0,1,length.out=N)
   q = p.rel.conn.beta.prior(phi,p,k,n,prior.func=prior.func,...)
-  return(approxfun(q,phi))
+  return(rel.conn.approxfun(q,phi))
 }
 
 #' @describeIn d.rel.conn.beta.prior Estimates quantiles for the probability
