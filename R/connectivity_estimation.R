@@ -141,7 +141,7 @@ q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
-#' @example tests/test.connectivity_estimation.R
+#' @example tests/test.connectivity_estimation.beta.prior.R
 #' @export
 d.rel.conn.beta.prior <- function(phi,p,k,n,
                                   prior.shape1=0.5,

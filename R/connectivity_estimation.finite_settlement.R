@@ -27,9 +27,7 @@
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
-#' @seealso See also \code{\link{d.relative.connectivity}},
-#'   \code{\link{d.rel.conn.multiple}}
-#'   
+#' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @example tests/test.connectivity_estimation.R
