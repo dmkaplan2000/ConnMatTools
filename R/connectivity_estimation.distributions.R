@@ -23,6 +23,7 @@
 #' @example tests/test.connectivity_estimation.distributions.R
 #' @encoding UTF-8
 #' @export
+#' @importFrom stats stepfun
 stepfun.hist <- function(h,...,normalize=TRUE) {
   n = 1
   if (normalize)
@@ -158,6 +159,7 @@ log.prob <- function(p,obs,dfunc) {
 #' @example tests/test.connectivity_estimation.distributions.R
 #' @encoding UTF-8
 #' @export
+#' @importFrom stats optim
 optim.rel.conn.dists <- function(obs,d.unmarked,d.marked,p=1,
                                  phi0=0.5,method="Brent",lower=0,upper=1,
                                  ...) {
@@ -241,6 +243,9 @@ optim.rel.conn.dists <- function(obs,d.unmarked,d.marked,p=1,
 #' @example tests/test.connectivity_estimation.distributions.R
 #' @encoding UTF-8
 #' @export
+#' @importFrom stats integrate
+#' @importFrom stats approxfun
+#' @importFrom stats dbeta
 d.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
                                   N=max(100,min(5000,2*length(obs))),
                                   prior.shape1=0.5,
@@ -260,6 +265,8 @@ d.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
 #' @describeIn d.rel.conn.dists.func Returns a function that is cumulative
 #'   probability distribution for relative connectivity
 #' @export
+#' @importFrom stats integrate
+#' @importFrom stats dbeta
 p.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
                                   N=max(100,min(5000,2*length(obs))),
                                   prior.shape1=0.5,
@@ -284,6 +291,8 @@ p.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
 #'   function for relative connectivity
 #' @include utils.R
 #' @export
+#' @importFrom stats integrate
+#' @importFrom stats dbeta
 q.rel.conn.dists.func <- function(obs,d.unmarked,d.marked,p=1,
                                   N=max(100,min(5000,2*length(obs))),
                                   prior.shape1=0.5,

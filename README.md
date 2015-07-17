@@ -2,7 +2,7 @@
 
 ## Description
 
-ConnMatTools collects several different methods for analyzing and
+Collects several different methods for analyzing and
 working with connectivity matrices in R.  Though primarily oriented
 towards marine larval dispersal, many of the methods are general and
 useful for terrestrial systems as well.
@@ -15,7 +15,7 @@ useful for terrestrial systems as well.
 
 The latest development version of the package can be installed directly from
 [github](https://github.com/) using the
-[devtools](http://cran.r-project.org/web/packages/devtools/index.html)
+[devtools](http://cran.r-project.org/package=devtools)
 R package. First that package needs to be installed:
 
      install.packages("devtools")
@@ -47,6 +47,9 @@ Grüss, A., Kaplan, D. M., and Lett, C. 2012. Estimating local
 Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal 
   per recruit: An efficient method for assessing sustainability in marine 
   reserve networks. Ecological Applications, 16: 2248-2263.
+
+Kaplan et al. (submitted) Uncertainty in marine larval 
+  connectivity estimation
 
 White, J. W. 2010. Adapting the steepness parameter from 
   stock-recruit curves for use in spatially explicit models. Fisheries 

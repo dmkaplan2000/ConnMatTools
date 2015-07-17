@@ -53,6 +53,8 @@
 #' @encoding UTF-8
 #' @example tests/test.connectivity_estimation.R
 #' @export
+#' @importFrom stats dbeta
+#' @importFrom stats pbeta
 d.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
   if (log) {
     log(p) + dbeta(phi*p,k+1,n-k+1,log=log,...) - pbeta(p,k+1,n-k+1,log.p=log,...)
@@ -64,6 +66,8 @@ d.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
 #' @describeIn d.rel.conn.unif.prior Returns the cumulative probability
 #'   distribution for relative connectivity between a paire of sites
 #' @export
+#' @importFrom stats dbeta
+#' @importFrom stats pbeta
 p.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
   if (log) {
     pbeta(phi*p,k+1,n-k+1,log.p=log,...) - pbeta(p,k+1,n-k+1,log.p=log,...)
@@ -75,6 +79,9 @@ p.rel.conn.unif.prior <- function(phi,p,k,n,log=FALSE,...) {
 #' @describeIn d.rel.conn.unif.prior Estimates quantiles for the probability
 #'   distribution function for relative connectivity between a pair of sites
 #' @export
+#' @importFrom stats dbeta
+#' @importFrom stats pbeta
+#' @importFrom stats qbeta
 q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
   if (log) {
     qbeta(q + pbeta(p,k+1,n-k+1,log.p=log,...),k+1,n-k+1,log.p=log,...)/p    
@@ -145,6 +152,7 @@ q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
 #' @encoding UTF-8
 #' @example tests/test.connectivity_estimation.beta.prior.R
 #' @export
+#' @importFrom stats dbeta
 d.rel.conn.beta.prior <- function(phi,p,k,n,
                                   prior.shape1=0.5,
                                   prior.shape2=prior.shape1,
@@ -159,6 +167,8 @@ d.rel.conn.beta.prior <- function(phi,p,k,n,
 #' @describeIn d.rel.conn.beta.prior Returns the cumulative probability
 #'   distribution for relative connectivity between a paire of sites
 #' @export
+#' @importFrom stats dbeta
+#' @importFrom stats integrate
 p.rel.conn.beta.prior <- function(phi,p,k,n,
                                   prior.shape1=0.5,
                                   prior.shape2=prior.shape1,
@@ -180,6 +190,7 @@ p.rel.conn.beta.prior <- function(phi,p,k,n,
 #'   pair of sites.
 #' @include utils.R
 #' @export
+#' @importFrom stats dbeta
 q.rel.conn.beta.prior.func <-function(p,k,n,
                                       prior.shape1=0.5,
                                       prior.shape2=prior.shape1,
@@ -194,6 +205,7 @@ q.rel.conn.beta.prior.func <-function(p,k,n,
 #' @describeIn d.rel.conn.beta.prior Estimates quantiles for the probability
 #'   distribution function for relative connectivity between a pair of sites
 #' @export
+#' @importFrom stats dbeta
 q.rel.conn.beta.prior <-function(q,p,k,n,
                                  prior.shape1=0.5,
                                  prior.shape2=prior.shape1,

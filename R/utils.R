@@ -1,5 +1,6 @@
 # Function used to fix problem with quantile estimation when you have many exact 0's and
 # 1's at beginning and end, respectively or probabilty distribution
+#' @importFrom stats approxfun
 rel.conn.approxfun <- function(x,y,xmin=0,xmax=1,...) {
   if (any(x>xmax) || any(x<xmin))
     stop(paste("Values outside of supposed bounds: [",xmin,",",xmax,"]"))

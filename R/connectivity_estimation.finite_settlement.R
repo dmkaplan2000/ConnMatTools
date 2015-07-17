@@ -32,6 +32,7 @@
 #' @encoding UTF-8
 #' @example tests/test.connectivity_estimation.R
 #' @export
+#' @importFrom stats runif
 d.rel.conn.finite.settlement <- function(phi,p,n.obs,n.settlers,n.bootstraps=1000) {
   ss = phi * n.settlers
   

@@ -1,3 +1,10 @@
+ConnMatTools 0.2.1
+------------------
+
+* Alpha release of package including Bayesian-based code for estimating relative connectivity.  
+  Most of the central functions are available, plus some tests, but a few more pieces 
+  need to be added.
+
 ConnMatTools 0.2.0
 ------------------
 

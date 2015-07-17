@@ -29,6 +29,7 @@
 #' David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
+#' @importFrom stats runif
 splitConnMat <- function(indices,conn.mat,beta,tries=5,
                     threshold=1e-10,alpha=0.1,maxit=500) {
     # makes a submatrix of the total connectivity matrix only

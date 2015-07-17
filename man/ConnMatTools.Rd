@@ -9,7 +9,7 @@
 Tools for Working with Connectivity Matrices
 }
 \details{
-ConnMatTools collects several different methods for analyzing and
+Collects several different methods for analyzing and
 working with connectivity matrices in R.  Though primarily oriented
 towards marine larval dispersal, many of the methods are general
 and useful for terrestrial systems as well.
@@ -17,7 +17,7 @@ and useful for terrestrial systems as well.
 \tabular{ll}{
 Package: \tab ConnMatTools\cr
 Type: \tab Package\cr
-Version: \tab 0.2.0\cr
+Version: \tab 0.2.1\cr
 Date: \tab 2015-06-12\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab no\cr
