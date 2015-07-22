@@ -15,9 +15,10 @@ qrc <- q.rel.conn.unif.prior(c(0.025,0.975),p,k,n.obs) # 95% confidence interval
 n.bootstraps <- 1000 # Increase to improve accuracy of brute force estimations
 
 # Test with brute force finite settlement function and (nearly) infinite settler pool
-dbf <- d.rel.conn.finite.settlement(phi,p,n.obs,100*n.obs,
+dbf <- d.rel.conn.finite.settlement(p,n.obs,100*n.obs,
                                     n.bootstraps=n.bootstraps)
-dbf <- dbf[as.character(k),]
+dbf <- dbf$res[as.character(k),]
+!!!!!!!!!!!!!!!CHANGES NOT COMPLETE!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 # Normalize and calculate cumulative probability function
 pbf <- cumsum(c(0,(dbf[1:length(dbf)-1]+dbf[2:length(dbf)])/2*diff(phi)))
