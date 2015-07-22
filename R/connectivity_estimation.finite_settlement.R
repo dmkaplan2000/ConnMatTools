@@ -28,7 +28,7 @@
 #'   row \code{k+1} of the matrix, the first row being used for \code{k=0}.  The
 #'   row names of the matrix reflect the value of \code{k}, whereas columns 
 #'   names reflect the elements of \code{n.conns}.}\item{phi}{relative
-#'   connectivity values corresponding to each column of \code{res}}
+#'   connectivity values corresponding to each column of \code{res}}}
 #'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
