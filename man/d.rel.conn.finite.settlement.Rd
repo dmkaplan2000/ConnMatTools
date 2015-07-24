@@ -5,12 +5,10 @@
 \alias{d.rel.conn.finite.settlement}
 \title{Frequency of the number of marked settlers for finite total settlement}
 \usage{
-d.rel.conn.finite.settlement(phi, p, n.obs, n.settlers, n.bootstraps = 1000)
+d.rel.conn.finite.settlement(p, n.obs, n.settlers, n.bootstraps = 1000,
+  n.conns = 0:n.settlers)
 }
 \arguments{
-\item{phi}{Vector of fractions of settlers at the destination population that
-originated at the source population}
-
 \item{p}{Fraction of individuals (i.e., eggs) marked in the source population}
 
 \item{n.obs}{Total number of settlers collected}
@@ -19,24 +17,33 @@ originated at the source population}
 the \code{n.obs} (\code{<=n.settlers}) settlers are collected}
 
 \item{n.bootstraps}{Number of simulated samples to generate to calculate
-  relative frequencies. Defaults to \code{1000}.}
+relative frequencies. Defaults to \code{1000}.}
+
+\item{n.conns}{Vector of integers of possible numbers of settlers in the
+  cohort that originated at the site of marking. All values should be
+  integers \code{<=n.settlers}.  Defaults to \code{0:n.settlers}}
 }
 \value{
-A matrix with \code{n.obs+1} rows and \code{length(phi)} columns, the
-  element of which are counts indicating the number of times among the
+A list with the following elements: \describe{\item{res}{matrix with
+  \code{n.obs+1} rows and \code{length(n.conns)} columns, the element of
+  which are counts indicating the number of times among the
   \code{n.bootstraps} samples that \code{k} marked settlers are found among
   the \code{n.obs} settlers collected from the total settlement pool of
   \code{n.settlers} individuals. Results for \code{k} marked settlers are in
   row \code{k+1} of the matrix, the first row being used for \code{k=0}.  The
-  row names of the matrix reflect the value of \code{k}.
+  row names of the matrix reflect the value of \code{k}, whereas columns
+  names reflect the elements of \code{n.conns}.}\item{phi}{relative
+  connectivity values corresponding to each column of \code{res}}}
 }
 \description{
 This function calculates the relative frequency with which a number of marked
 settlers would be observed as a function of relative connectivity, sample
 size and the total number of settlers to a site. Probable frequency of
 observation is calculated by randomly drawing \code{n.bootstraps} artificial
-samples and calculating for each the number of would-be marked settlers for
-all values of \code{phi}, the relative connectivity value.
+samples and calculating for each the number of would-be marked settlers in
+the sample for all values of \code{n.conns}, the true number of settlers from
+the marked site in the entire cohort. \code{n.conns} is related to relative
+connectivity, \code{phi}, by \code{phi=n.conns/n.settlers}.
 }
 \examples{
 library(ConnMatTools)
@@ -55,41 +62,40 @@ qrc <- q.rel.conn.unif.prior(c(0.025,0.975),p,k,n.obs) # 95\% confidence interva
 
 n.bootstraps <- 1000 # Increase to improve accuracy of brute force estimations
 
-# Test with brute force finite settlement function and (nearly) infinite settler pool
-dbf <- d.rel.conn.finite.settlement(phi,p,n.obs,100*n.obs,
+# Test with brute force finite settlement function and large (approx. infinite) settler pool
+dbf <- d.rel.conn.finite.settlement(p,n.obs,7*n.obs,
                                     n.bootstraps=n.bootstraps)
-dbf <- dbf[as.character(k),]
+dbf$d <- dbf$res[as.character(k),]
 
-# Normalize and calculate cumulative probability function
-pbf <- cumsum(c(0,(dbf[1:length(dbf)-1]+dbf[2:length(dbf)])/2*diff(phi)))
-dbf <- dbf / max(pbf)
-pbf <- pbf / max(pbf)
+# Approximate quantiles - could be slow for large cohort sizes or numbers of bootstraps
+dbf$q = quantile(do.call(c,sapply(1:length(dbf$d),function(i) rep(dbf$phi[i],dbf$d[i]))),
+                 c(0.025,0.975))
 
-# Approximate quantiles
-qbf <- approx(pbf,phi,c(0.025,0.975))$y
+# Normalize probability density
+dbf$d <- dbf$d / sum(dbf$d)
+
 
 # Finite settler pool
-dfr <- d.rel.conn.finite.settlement(phi,p,n.obs,n.settlers,
+dfr <- d.rel.conn.finite.settlement(p,n.obs,n.settlers,
                                     n.bootstraps=n.bootstraps)
-dfr <- dfr[as.character(k),]
+dfr$d <- dfr$res[as.character(k),]
 
-# Normalize and calculate cumulative probability function
-pfr <- cumsum(c(0,(dfr[1:length(dfr)-1]+dfr[2:length(dfr)])/2*diff(phi)))
-dfr <- dfr / max(pfr)
-pfr <- pfr / max(pfr)
+# Approximate quantiles - could be slow for large cohort sizes or numbers of bootstraps
+dfr$q = quantile(do.call(c,sapply(1:length(dfr$d),function(i) rep(dfr$phi[i],dfr$d[i]))),
+                 c(0.025,0.975))
 
-# Approximate quantiles
-qfr <- approx(pfr,phi,c(0.025,0.975))$y
+# Normalize probability density
+dfr$d <- dfr$d / sum(dfr$d)
 
 # Make a plot of different distributions
 plot(phi,drc,type="l",main="Probability of relative connectivity values",
      xlab=expression(phi),ylab="Probability density")
 lines(phi,prc,col="blue")
-lines(phi,dbf,col="black",lty="dashed")
-lines(phi,dfr,col="red",lty="dashed")
+lines(dbf$phi,dbf$d/diff(dbf$phi[1:2]),col="black",lty="dashed")
+lines(dfr$phi,dfr$d/diff(dfr$phi[1:2]),col="red",lty="dashed")
 abline(v=qrc,col="black")
-abline(v=qbf,col="black",lty="dashed")
-abline(v=qfr,col="red",lty="dashed")
+abline(v=dbf$q,col="black",lty="dashed")
+abline(v=dfr$q,col="red",lty="dashed")
 }
 \author{
 David M. Kaplan \email{dmkaplan2000@gmail.com}

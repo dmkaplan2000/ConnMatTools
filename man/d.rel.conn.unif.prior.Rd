@@ -79,41 +79,40 @@ qrc <- q.rel.conn.unif.prior(c(0.025,0.975),p,k,n.obs) # 95\% confidence interva
 
 n.bootstraps <- 1000 # Increase to improve accuracy of brute force estimations
 
-# Test with brute force finite settlement function and (nearly) infinite settler pool
-dbf <- d.rel.conn.finite.settlement(phi,p,n.obs,100*n.obs,
+# Test with brute force finite settlement function and large (approx. infinite) settler pool
+dbf <- d.rel.conn.finite.settlement(p,n.obs,7*n.obs,
                                     n.bootstraps=n.bootstraps)
-dbf <- dbf[as.character(k),]
+dbf$d <- dbf$res[as.character(k),]
 
-# Normalize and calculate cumulative probability function
-pbf <- cumsum(c(0,(dbf[1:length(dbf)-1]+dbf[2:length(dbf)])/2*diff(phi)))
-dbf <- dbf / max(pbf)
-pbf <- pbf / max(pbf)
+# Approximate quantiles - could be slow for large cohort sizes or numbers of bootstraps
+dbf$q = quantile(do.call(c,sapply(1:length(dbf$d),function(i) rep(dbf$phi[i],dbf$d[i]))),
+                 c(0.025,0.975))
 
-# Approximate quantiles
-qbf <- approx(pbf,phi,c(0.025,0.975))$y
+# Normalize probability density
+dbf$d <- dbf$d / sum(dbf$d)
+
 
 # Finite settler pool
-dfr <- d.rel.conn.finite.settlement(phi,p,n.obs,n.settlers,
+dfr <- d.rel.conn.finite.settlement(p,n.obs,n.settlers,
                                     n.bootstraps=n.bootstraps)
-dfr <- dfr[as.character(k),]
+dfr$d <- dfr$res[as.character(k),]
 
-# Normalize and calculate cumulative probability function
-pfr <- cumsum(c(0,(dfr[1:length(dfr)-1]+dfr[2:length(dfr)])/2*diff(phi)))
-dfr <- dfr / max(pfr)
-pfr <- pfr / max(pfr)
+# Approximate quantiles - could be slow for large cohort sizes or numbers of bootstraps
+dfr$q = quantile(do.call(c,sapply(1:length(dfr$d),function(i) rep(dfr$phi[i],dfr$d[i]))),
+                 c(0.025,0.975))
 
-# Approximate quantiles
-qfr <- approx(pfr,phi,c(0.025,0.975))$y
+# Normalize probability density
+dfr$d <- dfr$d / sum(dfr$d)
 
 # Make a plot of different distributions
 plot(phi,drc,type="l",main="Probability of relative connectivity values",
      xlab=expression(phi),ylab="Probability density")
 lines(phi,prc,col="blue")
-lines(phi,dbf,col="black",lty="dashed")
-lines(phi,dfr,col="red",lty="dashed")
+lines(dbf$phi,dbf$d/diff(dbf$phi[1:2]),col="black",lty="dashed")
+lines(dfr$phi,dfr$d/diff(dfr$phi[1:2]),col="red",lty="dashed")
 abline(v=qrc,col="black")
-abline(v=qbf,col="black",lty="dashed")
-abline(v=qfr,col="red",lty="dashed")
+abline(v=dbf$q,col="black",lty="dashed")
+abline(v=dfr$q,col="red",lty="dashed")
 }
 \author{
 David M. Kaplan \email{dmkaplan2000@gmail.com}
