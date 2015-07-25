@@ -52,3 +52,18 @@ dual.mark.transmission <- function(p.female,p.male=p.female) {
               p.female.known=p.female.known,
               p.two.known.parents=p.two.known.parents))
 }
+
+#' Fraction of eggs marked accounting for variability in reproductive output
+#' 
+r.marked.egg.fraction <- function(n,
+                                  n.females,
+                                  n.marked.females=round(n.females*p.marked.females),
+                                  mean.female=1,cv.female,
+                                  dual=FALSE,male.uncert=FALSE,
+                                  n.males=n.females,
+                                  n.marked.males=tryCatch(round(n.males*p.marked.males),error=function(e) n.marked.females),
+                                  mean.male=mean.female,cv.male=cv.female,
+                                  p.marked.females,p.marked.males=p.marked.females
+                                  ) {
+  
+}
