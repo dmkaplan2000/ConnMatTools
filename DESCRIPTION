@@ -23,7 +23,7 @@ Collate:
     'connectivity_estimation.multiple.R'
     'datasets.R'
     'dpr_model.R'
-    'genetic_mark_transmission.R'
+    'estimating_marked_egg_fraction.R'
     'retentionStats.R'
     'jacobi_etal_2012.R'
 License: GPL (>= 2)

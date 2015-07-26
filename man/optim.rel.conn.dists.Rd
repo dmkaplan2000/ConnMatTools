@@ -118,6 +118,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{d.rel.conn.unif.prior}},
   \code{\link{p.rel.conn.unif.prior}},
   \code{\link{q.rel.conn.unif.prior}};
-  \code{\link{dual.mark.transmission}}
+  \code{\link{dual.mark.transmission}};
+  \code{\link{r.marked.egg.fraction}}
 }
 

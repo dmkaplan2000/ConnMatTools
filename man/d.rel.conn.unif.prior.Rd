@@ -135,6 +135,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{q.rel.conn.multiple}},
   \code{\link{q.rel.conn.multiple.func}};
   \code{\link{dual.mark.transmission}};
-  \code{\link{optim.rel.conn.dists}}
+  \code{\link{optim.rel.conn.dists}};
+  \code{\link{r.marked.egg.fraction}}
 }
 

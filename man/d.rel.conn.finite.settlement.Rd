@@ -6,7 +6,7 @@
 \title{Frequency of the number of marked settlers for finite total settlement}
 \usage{
 d.rel.conn.finite.settlement(p, n.obs, n.settlers, n.bootstraps = 1000,
-  n.conns = 0:n.settlers)
+  n.origin = 0:n.settlers)
 }
 \arguments{
 \item{p}{Fraction of individuals (i.e., eggs) marked in the source population}
@@ -19,20 +19,20 @@ the \code{n.obs} (\code{<=n.settlers}) settlers are collected}
 \item{n.bootstraps}{Number of simulated samples to generate to calculate
 relative frequencies. Defaults to \code{1000}.}
 
-\item{n.conns}{Vector of integers of possible numbers of settlers in the
+\item{n.origin}{Vector of integers of possible numbers of settlers in the
   cohort that originated at the site of marking. All values should be
   integers \code{<=n.settlers}.  Defaults to \code{0:n.settlers}}
 }
 \value{
 A list with the following elements: \describe{\item{res}{matrix with
-  \code{n.obs+1} rows and \code{length(n.conns)} columns, the element of
+  \code{n.obs+1} rows and \code{length(n.origin)} columns, the element of
   which are counts indicating the number of times among the
   \code{n.bootstraps} samples that \code{k} marked settlers are found among
   the \code{n.obs} settlers collected from the total settlement pool of
   \code{n.settlers} individuals. Results for \code{k} marked settlers are in
   row \code{k+1} of the matrix, the first row being used for \code{k=0}.  The
   row names of the matrix reflect the value of \code{k}, whereas columns
-  names reflect the elements of \code{n.conns}.}\item{phi}{relative
+  names reflect the elements of \code{n.origin}.}\item{phi}{relative
   connectivity values corresponding to each column of \code{res}}}
 }
 \description{
@@ -41,9 +41,9 @@ settlers would be observed as a function of relative connectivity, sample
 size and the total number of settlers to a site. Probable frequency of
 observation is calculated by randomly drawing \code{n.bootstraps} artificial
 samples and calculating for each the number of would-be marked settlers in
-the sample for all values of \code{n.conns}, the true number of settlers from
-the marked site in the entire cohort. \code{n.conns} is related to relative
-connectivity, \code{phi}, by \code{phi=n.conns/n.settlers}.
+the sample for all values of \code{n.origin}, the true number of settlers from
+the marked site in the entire cohort. \code{n.origin} is related to relative
+connectivity, \code{phi}, by \code{phi=n.origin/n.settlers}.
 }
 \examples{
 library(ConnMatTools)
@@ -120,6 +120,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{p.rel.conn.unif.prior}},
   \code{\link{q.rel.conn.unif.prior}};
   \code{\link{dual.mark.transmission}};
-  \code{\link{optim.rel.conn.dists}}
+  \code{\link{optim.rel.conn.dists}};
+  \code{\link{r.marked.egg.fraction}}
 }
 

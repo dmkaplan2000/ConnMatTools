@@ -53,8 +53,18 @@ dual.mark.transmission <- function(p.female,p.male=p.female) {
               p.two.known.parents=p.two.known.parents))
 }
 
-#' Fraction of eggs marked accounting for variability in reproductive output
+#' Estimates of fraction of eggs marked accounting for variability in
+#' reproductive output
 #' 
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
+#'   connectivity estimation
+#'   
+#' @family connectivity estimation
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.connectivity_estimation.distributions.R
+#' @encoding UTF-8
+#' @export
+#' @include utils.R
 r.marked.egg.fraction <- function(n,
                                   n.females,
                                   n.marked.females=round(n.females*p.marked.females),
@@ -65,5 +75,34 @@ r.marked.egg.fraction <- function(n,
                                   mean.male=mean.female,cv.male=cv.female,
                                   p.marked.females,p.marked.males=p.marked.females
                                   ) {
+  if (n.marked.females>n.females)
+    stop("n.females must be greater than n.marked.females")
   
+  f1 = function(x,y) x / (x+y)
+  
+  lf = gamma.mean.sd.shape.scale(mean=mean.female,sd=mean.female*cv.female)
+
+  xf = rgamma(n,n.marked.females*lf$shape,lf$scale)
+  yf = rgamma(n,(n.females-n.marked.females)*lf$shape,lf$scale)
+  
+  if (!dual)
+    return(list(eggs=xf+yf,marked.eggs=xf,p=f1(xf,yf)))
+  
+  if (n.marked.males>n.males)
+    stop("n.males must be greater than n.marked.males")
+
+  xm = n.marked.males
+  ym = n.males
+  
+  if (male.uncert) {
+    lm = gamma.mean.sd.shape.scale(mean=mean.male,sd=mean.male*cv.male)
+    xm = rgamma(n,n.marked.males*lm$shape,lm$scale)
+    ym = rgamma(n,(n.males-n.marked.males)*lm$shape,lm$scale)    
+  }
+  
+  f2 = function(pf,pm) pm + pf - pm*pf
+  
+  return(list(eggs=xf+yf,marked.eggs=xf,
+              sperm=xm+ym,marked.sperm=xm,
+              p=f2(f1(xf,yf),f1(xm,ym))))
 }
