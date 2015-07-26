@@ -53,15 +53,73 @@ dual.mark.transmission <- function(p.female,p.male=p.female) {
               p.two.known.parents=p.two.known.parents))
 }
 
-#' Estimates of fraction of eggs marked accounting for variability in
+#' Estimates of fraction of eggs marked accounting for variability in 
 #' reproductive output
 #' 
+#' This function estimates the fraction of eggs "marked" at a site (where the 
+#' "mark" could be micro-chemical or genetic) taking into account uncertainty in
+#' female (and potentially male in the case of dual genetic mark transmission) 
+#' reproductive output. It generates a set of potential values for the fraction 
+#' of eggs marked assuming that reproductive output of each marked or unmarked 
+#' mature individual is given by a random variable drawn from a single 
+#' probability distribution with known mean and standard deviation (or 
+#' equivalently coefficient of variation) \bold{\italics{and}} that the numbers 
+#' of marked and unmarked individuals are large enough that the central limit 
+#' theorem applies and, therefore, their collective reproductive outputs are 
+#' reasonably well described by a gamma distribution whose mean and standard 
+#' deviation are appropriately scaled based on the number of individual 
+#' reproducers.  The function also returns the total egg production 
+#' corresponding to each fraction of marked eggs, needed for estimating absolute
+#' connectivity values (i.e., elements of the connectivity matrix needed for 
+#' assessing population persistence).
+#' 
+#' @param n Number of random values to estimates
+#' @param n.females Total number of mature females in the population
+#' @param n.marked.females Number of marked females in population
+#' @param mean.female Mean egg production of each mature female. Defaults to 1.
+#' @param cv.female Coefficient of variation of reproductive output of an 
+#'   individual mature female
+#' @param dual Logical variable. If \code{TRUE}, then the fraction of marked 
+#'   eggs is calculated assuming dual (male and female) mark transmission. 
+#'   Defaults to \code{FALSE}.
+#' @param male.uncert Logical variable. If \code{TRUE}, then variability in male
+#'   sperm output is also taken into account when estimating the number of 
+#'   marked eggs. Defaults to \code{FALSE}.
+#' @param n.males Total number of mature males in the population. Only used if 
+#'   \code{dual=TRUE}. Defaults to being equal to \code{n.females}.
+#' @param n.marked.males Number of marked males in population. Only used if 
+#'   \code{dual=TRUE}. Defaults to being equal to \code{n.marked.females}.
+#' @param mean.male Mean sperm production of each mature male. Only used if 
+#'   \code{dual=TRUE} and \code{male.uncert=TRUE}. Defaults to being equal to 
+#'   \code{mean.female}.
+#' @param cv.male Coefficient of variation of reproductive output of an 
+#'   individual mature male. Only used if \code{dual=TRUE} and 
+#'   \code{male.uncert=TRUE}. Defaults to being equal to \code{cv.female}.
+#' @param p.marked.females Fraction of marked females in population. Can be 
+#'   supplied instead of \code{n.marked.females}. Ignored if 
+#'   \code{n.marked.females} is given.
+#' @param p.marked.males Fraction of marked males in population. Can be supplied
+#'   instead of \code{n.marked.males}. Only used if \code{dual=TRUE}. Ignored if
+#'   \code{n.marked.males} is given.
+#'   
+#' @return A list with the following elements: \describe{\item{p}{Vector of 
+#'   length \code{n} with estimates for fraction of marked 
+#'   eggs}\item{eggs}{Vector of length \code{n} with estimates for total egg 
+#'   production}\item{marked.eggs}{Vector of length \code{n} with estimates for 
+#'   total number of marked eggs produced}\item{sperm}{Only returned if 
+#'   \code{dual=TRUE}. If \code{male.uncert=FALSE}, then a scalar equal to 
+#'   \code{n.males}. Otherwise, a vector of length \code{n} with estimates for 
+#'   total sperm production}\item{marked.sperm}{Only returned if 
+#'   \code{dual=TRUE}. If \code{male.uncert=FALSE}, then a scalar equal to 
+#'   \code{n.marked.males}. Otherwise, a vector of length \code{n} with
+#'   estimates for total marked sperm production}}
+#'   
 #' @references Kaplan et al. (submitted) Uncertainty in marine larval 
 #'   connectivity estimation
 #'   
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
-#' @example tests/test.connectivity_estimation.distributions.R
+#' @example tests/test.marked.egg.fraction.R
 #' @encoding UTF-8
 #' @export
 #' @include utils.R
@@ -92,7 +150,7 @@ r.marked.egg.fraction <- function(n,
     stop("n.males must be greater than n.marked.males")
 
   xm = n.marked.males
-  ym = n.males
+  ym = n.males - n.marked.males
   
   if (male.uncert) {
     lm = gamma.mean.sd.shape.scale(mean=mean.male,sd=mean.male*cv.male)
@@ -100,6 +158,7 @@ r.marked.egg.fraction <- function(n,
     ym = rgamma(n,(n.males-n.marked.males)*lm$shape,lm$scale)    
   }
   
+  # Function that gives fraction marked when there is dual mark transmission
   f2 = function(pf,pm) pm + pf - pm*pf
   
   return(list(eggs=xf+yf,marked.eggs=xf,
