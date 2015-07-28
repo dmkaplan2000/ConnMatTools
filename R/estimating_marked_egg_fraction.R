@@ -63,7 +63,7 @@ dual.mark.transmission <- function(p.female,p.male=p.female) {
 #' of eggs marked assuming that reproductive output of each marked or unmarked 
 #' mature individual is given by a random variable drawn from a single 
 #' probability distribution with known mean and standard deviation (or 
-#' equivalently coefficient of variation) \bold{\italics{and}} that the numbers 
+#' equivalently coefficient of variation) \strong{and} that the numbers 
 #' of marked and unmarked individuals are large enough that the central limit 
 #' theorem applies and, therefore, their collective reproductive outputs are 
 #' reasonably well described by a gamma distribution whose mean and standard 
