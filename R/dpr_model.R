@@ -293,8 +293,8 @@ DPRHomerangeGravity <-
         recruits[,I] = r        
         fishing.mortality[,I] = f        
         effective.fishing.mortality[,I] = feff        
-        yield[,I] =         
-        effective.yield[,I] = feff        
+        yield[,I] = Y        
+        effective.yield[,I] = Yeff        
       }
       
       if ((gamma>0) && (t%%gravity.ts.interval == 0)) {
