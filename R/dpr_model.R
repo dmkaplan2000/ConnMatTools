@@ -281,10 +281,14 @@ DPRHomerangeGravity <-
       YPR = YPR.of.f(feff)
       Yeff = YPR * r
       
-      if (prod(dim(adult.mat))>1)
-        Y = (adult.mat %*% (Yeff/feff)) * f
-      else
+      if (prod(dim(adult.mat))>1) {
+        kk = Yeff/feff
+        #kk[is.na(kk)]=0 
+        kk[Yeff==0]=0 
+        Y = (adult.mat %*% kk) * f
+      } else {        
         Y = Yeff
+      }
       
       I = which( t == timesteps )
       if (length(I)>0) {
