@@ -75,7 +75,8 @@ d.mix.dists.func <- function(d.unmarked,d.marked) {
 #'   unmarked) individuals from the population
 #' @inheritParams d.mix.dists.func
 #' @param phi The fraction of settlers at the destination population that 
-#'   originated at the source population
+#'   originated at the source population. Defaults to 0.5, which would
+#'   correspond to an even sample of marked and unmarked individuals.
 #' @param p Fraction of individuals (i.e., eggs) marked in the source 
 #'   population. Defaults to 1.
 #'   
@@ -90,7 +91,7 @@ d.mix.dists.func <- function(d.unmarked,d.marked) {
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
-prob.marked <- function(obs,d.unmarked,d.marked,phi,p=1) {
+prob.marked <- function(obs,d.unmarked,d.marked,phi=0.5,p=1) {
   p.marked = phi * p
   p.marked*d.marked(obs) / ((1-p.marked)*d.unmarked(obs)+p.marked*d.marked(obs))
 }
