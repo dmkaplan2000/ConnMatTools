@@ -1,12 +1,12 @@
 Package: ConnMatTools
 Type: Package
-Title: Tools for Working with Connectivity Matrices
-Version: 0.2.1
+Title: Tools for Working with connectivity data
+Version: 0.3.0
 Date: 2016-01-22
 Author: Marco Andrello <marco.andrello@gmail.com>
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>
 Description: Collects several different methods for analyzing and
-    working with connectivity matrices in R.  Though primarily oriented towards
+    working with connectivity data in R.  Though primarily oriented towards
     marine larval dispersal, many of the methods are general and useful for
     terrestrial systems as well.
 URL: https://github.com/dmkaplan2000/ConnMatTools.git

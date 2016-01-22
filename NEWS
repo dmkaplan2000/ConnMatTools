@@ -1,3 +1,12 @@
+ConnMatTools 0.3.0
+------------------
+
+* Finished initial release of package including code for Bayesian-based estimation of 
+  relative connectivity.
+  
+* Also include somes fixes to DPRHomeRange function and a number of minor changes to meet
+  new CRAN standards.
+
 ConnMatTools 0.2.1
 ------------------
 
