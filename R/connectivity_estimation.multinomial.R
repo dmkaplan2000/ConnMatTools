@@ -30,8 +30,55 @@ ddirichlet <- function (x, alpha, log=FALSE)
   pd
 }
 
+#' Calculates unnormalized probability density for relative connectivity values 
+#' from multiple distinct sites
+#' 
+#' This functions calculates the unnormalized probability density function for 
+#' the relative (to all settlers at the destination site) connectivity value for
+#' larval transport between multiple source sites to a destination site. An 
+#' arbitrary number of source sites can be evaluated.
+#' 
+#' As this function returns the unnormalized probability density, it must be
+#' normalized somehow to be produce a true probability density.  This can be
+#' acheived using a variety of approaches, including brute force integration of
+#' the unnormalized probability density and MCMC algorithms.
+#' 
+#' @param phis Vector of fractions of individuals (i.e., eggs) from the source 
+#'   populations settling at the destination population
+#' @param ps Vector of fractions of individuals (i.e., eggs) marked in each of 
+#'   the source populations
+#' @param ks Vector of numbers of marked settlers from each source population 
+#'   found in the sample
+#' @param n Vector of total numbers of settlers collected
+#' @param log Boolean indicating whether or not to return the log probability 
+#'   density.  Defaults to \code{FALSE}.
+#' @param dirichlet.prior.alphas Parameter value for a Dirichlet prior 
+#'   distribution for the \code{phis}. Can be a single value for a Dirichlet 
+#'   prior with uniform parameters, or a vector of length = 
+#'   \code{length(phis)+1}. Defaults to \code{1/(length(phis)+1)}, the value for
+#'   the "reference distance" non-informative prior of Berger et al. 2015.
+#'   
+#' @return The unnormalized probability density value.  If \code{log=TRUE}, then
+#'   the logarithm of the probability density value will be returned.
+#'   
+#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
+#'   connectivity estimation
+#'   
+#' @references Berger JO, Bernardo JM, Sun D (2015) Overall Objective Priors. 
+#'   Bayesian Analysis 10:189–221. doi:10.1214/14-BA915
+#'   
+#' @family connectivity estimation
+#' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
+#' @example tests/test.connectivity_estimation.multinomial.R
+#' @export
 d.rel.conn.multinomial.unnorm <- function(phis,ps,ks,n,log=FALSE,
                                           dirichlet.prior.alphas=1/(length(phis)+1)) {
+  if (sum(ks)>n)
+    stop("sum(ks) must be less than n")
+  
+  if (any(ps>1 | ps<0))
+    stop("ps must be between 0 and 1")
+  
   alphas = c(ks,n-sum(ks))+1
   x = c(phis*ps,1-sum(phis*ps))
   phis = c(phis,1-sum(phis))
@@ -39,10 +86,9 @@ d.rel.conn.multinomial.unnorm <- function(phis,ps,ks,n,log=FALSE,
   if (length(dirichlet.prior.alphas)==1)
     dirichlet.prior.alphas=rep(dirichlet.prior.alphas,length(alphas))
   
-  if (log)
-    d = ddirichlet(x,alphas,log=log)+ddirichlet(phis,dirichlet.prior.alphas,log=log)
-  else
-    d = ddirichlet(x,alphas,log=log)*ddirichlet(phis,dirichlet.prior.alphas,log=log)
-  
+  d = ddirichlet(x,alphas,log=T)+ddirichlet(phis,dirichlet.prior.alphas,log=T)
+  if (!log)
+    d = exp(d)
+
   return(d)
 }
