@@ -12,6 +12,7 @@ Description: Collects several different methods for analyzing and
 URL: https://github.com/dmkaplan2000/ConnMatTools.git
 Suggests:
     igraph
+    mcmc
 Collate:
     'ConnMatTools.R'
     'eigs.R'
