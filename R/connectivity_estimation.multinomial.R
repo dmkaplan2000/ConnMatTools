@@ -49,7 +49,7 @@ ddirichlet <- function (x, alpha, log=FALSE)
 #'   the source populations
 #' @param ks Vector of numbers of marked settlers from each source population 
 #'   found in the sample
-#' @param n Vector of total numbers of settlers collected
+#' @param n.sample Vector of total numbers of settlers collected
 #' @param log Boolean indicating whether or not to return the log probability 
 #'   density.  Defaults to \code{FALSE}.
 #' @param dirichlet.prior.alphas Parameter value for a Dirichlet prior 
@@ -65,21 +65,24 @@ ddirichlet <- function (x, alpha, log=FALSE)
 #'   connectivity estimation
 #'   
 #' @references Berger JO, Bernardo JM, Sun D (2015) Overall Objective Priors. 
-#'   Bayesian Analysis 10:189–221. doi:10.1214/14-BA915
+#'   Bayesian Analysis 10:189-221. doi:10.1214/14-BA915
 #'   
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @example tests/test.connectivity_estimation.multinomial.R
 #' @export
-d.rel.conn.multinomial.unnorm <- function(phis,ps,ks,n,log=FALSE,
+d.rel.conn.multinomial.unnorm <- function(phis,ps,ks,n.sample,log=FALSE,
                                           dirichlet.prior.alphas=1/(length(phis)+1)) {
-  if (sum(ks)>n)
+  if (sum(ks)>n.sample)
     stop("sum(ks) must be less than n")
   
   if (any(ps>1 | ps<0))
     stop("ps must be between 0 and 1")
   
-  alphas = c(ks,n-sum(ks))+1
+  if (!all(length(phis) == c(length(ps),length(ks))))
+    stop("phis, ps and ks must be vectors of same length")
+  
+  alphas = c(ks,n.sample-sum(ks))+1
   x = c(phis*ps,1-sum(phis*ps))
   phis = c(phis,1-sum(phis))
   

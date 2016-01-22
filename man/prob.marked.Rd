@@ -5,7 +5,7 @@
 \alias{prob.marked}
 \title{Returns probability a set of observations correspond to marked individuals}
 \usage{
-prob.marked(obs, d.unmarked, d.marked, phi, p = 1)
+prob.marked(obs, d.unmarked, d.marked, phi = 0.5, p = 1)
 }
 \arguments{
 \item{obs}{A vector of score values for a random sample of (marked and
@@ -19,7 +19,8 @@ properly.}
   be normalized so that it integrates to 1 for the function to work properly.}
 
 \item{phi}{The fraction of settlers at the destination population that
-originated at the source population}
+originated at the source population. Defaults to 0.5, which would
+correspond to an even sample of marked and unmarked individuals.}
 
 \item{p}{Fraction of individuals (i.e., eggs) marked in the source
   population. Defaults to 1.}

@@ -112,6 +112,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{d.rel.conn.dists.func}},
   \code{\link{p.rel.conn.dists.func}},
   \code{\link{q.rel.conn.dists.func}};
+  \code{\link{d.rel.conn.multinomial.unnorm}};
   \code{\link{d.rel.conn.multiple}},
   \code{\link{p.rel.conn.multiple}},
   \code{\link{q.rel.conn.multiple}},

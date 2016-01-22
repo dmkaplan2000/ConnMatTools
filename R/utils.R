@@ -21,28 +21,32 @@ rel.conn.approxfun <- function(x,y,xmin=0,xmax=1,...) {
 #' either \code{mean} and \code{sd} or \code{shape} and \code{scale} and the 
 #' function returns a list with all four parameter values.
 #' 
-#' @param mean Mean of the gamma distribution
-#' @param sd Standard deviation of the gamma distribution
-#' @param shape Shape parameter of the gamma distribution
-#' @param scale Scale parameter of the gamma distribution
+# @param mean Mean of the gamma distribution
+# @param sd Standard deviation of the gamma distribution
+# @param shape Shape parameter of the gamma distribution
+# @param scale Scale parameter of the gamma distribution
+#' @param \dots This function can be run either supplying \code{mean} and
+#'   \code{sd}, or supplying \code{shape} and \code{scale}, but not both pairs
+#'   of parameters.
 #'   
-#' @return A list with \code{mean}, \code{sd}, \code{shape} and \code{scale}
+#' @return A list with \code{mean}, \code{sd}, \code{shape} and \code{scale} 
 #'   parameters of the corresponding gamma distribution.
 #'   
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 #' @encoding UTF-8
 #' @export
 #' @examples
+#' library(ConnMatTools)
 #' mn <- 1
 #' sd <- 0.4
-#' l <- gamma.mean.sd.shape.scale(mean=mn,sd=sd)
+#' l <- gammaParamsConvert(mean=mn,sd=sd)
 #' x <- seq(0,2,length.out=50)
 #' 
 #' # Plot gamma and normal distributions - for sd << mean, the two should be very close
 #' plot(x,dgamma(x,l$shape,scale=l$scale),
 #'      main="Normal versus Gamma distributions",type="l")
 #' lines(x,dnorm(x,l$mean,l$sd),col="red")
-gamma.mean.sd.shape.scale <- function(...) {
+gammaParamsConvert <- function(...) {
   l = list(...)
   
   if (length(l) != 2)

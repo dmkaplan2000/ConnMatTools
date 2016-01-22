@@ -2,7 +2,7 @@ Package: ConnMatTools
 Type: Package
 Title: Tools for Working with Connectivity Matrices
 Version: 0.2.1
-Date: 2015-07-17
+Date: 2016-01-22
 Author: Marco Andrello <marco.andrello@gmail.com>
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>
 Description: Collects several different methods for analyzing and
@@ -11,8 +11,7 @@ Description: Collects several different methods for analyzing and
     terrestrial systems as well.
 URL: https://github.com/dmkaplan2000/ConnMatTools.git
 Suggests:
-    igraph
-    mcmc
+    igraph,mcmc
 Collate:
     'ConnMatTools.R'
     'eigs.R'
@@ -21,6 +20,7 @@ Collate:
     'connectivity_estimation.R'
     'connectivity_estimation.distributions.R'
     'connectivity_estimation.finite_settlement.R'
+    'connectivity_estimation.multinomial.R'
     'connectivity_estimation.multiple.R'
     'datasets.R'
     'dpr_model.R'

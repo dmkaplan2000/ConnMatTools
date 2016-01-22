@@ -138,7 +138,7 @@ r.marked.egg.fraction <- function(n,
   
   f1 = function(x,y) x / (x+y)
   
-  lf = gamma.mean.sd.shape.scale(mean=mean.female,sd=mean.female*cv.female)
+  lf = gammaParamsConvert(mean=mean.female,sd=mean.female*cv.female)
 
   xf = rgamma(n,n.marked.females*lf$shape,lf$scale)
   yf = rgamma(n,(n.females-n.marked.females)*lf$shape,lf$scale)
@@ -153,7 +153,7 @@ r.marked.egg.fraction <- function(n,
   ym = n.males - n.marked.males
   
   if (male.uncert) {
-    lm = gamma.mean.sd.shape.scale(mean=mean.male,sd=mean.male*cv.male)
+    lm = gammaParamsConvert(mean=mean.male,sd=mean.male*cv.male)
     xm = rgamma(n,n.marked.males*lm$shape,lm$scale)
     ym = rgamma(n,(n.males-n.marked.males)*lm$shape,lm$scale)    
   }

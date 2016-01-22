@@ -87,6 +87,8 @@ connectivity values (i.e., elements of the connectivity matrix needed for
 assessing population persistence).
 }
 \examples{
+library(ConnMatTools)
+
 n.females <- 500
 n.marked.females <- 100
 p.marked.females <- n.marked.females/n.females
@@ -102,12 +104,12 @@ F=r.marked.egg.fraction(1000,n.females=n.females,n.marked.females=n.marked.femal
 # Random values from distribution of dual female-male mark transmission, but
 # fraction of marked eggs only depends on fraction of marked males
 Fm=r.marked.egg.fraction(1000,n.females=n.females,n.marked.females=n.marked.females,
-                        mean.female=mn,cv.female=cv,dual=T,male.uncert=FALSE)
+                        mean.female=mn,cv.female=cv,dual=TRUE,male.uncert=FALSE)
 
 # Random values from distribution of dual female-male mark transmission, with
 # fraction of marked eggs depending on absolute marked and unmarked sperm output
 FM=r.marked.egg.fraction(1000,n.females=n.females,n.marked.females=n.marked.females,
-                         mean.female=mn,cv.female=cv,dual=T,male.uncert=T)
+                         mean.female=mn,cv.female=cv,dual=TRUE,male.uncert=TRUE)
 
 # Plot of pure female mark transmission
 hist(F$p,50,main="Female mark transmission",
@@ -148,6 +150,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{p.rel.conn.dists.func}},
   \code{\link{q.rel.conn.dists.func}};
   \code{\link{d.rel.conn.finite.settlement}};
+  \code{\link{d.rel.conn.multinomial.unnorm}};
   \code{\link{d.rel.conn.multiple}},
   \code{\link{p.rel.conn.multiple}},
   \code{\link{q.rel.conn.multiple}},
