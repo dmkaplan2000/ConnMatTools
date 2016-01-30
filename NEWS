@@ -1,3 +1,9 @@
+ConnMatTools 0.3.1
+------------------
+
+* Replacing bootstrap approach to solving finite settler pool problem in relative 
+  connectivity code with analytic approach based on hypergeometric distributions.
+  
 ConnMatTools 0.3.0
 ------------------
 

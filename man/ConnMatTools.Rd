@@ -6,7 +6,7 @@
 \alias{ConnMatTools-package}
 \title{Tools for working with connectivity matrices}
 \description{
-Tools for Working with connectivity data
+Tools for Working with Connectivity Data
 }
 \details{
 Collects several different methods for analyzing and
@@ -17,7 +17,7 @@ and useful for terrestrial systems as well.
 \tabular{ll}{
 Package: \tab ConnMatTools\cr
 Type: \tab Package\cr
-Version: \tab 0.3.0\cr
+Version: \tab 0.3.1\cr
 Date: \tab 2016-01-22\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab no\cr

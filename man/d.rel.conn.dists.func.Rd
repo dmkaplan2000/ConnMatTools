@@ -149,7 +149,9 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{p.rel.conn.beta.prior}},
   \code{\link{q.rel.conn.beta.prior}},
   \code{\link{q.rel.conn.beta.prior.func}};
-  \code{\link{d.rel.conn.finite.settlement}};
+  \code{\link{d.rel.conn.finite.settlement}},
+  \code{\link{p.rel.conn.finite.settlement}},
+  \code{\link{q.rel.conn.finite.settlement}};
   \code{\link{d.rel.conn.multinomial.unnorm}};
   \code{\link{d.rel.conn.multiple}},
   \code{\link{p.rel.conn.multiple}},

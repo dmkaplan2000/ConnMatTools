@@ -3,48 +3,70 @@
 \encoding{UTF-8}
 \name{d.rel.conn.finite.settlement}
 \alias{d.rel.conn.finite.settlement}
-\title{Frequency of the number of marked settlers for finite total settlement}
+\alias{p.rel.conn.finite.settlement}
+\alias{q.rel.conn.finite.settlement}
+\title{Estimate the probability distribution for the number of settlers originating
+at a site given a sample from a finite settler pool}
 \usage{
-d.rel.conn.finite.settlement(p, n.obs, n.settlers, n.bootstraps = 1000,
-  n.origin = 0:n.settlers)
+d.rel.conn.finite.settlement(n.origin, p, k, n.obs, n.settlers,
+  prior.n.origin = 1)
+
+p.rel.conn.finite.settlement(n.origin, p, k, n.obs, n.settlers,
+  prior.n.origin = 1)
+
+q.rel.conn.finite.settlement(q, p, k, n.obs, n.settlers, prior.n.origin = 1)
 }
 \arguments{
+\item{n.origin}{Vector of integers of possible numbers of settlers in the
+cohort that originated at the site of marking. All values should be
+integers \code{<=n.settlers}.}
+
 \item{p}{Fraction of individuals (i.e., eggs) marked in the source population}
+
+\item{k}{Number of marked settlers in sample}
 
 \item{n.obs}{Total number of settlers collected}
 
 \item{n.settlers}{Total number of settlers at the destination site from which
 the \code{n.obs} (\code{<=n.settlers}) settlers are collected}
 
-\item{n.bootstraps}{Number of simulated samples to generate to calculate
-relative frequencies. Defaults to \code{1000}.}
+\item{prior.n.origin}{A prior probability mass function for the number of
+  settlers in the cohort originating at the site of marking. Must be a scalar
+  or a vector of length \code{n.settlers+1}. Defaults to \code{1}.}
 
-\item{n.origin}{Vector of integers of possible numbers of settlers in the
-  cohort that originated at the site of marking. All values should be
-  integers \code{<=n.settlers}.  Defaults to \code{0:n.settlers}}
+\item{q}{Vector of quantiles}
 }
 \value{
-A list with the following elements: \describe{\item{res}{matrix with
-  \code{n.obs+1} rows and \code{length(n.origin)} columns, the element of
-  which are counts indicating the number of times among the
-  \code{n.bootstraps} samples that \code{k} marked settlers are found among
-  the \code{n.obs} settlers collected from the total settlement pool of
-  \code{n.settlers} individuals. Results for \code{k} marked settlers are in
-  row \code{k+1} of the matrix, the first row being used for \code{k=0}.  The
-  row names of the matrix reflect the value of \code{k}, whereas columns
-  names reflect the elements of \code{n.origin}.}\item{phi}{relative
-  connectivity values corresponding to each column of \code{res}}}
+A vector of probabilities or quantiles.
 }
 \description{
-This function calculates the relative frequency with which a number of marked
-settlers would be observed as a function of relative connectivity, sample
-size and the total number of settlers to a site. Probable frequency of
-observation is calculated by randomly drawing \code{n.bootstraps} artificial
-samples and calculating for each the number of would-be marked settlers in
-the sample for all values of \code{n.origin}, the true number of settlers from
-the marked site in the entire cohort. \code{n.origin} is related to relative
-connectivity, \code{phi}, by \code{phi=n.origin/n.settlers}.
+These functions calculate the probability mass function
+(\code{d.rel.conn.finite.settlement}), the cumulative distribution function
+(\code{p.rel.conn.finite.settlement}) and the quantile function
+(\code{q.rel.conn.finite.settlement}) for the true number of settlers at a
+site that originated in a particular site given a known fraction of marked
+eggs among the eggs originating at the source site, a sample of settlers at
+the destination site, a known fraction of which are marked, and a finite
+settler pool of known size.
 }
+\details{
+The relative connectivity between the source and destination sites is
+calculated as \code{n.origin/n.settlers}.
+}
+\section{Functions}{
+\itemize{
+\item \code{d.rel.conn.finite.settlement}: Returns the probability mass
+function for the numbers of settlers in the cohort that originated at the
+source site (i.e., site of marking).
+
+\item \code{p.rel.conn.finite.settlement}: Returns the cumulative distribution
+function for the numbers of settlers in the cohort that originated at the
+source site (i.e., site of marking).
+
+\item \code{q.rel.conn.finite.settlement}: Returns quantiles of the cumulative
+distribution function for the numbers of settlers in the cohort that
+originated at the source site (i.e., site of marking).
+}}
 \examples{
 library(ConnMatTools)
 
@@ -60,42 +82,29 @@ drc <- d.rel.conn.unif.prior(phi,p,k,n.obs)
 prc <- p.rel.conn.unif.prior(phi,p,k,n.obs)
 qrc <- q.rel.conn.unif.prior(c(0.025,0.975),p,k,n.obs) # 95\% confidence interval
 
-n.bootstraps <- 1000 # Increase to improve accuracy of brute force estimations
+# Test with finite settlement function and large (approx. infinite) settler pool
+# Can be a bit slow for large settler pools
+dis <- d.rel.conn.finite.settlement(0:(7*n.obs),p,k,n.obs,7*n.obs)
 
-# Test with brute force finite settlement function and large (approx. infinite) settler pool
-dbf <- d.rel.conn.finite.settlement(p,n.obs,7*n.obs,
-                                    n.bootstraps=n.bootstraps)
-dbf$d <- dbf$res[as.character(k),]
-
-# Approximate quantiles - could be slow for large cohort sizes or numbers of bootstraps
-dbf$q = quantile(do.call(c,sapply(1:length(dbf$d),function(i) rep(dbf$phi[i],dbf$d[i]))),
-                 c(0.025,0.975))
-
-# Normalize probability density
-dbf$d <- dbf$d / sum(dbf$d)
-
+# Quantiles
+qis <- q.rel.conn.finite.settlement(c(0.025,0.975),p,k,n.obs,7*n.obs)
 
 # Finite settler pool
-dfr <- d.rel.conn.finite.settlement(p,n.obs,n.settlers,
-                                    n.bootstraps=n.bootstraps)
-dfr$d <- dfr$res[as.character(k),]
+dfs <- d.rel.conn.finite.settlement(0:n.settlers,p,k,n.obs,n.settlers)
 
-# Approximate quantiles - could be slow for large cohort sizes or numbers of bootstraps
-dfr$q = quantile(do.call(c,sapply(1:length(dfr$d),function(i) rep(dfr$phi[i],dfr$d[i]))),
-                 c(0.025,0.975))
-
-# Normalize probability density
-dfr$d <- dfr$d / sum(dfr$d)
+# Quantiles for the finite settler pool
+qfs <- q.rel.conn.finite.settlement(c(0.025,0.975),p,k,n.obs,n.settlers)
 
 # Make a plot of different distributions
 plot(phi,drc,type="l",main="Probability of relative connectivity values",
      xlab=expression(phi),ylab="Probability density")
 lines(phi,prc,col="blue")
-lines(dbf$phi,dbf$d/diff(dbf$phi[1:2]),col="black",lty="dashed")
-lines(dfr$phi,dfr$d/diff(dfr$phi[1:2]),col="red",lty="dashed")
+lines((0:(7*n.obs))/(7*n.obs),dis*(7*n.obs),col="black",lty="dashed")
+lines((0:n.settlers)/n.settlers,dfs*n.settlers,col="red",lty="dashed")
 abline(v=qrc,col="black")
-abline(v=dbf$q,col="black",lty="dashed")
-abline(v=dfr$q,col="red",lty="dashed")
+abline(v=qis/(7*n.obs),col="black",lty="dashed")
+abline(v=qfs/n.settlers,col="red",lty="dashed")
+
 }
 \author{
 David M. Kaplan \email{dmkaplan2000@gmail.com}
