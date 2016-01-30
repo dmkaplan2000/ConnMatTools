@@ -66,3 +66,26 @@ d.rel.conn.finite.settlement <- function(p,n.obs,n.settlers,n.bootstraps=1000,
   
   return(list(res=res,n.origin=n.origin,phi=n.origin/n.settlers))
 }
+
+
+
+################################################
+# Alternative using Hypergeometric distribution to calculate probability
+################################################
+# Works, but possibly can be sped up significantly by pre-calculating all values
+# of dhyper(k,K,n.settlers-K,n.obs)
+# and then precalculating all values of f(k:n.settlers)
+#
+# Also, use isTRUE(all.equal(n.conns,round(n.conns))) to test for all integral values
+d.rel.conn.finite.settlement2 <- function(n.conns,p,k,n.obs,n.settlers,
+                                  prior.shape1=0.5,
+                                  prior.shape2=prior.shape1,
+                                  prior.func=function(phi) dbeta(phi,prior.shape1,prior.shape2),
+                                  ...) {
+  f = function(N) {
+    r = sapply(N,function(NN) sum(dbinom(k:NN,NN,p)*dhyper(k,k:NN,n.settlers-(k:NN),n.obs) ))
+    return(r)
+  }
+  
+  f(n.conns) / sum(f(k:n.settlers))
+}
