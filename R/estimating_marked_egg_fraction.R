@@ -123,6 +123,7 @@ dual.mark.transmission <- function(p.female,p.male=p.female) {
 #' @encoding UTF-8
 #' @export
 #' @include utils.R
+#' @importFrom stats rgamma
 r.marked.egg.fraction <- function(n,
                                   n.females,
                                   n.marked.females=round(n.females*p.marked.females),

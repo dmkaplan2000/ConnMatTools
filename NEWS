@@ -1,3 +1,9 @@
+ConnMatTools 0.3.2
+------------------
+
+* Fix for problems due to cumulative distribution function for relative connectivity sometimes
+  producing values slightly larger than 1.
+
 ConnMatTools 0.3.1
 ------------------
 
