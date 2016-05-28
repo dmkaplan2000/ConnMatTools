@@ -182,7 +182,12 @@ p.rel.conn.beta.prior <- function(phi,p,k,n,
     integrate(f,0,phi,...)$value
   }
   
-  sapply(phi,fff) / ff
+  x = sapply(phi,fff) / ff
+  
+  # Cludge to fix imprecise integration leading to values greater than 1
+  x[x>1 & x<(1.000001)]=1
+  
+  return(x)
 }
 
 #' @describeIn d.rel.conn.beta.prior Returns a function to estimate quantiles for
