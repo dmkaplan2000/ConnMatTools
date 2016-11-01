@@ -23,7 +23,7 @@
 #' @keywords package
 #' @examples
 #' \dontrun{optimalSplitConnMat(CM)}
-#' @seealso See \code{\link{optimalSplitConnMat}}
+#' @seealso See \code{\link{optimalSplitConnMat}}, \code{\link{d.rel.conn.beta.prior}}
 #' 
 #' @references Jacobi, M. N., and Jonsson, P. R. 2011. Optimal networks of 
 #'   nature reserves can be found through eigenvalue perturbation theory of the 
@@ -37,8 +37,9 @@
 #' @references Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal 
 #'   per recruit: An efficient method for assessing sustainability in marine 
 #'   reserve networks. Ecological Applications, 16: 2248-2263.
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #' @references White, J. W. 2010. Adapting the steepness parameter from 
 #'   stock-recruit curves for use in spatially explicit models. Fisheries 
 #'   Research, 102: 330-334.

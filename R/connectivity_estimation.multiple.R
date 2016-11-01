@@ -59,8 +59,9 @@
 #' @return Vector of probabilities or quantiles, or a function in the case of 
 #'   \code{\link{q.rel.conn.multiple.func}}
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
