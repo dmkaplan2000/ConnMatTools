@@ -15,7 +15,7 @@ useful for terrestrial systems as well.
 
 The latest development version of the package can be installed directly from
 [github](https://github.com/) using the
-[devtools](http://cran.r-project.org/package=devtools)
+[devtools](https://cran.r-project.org/package=devtools)
 R package. First that package needs to be installed:
 
      install.packages("devtools")
