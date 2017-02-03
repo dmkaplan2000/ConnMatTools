@@ -61,8 +61,9 @@ ddirichlet <- function (x, alpha, log=FALSE)
 #' @return The unnormalized probability density value.  If \code{log=TRUE}, then
 #'   the logarithm of the probability density value will be returned.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @references Berger JO, Bernardo JM, Sun D (2015) Overall Objective Priors. 
 #'   Bayesian Analysis 10:189-221. doi:10.1214/14-BA915

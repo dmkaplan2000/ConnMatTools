@@ -22,8 +22,9 @@
 #'   parents}\item{p.two.known.parents}{Fraction of eggs with two known parents
 #'   among all eggs that have one or more known parents}}
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
@@ -114,8 +115,9 @@ dual.mark.transmission <- function(p.female,p.male=p.female) {
 #'   \code{n.marked.males}. Otherwise, a vector of length \code{n} with
 #'   estimates for total marked sperm production}}
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}

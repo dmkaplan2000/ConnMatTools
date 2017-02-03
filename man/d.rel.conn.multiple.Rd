@@ -135,8 +135,9 @@ abline(v=q,col="green")
 David M. Kaplan \email{dmkaplan2000@gmail.com}
 }
 \references{
-Kaplan et al. (submitted) Uncertainty in marine larval 
-  connectivity estimation
+Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+  (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+  ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 }
 \seealso{
 Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},

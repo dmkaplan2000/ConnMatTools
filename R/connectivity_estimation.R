@@ -43,8 +43,9 @@
 #'   
 #' @return Vector of probabilities or quantiles.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @describeIn d.rel.conn.unif.prior Returns the probability density for 
 #'   relative connectivity between a pair of sites
@@ -142,8 +143,9 @@ q.rel.conn.unif.prior <-function(q,p,k,n,log=FALSE,...) {
 #' @return Vector of probabilities or quantiles, or a function in the case of 
 #'   \code{\link{q.rel.conn.beta.prior.func}}.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @describeIn d.rel.conn.beta.prior Returns the probability density for 
 #'   relative connectivity between a pair of sites

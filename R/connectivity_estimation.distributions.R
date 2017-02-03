@@ -51,8 +51,9 @@ stepfun.hist <- function(h,...,normalize=TRUE) {
 #'   arguments: \code{p.marked}, the fraction of marked individuals in the
 #'   distribution; and \code{obs}, a vector of observed score values.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @seealso See also \code{\link{d.rel.conn.dists.func}},
 #'   \code{\link{optim.rel.conn.dists}}.
@@ -83,8 +84,9 @@ d.mix.dists.func <- function(d.unmarked,d.marked) {
 #' @return A vector of the same size as \code{obs} containing the probability 
 #'   that each individual is marked
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @seealso See also \code{\link{d.rel.conn.dists.func}},
 #'   \code{\link{optim.rel.conn.dists}}.
@@ -111,8 +113,9 @@ prob.marked <- function(obs,d.unmarked,d.marked,phi=0.5,p=1) {
 #   
 # @return The log-probability.
 #   
-# @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #   
 # @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
 # @encoding UTF-8
@@ -152,8 +155,9 @@ log.prob <- function(p,obs,dfunc) {
 #'   \code{neg.log.prob} field. See \code{\link{optim}} for other elements of
 #'   list.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @family connectivity estimation
 #' @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
@@ -234,8 +238,9 @@ optim.rel.conn.dists <- function(obs,d.unmarked,d.marked,p=1,
 #'   cumulative probability or score value, respectively. The returned function 
 #'   accepts both vector and scalar input values.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @describeIn d.rel.conn.dists.func Returns a function that is PDF for relative
 #'   connectivity

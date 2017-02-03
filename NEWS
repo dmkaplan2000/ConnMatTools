@@ -1,7 +1,12 @@
-ConnMatTools 0.3.3
+ConnMatTools 0.3.4
 ------------------
 
 * Small fix to q.rel.conn.dists.func to let you pass extra arguments to the integrate function.
+
+ConnMatTools 0.3.3
+------------------
+
+* Add a CITATION file for package.
 
 ConnMatTools 0.3.2
 ------------------

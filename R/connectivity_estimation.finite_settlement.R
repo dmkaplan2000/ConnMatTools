@@ -35,8 +35,9 @@
 #   reflect the elements of \code{n.origin}.}\item{phi}{relative connectivity
 #   values corresponding to each column of \code{res}}}
 #   
-# @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #   
 # @family connectivity estimation
 # @author David M. Kaplan \email{dmkaplan2000@@gmail.com}
@@ -142,8 +143,9 @@ fs.checkparams = function(n.origin,p,k,n.obs,n.settlers,prior.n.origin,q) {
 #'   
 #' @return A vector of probabilities or quantiles.
 #'   
-#' @references Kaplan et al. (submitted) Uncertainty in marine larval 
-#'   connectivity estimation
+#' @references Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+#'   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+#'   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 #'   
 #' @describeIn d.rel.conn.finite.settlement Returns the probability mass 
 #'   function for the numbers of settlers in the cohort that originated at the

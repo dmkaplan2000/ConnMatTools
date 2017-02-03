@@ -17,7 +17,7 @@ and useful for terrestrial systems as well.
 \tabular{ll}{
 Package: \tab ConnMatTools\cr
 Type: \tab Package\cr
-Version: \tab 0.3.3\cr
+Version: \tab 0.3.4\cr
 Date: \tab 2017-02-02\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab no\cr
@@ -48,8 +48,9 @@ Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
   per recruit: An efficient method for assessing sustainability in marine 
   reserve networks. Ecological Applications, 16: 2248-2263.
 
-Kaplan et al. (submitted) Uncertainty in marine larval 
-  connectivity estimation
+Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
+  (in press) Uncertainty in empirical estimates of marine larval connectivity. 
+  ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 
 White, J. W. 2010. Adapting the steepness parameter from 
   stock-recruit curves for use in spatially explicit models. Fisheries 
@@ -63,7 +64,7 @@ Beverton RJH, Holt SJ (1957) On the dynamics of exploited fish
   populations. H.M.S.O., London. 533 pp.
 }
 \seealso{
-See \code{\link{optimalSplitConnMat}}
+See \code{\link{optimalSplitConnMat}}, \code{\link{d.rel.conn.beta.prior}}
 }
 \keyword{package}
 
