@@ -1,8 +1,8 @@
 Package: ConnMatTools
 Type: Package
 Title: Tools for Working with Connectivity Data
-Version: 0.3.2
-Date: 2016-05-28
+Version: 0.3.3
+Date: 2017-02-03
 Author: Marco Andrello <marco.andrello@gmail.com>
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>
 Description: Collects several different methods for analyzing and
