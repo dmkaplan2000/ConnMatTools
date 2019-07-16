@@ -3,8 +3,8 @@
 \name{d.rel.conn.multiple}
 \alias{d.rel.conn.multiple}
 \alias{p.rel.conn.multiple}
-\alias{q.rel.conn.multiple}
 \alias{q.rel.conn.multiple.func}
+\alias{q.rel.conn.multiple}
 \title{Functions for estimating the probability distribution of relative 
 connectivity values as a weighted sum over possible input parameters}
 \usage{
@@ -38,6 +38,9 @@ individual combinations of \code{ps}, \code{ks} and \code{ns}. Defaults to
 \code{\link{d.rel.conn.beta.prior}}.  Could also be 
 \code{\link{d.rel.conn.unif.prior}}.}
 
+\item{\dots}{Additional arguments for the function \code{d.rel.conn} or
+\code{p.rel.conn}}
+
 \item{p.rel.conn}{Function to use to calculate cumulative probability 
 distribution for individual combinations of \code{ps}, \code{ks} and 
 \code{ns}. Defaults to \code{\link{p.rel.conn.beta.prior}}. Could also be 
@@ -48,9 +51,6 @@ function for reverse approximation of quantile distribution. Defaults to
 \code{1000}.}
 
 \item{q}{Vector of quantiles}
-
-\item{\dots}{Additional arguments for the function \code{d.rel.conn} or
-\code{p.rel.conn}}
 }
 \value{
 Vector of probabilities or quantiles, or a function in the case of 
@@ -93,6 +93,7 @@ pair of sites for multiple possible \code{p}, \code{k} and \code{n} values.
 distribution function for relative connectivity between a pair of sites for
 multiple possible \code{p}, \code{k} and \code{n} values.
 }}
+
 \examples{
 library(ConnMatTools)
 
@@ -131,16 +132,13 @@ q = q.rel.conn.multiple(c(0.025,0.25,0.5,0.75,0.975),
                         p,k,n,w,prior.shape1=prior.shape1)
 abline(v=q,col="green")
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 }
 \seealso{
-Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
+Other connectivity estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{d.rel.conn.dists.func}},
   \code{\link{d.rel.conn.finite.settlement}},
   \code{\link{d.rel.conn.multinomial.unnorm}},
@@ -149,4 +147,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{optim.rel.conn.dists}},
   \code{\link{r.marked.egg.fraction}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}
+\concept{connectivity estimation}

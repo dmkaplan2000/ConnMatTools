@@ -90,6 +90,7 @@ probability distribution for relative connectivity
 \item \code{q.rel.conn.dists.func}: Returns a function that is quantile
 function for relative connectivity
 }}
+
 \examples{
 library(ConnMatTools)
 data(damselfish.lods)
@@ -137,16 +138,13 @@ plot(phi,D(phi),type="l",
 abline(v=phi.mx,col="green",lty="dashed")
 abline(v=Q(c(0.025,0.975)),col="red",lty="dashed")
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 }
 \seealso{
-Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
+Other connectivity estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{d.rel.conn.finite.settlement}},
   \code{\link{d.rel.conn.multinomial.unnorm}},
   \code{\link{d.rel.conn.multiple}},
@@ -155,4 +153,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{optim.rel.conn.dists}},
   \code{\link{r.marked.egg.fraction}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}
+\concept{connectivity estimation}

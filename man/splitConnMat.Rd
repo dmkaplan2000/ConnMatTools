@@ -34,9 +34,6 @@ indices of sites in a subpopulations
 This function tries to optimally split a given subpopulation into
 two smaller subpopulations.
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Jacobi, M. N., Andre, C., Doos, K., and Jonsson,
 P. R. 2012. Identification of subpopulations from connectivity
@@ -47,4 +44,6 @@ See also \code{\link{optimalSplitConnMat}},
 \code{\link{recSplitConnMat}},
 \code{\link{subpopsVectorToList}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}

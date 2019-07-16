@@ -8,8 +8,8 @@
 #' \tabular{ll}{
 #' Package: \tab ConnMatTools\cr
 #' Type: \tab Package\cr
-#' Version: \tab 0.3.4\cr
-#' Date: \tab 2017-02-02\cr
+#' Version: \tab 0.3.5\cr
+#' Date: \tab 2019-07-16\cr
 #' License: \tab GPL (>= 2)\cr
 #' LazyLoad: \tab no\cr
 #' }

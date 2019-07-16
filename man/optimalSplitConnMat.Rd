@@ -89,9 +89,6 @@ sr <- selfRecruitment(reduce.loco)
 lr <- localRetention(reduce.loco)
 rlr <- relativeLocalRetention(reduce.loco)
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Jacobi, M. N., Andre, C., Doos, K., and Jonsson,
  P. R. 2012. Identification of subpopulations from connectivity
@@ -102,4 +99,6 @@ See also \code{\link{splitConnMat}},
 \code{\link{recSplitConnMat}}, \code{\link{mergeSubpops}},
 \code{\link{qualitySubpops}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}

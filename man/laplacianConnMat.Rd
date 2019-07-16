@@ -4,7 +4,8 @@
 \alias{laplacianConnMat}
 \title{Uniform Laplacian connectivity matrix}
 \usage{
-laplacianConnMat(num.sites, disp.dist, shift = 0, boundaries = "nothing")
+laplacianConnMat(num.sites, disp.dist, shift = 0,
+  boundaries = "nothing")
 }
 \arguments{
 \item{num.sites}{number of sites.  Sites are assumed to be aligned on a 
@@ -36,9 +37,6 @@ library(ConnMatTools)
 cm <- laplacianConnMat(100,10,15,"circular")
 image(cm)
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
   per recruit: An efficient method for assessing sustainability in marine 
@@ -47,4 +45,6 @@ Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
 \seealso{
 See also \code{\link{DispersalPerRecruitModel}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}

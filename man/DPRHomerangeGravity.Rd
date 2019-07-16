@@ -66,9 +66,6 @@ Gruss et al. (2011).  The model is an extension of the dispersal-per-recruit
 model in Kaplan et al. (2006) to include movement in a homerange and a 
 gravity model for fishing effort redistribution.
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Gruss A, Kaplan DM, Hart DR (2011) Relative Impacts of Adult 
   Movement, Larval Dispersal and Harvester Movement on the Effectiveness of 
@@ -82,4 +79,6 @@ Kaplan, D. M., Botsford, L. W., and Jorgensen, S. 2006. Dispersal
 See also \code{\link{BevertonHolt}}, \code{\link{hockeyStick}}, 
   \code{\link{DispersalPerRecruitModel}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}

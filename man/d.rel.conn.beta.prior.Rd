@@ -4,8 +4,8 @@
 \name{d.rel.conn.beta.prior}
 \alias{d.rel.conn.beta.prior}
 \alias{p.rel.conn.beta.prior}
-\alias{q.rel.conn.beta.prior}
 \alias{q.rel.conn.beta.prior.func}
+\alias{q.rel.conn.beta.prior}
 \title{Estimate the probability distribution of relative connectivity values 
 assuming a Beta-distributed prior}
 \usage{
@@ -47,14 +47,14 @@ parameter, \code{phi}, and return a probability.  Defaults to
 specified, then inputs \code{prior.shape1} and \code{prior.shape2} are
 ignored.}
 
+\item{\dots}{Extra arguments for the \code{\link{integrate}} function used 
+for normalization of probability distributions.}
+
 \item{N}{Number of points at which to estimate cumulative probability 
 function for reverse approximation of quantile distribution. Defaults to 
 \code{1000}.}
 
 \item{q}{Vector of quantiles}
-
-\item{\dots}{Extra arguments for the \code{\link{integrate}} function used 
-for normalization of probability distributions.}
 }
 \value{
 Vector of probabilities or quantiles, or a function in the case of 
@@ -97,6 +97,7 @@ pair of sites.
 \item \code{q.rel.conn.beta.prior}: Estimates quantiles for the probability
 distribution function for relative connectivity between a pair of sites
 }}
+
 \examples{
 library(ConnMatTools)
 
@@ -124,16 +125,13 @@ lines(phi,drc,col="red")
 abline(v=qrp,col="black",lty="dashed")
 abline(v=qrc,col="red",lty="dashed")
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 }
 \seealso{
-Other connectivity.estimation: \code{\link{d.rel.conn.dists.func}},
+Other connectivity estimation: \code{\link{d.rel.conn.dists.func}},
   \code{\link{d.rel.conn.finite.settlement}},
   \code{\link{d.rel.conn.multinomial.unnorm}},
   \code{\link{d.rel.conn.multiple}},
@@ -142,4 +140,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.dists.func}},
   \code{\link{optim.rel.conn.dists}},
   \code{\link{r.marked.egg.fraction}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}
+\concept{connectivity estimation}

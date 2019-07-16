@@ -11,7 +11,8 @@ r.marked.egg.fraction(n, n.females, n.marked.females = round(n.females *
   male.uncert = FALSE, n.males = n.females,
   n.marked.males = tryCatch(round(n.males * p.marked.males), error =
   function(e) n.marked.females), mean.male = mean.female,
-  cv.male = cv.female, p.marked.females, p.marked.males = p.marked.females)
+  cv.male = cv.female, p.marked.females,
+  p.marked.males = p.marked.females)
 }
 \arguments{
 \item{n}{Number of random values to estimates}
@@ -134,16 +135,13 @@ plot(h,ylim=c(0,1.1*max(hh$counts,h$counts)),
      ylab="Frequency")
 lines(hh$mids,hh$counts,col="red")
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 Kaplan DM, Cuif M, Fauvelot C, Vigliola L, Nguyen-Huu T, Tiavouane J and Lett C 
   (in press) Uncertainty in empirical estimates of marine larval connectivity. 
   ICES Journal of Marine Science. doi:10.1093/icesjms/fsw182.
 }
 \seealso{
-Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
+Other connectivity estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{d.rel.conn.dists.func}},
   \code{\link{d.rel.conn.finite.settlement}},
   \code{\link{d.rel.conn.multinomial.unnorm}},
@@ -152,4 +150,7 @@ Other connectivity.estimation: \code{\link{d.rel.conn.beta.prior}},
   \code{\link{dual.mark.transmission}},
   \code{\link{optim.rel.conn.dists}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}
+\concept{connectivity estimation}

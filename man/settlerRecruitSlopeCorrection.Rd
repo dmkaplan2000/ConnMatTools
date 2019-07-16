@@ -38,9 +38,6 @@ collapse point of the spatially-explicit population model corresponding to
 the connectivity matrix agrees with that of the global non-spatially-explicit
 model.  Uses the method in White (2010).
 }
-\author{
-David M. Kaplan \email{dmkaplan2000@gmail.com}
-}
 \references{
 White, J. W. 2010. Adapting the steepness parameter from 
   stock-recruit curves for use in spatially explicit models. Fisheries 
@@ -49,4 +46,6 @@ White, J. W. 2010. Adapting the steepness parameter from
 \seealso{
 See also \code{\link{eigs}}, \code{\link[igraph]{arpack}}
 }
-
+\author{
+David M. Kaplan \email{dmkaplan2000@gmail.com}
+}
