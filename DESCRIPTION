@@ -1,7 +1,7 @@
 Package: ConnMatTools
 Type: Package
 Title: Tools for Working with Connectivity Data
-Version: 0.3.4
+Version: 0.3.5
 Date: 2017-02-03
 Author: David M. Kaplan <dmkaplan2000@gmail.com> [cre,aut], Marco Andrello <marco.andrello@gmail.com> [ctb]
 Maintainer: David M. Kaplan <dmkaplan2000@gmail.com>
@@ -28,4 +28,4 @@ Collate:
     'retentionStats.R'
     'jacobi_etal_2012.R'
 License: GPL (>= 2)
-RoxygenNote: 5.0.1
+RoxygenNote: 7.0.2
